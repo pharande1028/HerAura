@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        
+        .dashboard-container { display: flex; min-height: 100vh; }
+        
+        /* Sidebar */
+        .sidebar { width: 280px; background: white; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding: 2rem 0; }
+        .logo { padding: 0 2rem 2rem; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #d4a574; }
+        .nav-item { padding: 1rem 2rem; cursor: pointer; transition: all 0.3s; border-left: 3px solid transparent; }
+        .nav-item:hover, .nav-item.active { background: #f8f6f0; border-left-color: #d4a574; color: #d4a574; }
+        
+        /* Main Content */
+        .main-content { flex: 1; padding: 2rem; }
+        .header { background: white; padding: 1.5rem 2rem; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .welcome { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+        .subtitle { color: #666; }
+        
+        /* Cards */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card-title { font-size: 1.1rem; margin-bottom: 1rem; color: #333; }
+        
+        /* Orders */
+        .order-item { padding: 1rem; border: 1px solid #eee; border-radius: 8px; margin-bottom: 1rem; }
+        .order-header { display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem; }
+        .order-id { font-weight: 600; color: #d4a574; }
+        .order-status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-shipped { background: #cce5ff; color: #004085; }
+        .status-processing { background: #fff3cd; color: #856404; }
+        
+        .btn { background: #d4a574; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #b8860b; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">HerAura</div>
+            <div class="nav-item active" onclick="showSection('overview')">📊 Overview</div>
+            <div class="nav-item" onclick="showSection('orders')">📦 My Orders</div>
+            <div class="nav-item" onclick="showSection('wishlist')">❤️ Wishlist</div>
+            <div class="nav-item" onclick="showSection('profile')">👤 Profile</div>
+            <div class="nav-item" onclick="showSection('addresses')">📍 Addresses</div>
+            <div class="nav-item" onclick="showSection('returns')">↩️ Returns</div>
+            <div class="nav-item" onclick="window.location.href='../landing.html'">🏠 Back to Store</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="welcome">Welcome back, Priya!</div>
+                <div class="subtitle">Manage your orders, wishlist, and account settings</div>
+            </div>
+            
+            <!-- Overview Section -->
+            <div id="overview" class="section">
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">Recent Orders</div>
+                        <div style="font-size: 2rem; color: #d4a574; margin-bottom: 0.5rem;">3</div>
+                        <div style="color: #666;">Last 30 days</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Wishlist Items</div>
+                        <div style="font-size: 2rem; color: #d4a574; margin-bottom: 0.5rem;">12</div>
+                        <div style="color: #666;">Saved for later</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Loyalty Points</div>
+                        <div style="font-size: 2rem; color: #d4a574; margin-bottom: 0.5rem;">850</div>
+                        <div style="color: #666;">₹85 value</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Section -->
+            <div id="orders" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-title">Order History</div>
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">#HA2024001</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                        </div>
+                        <div>Elegant Gold Earrings - ₹2,299</div>
+                        <div style="color: #666; font-size: 0.9rem;">Ordered on Jan 15, 2024</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">#HA2024002</span>
+                            <span class="order-status status-shipped">Shipped</span>
+                        </div>
+                        <div>Minimal Silver Necklace - ₹1,899</div>
+                        <div style="color: #666; font-size: 0.9rem;">Ordered on Jan 20, 2024</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wishlist Section -->
+            <div id="wishlist" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-title">My Wishlist (12 items)</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px;">
+                            <div style="height: 150px; background: #f5f5f5; border-radius: 5px; margin-bottom: 0.5rem;"></div>
+                            <div style="font-weight: 500;">Rose Gold Ring</div>
+                            <div style="color: #d4a574;">₹1,599</div>
+                            <button class="btn" style="margin-top: 0.5rem; width: 100%;">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Section -->
+            <div id="profile" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-title">Profile Information</div>
+                    <form style="display: grid; gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem;">Full Name</label>
+                            <input type="text" value="Priya Sharma" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem;">Email</label>
+                            <input type="email" value="priya@example.com" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem;">Phone</label>
+                            <input type="tel" value="+91 9876543210" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <button type="submit" class="btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

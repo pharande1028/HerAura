@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HerAura Dashboards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        
+        .container { max-width: 800px; text-align: center; padding: 2rem; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: #d4a574; margin-bottom: 1rem; }
+        .subtitle { color: #666; font-size: 1.2rem; margin-bottom: 3rem; }
+        
+        .dashboards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        
+        .dashboard-card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit; }
+        .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        
+        .dashboard-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .dashboard-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; color: #333; }
+        .dashboard-desc { color: #666; font-size: 0.9rem; line-height: 1.5; }
+        
+        .customer { border-left: 4px solid #4caf50; }
+        .admin { border-left: 4px solid #2196f3; }
+        .logistics { border-left: 4px solid #ff9800; }
+        
+        .back-link { display: inline-block; margin-top: 2rem; color: #d4a574; text-decoration: none; font-weight: 500; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">HerAura</div>
+        <div class="subtitle">Choose your dashboard to access role-specific features</div>
+        
+        <div class="dashboards-grid">
+            <a href="customer/dashboard.html" class="dashboard-card customer">
+                <div class="dashboard-icon">👤</div>
+                <div class="dashboard-title">Customer Dashboard</div>
+                <div class="dashboard-desc">
+                    Manage your orders, wishlist, profile, and track deliveries. View order history and loyalty points.
+                </div>
+            </a>
+            
+            <a href="admin/dashboard.html" class="dashboard-card admin">
+                <div class="dashboard-icon">⚙️</div>
+                <div class="dashboard-title">Admin Dashboard</div>
+                <div class="dashboard-desc">
+                    Manage products, orders, customers, and analytics. Full control over the HerAura store operations.
+                </div>
+            </a>
+            
+            <a href="logistics/dashboard.html" class="dashboard-card logistics">
+                <div class="dashboard-icon">🚚</div>
+                <div class="dashboard-title">Logistics Dashboard</div>
+                <div class="dashboard-desc">
+                    Track shipments, manage deliveries, handle returns, and optimize delivery routes in real-time.
+                </div>
+            </a>
+        </div>
+        
+        <a href="../landing.html" class="back-link">← Back to HerAura Store</a>
+    </div>
+</body>
+</html>

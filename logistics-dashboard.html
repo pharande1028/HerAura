@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Dashboard - HerAura</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: #f8f9fa; }
+        .header { background: #007bff; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card h3 { color: #333; margin-bottom: 1rem; }
+        .btn { background: #007bff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #0056b3; }
+        .logout { background: #dc3545; }
+        .logout:hover { background: #c82333; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #007bff; }
+        .status { padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem; }
+        .status.pending { background: #fff3cd; color: #856404; }
+        .status.transit { background: #d4edda; color: #155724; }
+        .status.delivered { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Logistics Dashboard</h1>
+        <div>
+            <span id="userEmail"></span>
+            <button class="btn logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">45</div>
+                <div>Pending Shipments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">23</div>
+                <div>In Transit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">189</div>
+                <div>Delivered Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div>Active Routes</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Shipment Tracking</h3>
+                <p>Track all jewelry shipments in real-time</p>
+                <a href="#" class="btn">Track Shipments</a>
+            </div>
+            <div class="card">
+                <h3>Delivery Management</h3>
+                <p>Manage delivery schedules and routes</p>
+                <a href="#" class="btn">Manage Deliveries</a>
+            </div>
+            <div class="card">
+                <h3>Route Optimization</h3>
+                <p>Optimize delivery routes for efficiency</p>
+                <a href="#" class="btn">Optimize Routes</a>
+            </div>
+            <div class="card">
+                <h3>Pending Pickups</h3>
+                <p>View orders ready for pickup</p>
+                <a href="#" class="btn">View Pickups</a>
+            </div>
+            <div class="card">
+                <h3>Delivery Reports</h3>
+                <p>Generate delivery performance reports</p>
+                <a href="#" class="btn">View Reports</a>
+            </div>
+            <div class="card">
+                <h3>Vehicle Management</h3>
+                <p>Manage delivery vehicles and drivers</p>
+                <a href="#" class="btn">Manage Fleet</a>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h3>Recent Shipments</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <th style="text-align: left; padding: 0.5rem;">Order ID</th>
+                        <th style="text-align: left; padding: 0.5rem;">Customer</th>
+                        <th style="text-align: left; padding: 0.5rem;">Destination</th>
+                        <th style="text-align: left; padding: 0.5rem;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 0.5rem;">#HA001</td>
+                        <td style="padding: 0.5rem;">Priya Sharma</td>
+                        <td style="padding: 0.5rem;">Mumbai</td>
+                        <td style="padding: 0.5rem;"><span class="status transit">In Transit</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 0.5rem;">#HA002</td>
+                        <td style="padding: 0.5rem;">Rahul Patel</td>
+                        <td style="padding: 0.5rem;">Delhi</td>
+                        <td style="padding: 0.5rem;"><span class="status pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem;">#HA003</td>
+                        <td style="padding: 0.5rem;">Anita Singh</td>
+                        <td style="padding: 0.5rem;">Bangalore</td>
+                        <td style="padding: 0.5rem;"><span class="status delivered">Delivered</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Display user email
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        function logout() {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userType');
+            window.location.href = 'landing.html';
+        }
+    </script>
+</body>
+</html>

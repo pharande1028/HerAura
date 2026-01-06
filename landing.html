@@ -4,28 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HerAura - Anti-Tarnish Jewellery for Everyday You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fefefe; overflow-x: hidden; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 5px; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: white; overflow-x: hidden; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 5px; }
         
         /* Header */
-        header { background: linear-gradient(135deg, rgba(248,246,240,0.95) 0%, rgba(255,248,231,0.95) 100%); backdrop-filter: blur(10px); padding: 0.6rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(212,165,116,0.15); border-bottom: 1px solid rgba(212,165,116,0.2); transition: transform 0.3s ease, background 0.3s ease; }
+        header { background: white; backdrop-filter: blur(10px); padding: 0.1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(212,165,116,0.15); border-bottom: 1px solid rgba(212,165,116,0.2); transition: transform 0.3s ease, background 0.3s ease; height: 120px; }
         header.slide-up { transform: translateY(-100%); }
         
-        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 5px; }
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5px;
+        }
+        
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-middle {
+            display: none;
+        }
+        
+        .nav-menu {
+            position: absolute;
+            top: 5.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-menu ul li {
+            margin-left: 1.25rem;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-menu a:hover {
+            color: #d4a574;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4a574;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -5px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 2rem;
+            right: 4rem;
+            display: flex;
+            gap: 1rem;
+        }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #d4a574; }
-        .logo img { height: 80px; width: auto; max-width: 300px; object-fit: contain; filter: contrast(1.2) brightness(1.1) saturate(1.1); transition: transform 0.3s ease; mix-blend-mode: multiply; opacity: 0.9; }
+        .logo img { height: 160px; width: auto; max-width: 600px; object-fit: contain; filter: contrast(1.2) brightness(1.1) saturate(1.1); transition: transform 0.3s ease; mix-blend-mode: multiply; opacity: 0.9; }
         .logo img:hover { transform: scale(1.05); opacity: 1; }
         
-        .nav-right { display: flex; align-items: center; gap: 1rem; }
-        .search-bar { width: 250px; position: relative; }
+        .nav-right { display: flex; align-items: center; gap: 0.5rem; }
+        .search-bar {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+        }
         .search-bar input { width: 100%; padding: 0.6rem 1rem; border: 1px solid rgba(212,165,116,0.4); border-radius: 20px; background: rgba(255,255,255,0.95); font-size: 0.85rem; outline: none; transition: all 0.3s; }
         .search-bar input:focus { border-color: #d4a574; box-shadow: 0 0 8px rgba(212,165,116,0.2); }
         .search-bar input::placeholder { color: #999; }
         nav ul { display: flex; list-style: none; align-items: center; }
-        nav ul li { margin-left: 2.5rem; }
+        nav ul li { margin-left: 1.25rem; }
         nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; font-size: 0.9rem; letter-spacing: 0.5px; }
         nav a:hover { color: #d4a574; }
         .nav-icons { display: flex; gap: 1rem; }
@@ -33,7 +122,7 @@
         .nav-icon:hover { opacity: 0.7; }
         
         /* Hero Section */
-        .hero { background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0; padding-top: 80px; position: relative; overflow: hidden; }
+        .hero { background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; margin-top: 0; padding-top: 120px; position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23d4a574" opacity="0.1"/></svg>') repeat; }
         .hero-content { position: relative; z-index: 2; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: 4rem; margin-bottom: 1.5rem; color: #2c2c2c; font-weight: 600; line-height: 1.2; }
@@ -52,7 +141,7 @@
         .trust-item { display: flex; align-items: center; gap: 0.5rem; color: #666; font-size: 0.9rem; }
         
         /* Sections */
-        section { padding: 2rem 0; margin: 0; }
+        section { padding: 1rem 0; margin: 0; }
         .section-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; text-align: center; color: #2c2c2c; margin-bottom: 1rem; }
         .section-subtitle { text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 2rem; font-weight: 300; }
         
@@ -105,31 +194,139 @@
             .products-grid, .features-grid { grid-template-columns: 1fr; }
             .logo img { height: 80px; max-width: 220px; }
         }
+
+        /* Login Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 10px;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #d4a574;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #b8860b;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .signup-link a {
+            color: #d4a574;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">
-                <img src="logo.jpg" alt="HerAura" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
-                <span style="display:none">HerAura</span>
-            </div>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jewellery & Accessories</div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search jewelry...">
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="nav-menu">
             <ul>
                 <li><a href="#home">HOME</a></li>
                 <li><a href="#products">SHOP</a></li>
                 <li><a href="#about">ABOUT</a></li>
                 <li><a href="#contact">CONTACT</a></li>
             </ul>
-            <div class="nav-right">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search jewelry...">
-                </div>
-                <div class="nav-icons">
-                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/></svg>
-                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                </div>
-            </div>
+        </div>
+        <div class="nav-icons">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/></svg>
+            <svg class="nav-icon" id="loginIcon" fill="currentColor" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <nav>
         </nav>
     </header>
 
@@ -284,6 +481,36 @@
             </div>
         </div>
     </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Sign In to HerAura</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="userType">Login as:</label>
+                    <select id="userType" name="userType" required>
+                        <option value="">Select Role</option>
+                        <option value="customer">Customer</option>
+                        <option value="owner">Owner/Admin</option>
+                        <option value="logistics">Logistics Partner</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn login-btn">Sign In</button>
+            </form>
+            <p class="signup-link">Don't have an account? <a href="#" id="signupLink">Sign up here</a></p>
+        </div>
+    </div>
+
 </body>
 <script>
     let lastScrollTop = 0;
@@ -302,5 +529,79 @@
         
         lastScrollTop = scrollTop;
     });
+
+    // Login Modal Functionality
+    const loginIcon = document.getElementById('loginIcon');
+    const loginModal = document.getElementById('loginModal');
+    const closeModal = document.querySelector('.close');
+    const loginForm = document.getElementById('loginForm');
+
+    // Open modal when person icon is clicked
+    loginIcon.addEventListener('click', function() {
+        loginModal.style.display = 'block';
+    });
+
+    // Close modal when X is clicked
+    closeModal.addEventListener('click', function() {
+        loginModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === loginModal) {
+            loginModal.style.display = 'none';
+        }
+    });
+
+    // Handle form submission
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const userType = document.getElementById('userType').value;
+
+        // Basic validation
+        if (!email || !password || !userType) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        // Simulate authentication (replace with actual API call)
+        authenticateUser(email, password, userType);
+    });
+
+    function authenticateUser(email, password, userType) {
+        // Simulate API call - replace with actual authentication
+        console.log('Authenticating:', { email, userType });
+        
+        // Mock authentication - replace with real logic
+        if (email && password) {
+            // Store user info in localStorage
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userType', userType);
+            
+            // Redirect based on user type
+            redirectToDashboard(userType);
+        } else {
+            alert('Invalid credentials');
+        }
+    }
+
+    function redirectToDashboard(userType) {
+        switch(userType) {
+            case 'customer':
+                window.location.href = 'customer-dashboard.html';
+                break;
+            case 'owner':
+                window.location.href = 'admin-dashboard.html';
+                break;
+            case 'logistics':
+                window.location.href = 'logistics-dashboard.html';
+                break;
+            default:
+                alert('Invalid user type');
+        }
+    }
 </script>
 </html>
