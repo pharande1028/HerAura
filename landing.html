@@ -77,7 +77,7 @@
             font-family: 'Dancing Script', cursive;
             font-size: 2.5rem;
             font-weight: 700;
-            color: #d4a574;
+            color: #333;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             margin: 0;
         }
@@ -87,7 +87,7 @@
             font-size: 0.8rem;
             font-weight: 400;
             color: #666;
-            margin: -5px 0 0 0;
+            margin: -15px 0 0 0;
             letter-spacing: 1px;
         }
         
@@ -96,7 +96,20 @@
             top: 2rem;
             right: 4rem;
             display: flex;
-            gap: 1rem;
+            gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
         }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #d4a574; }
         .logo img { height: 160px; width: auto; max-width: 600px; object-fit: contain; filter: contrast(1.2) brightness(1.1) saturate(1.1); transition: transform 0.3s ease; mix-blend-mode: multiply; opacity: 0.9; }
@@ -108,30 +121,189 @@
             top: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 500px;
+            width: 600px;
+            position: relative;
         }
-        .search-bar input { width: 100%; padding: 0.6rem 1rem; border: 1px solid rgba(212,165,116,0.4); border-radius: 20px; background: rgba(255,255,255,0.95); font-size: 0.85rem; outline: none; transition: all 0.3s; }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #666;
+            z-index: 1;
+        }
+        
+        .search-bar input { 
+            width: 100%; 
+            padding: 0.6rem 1rem 0.6rem 2.5rem; 
+            border: 1px solid rgba(212,165,116,0.4); 
+            border-radius: 15px; 
+            background: rgba(255,255,255,0.95); 
+            font-size: 0.85rem; 
+            outline: none; 
+            transition: all 0.3s; 
+        }
         .search-bar input:focus { border-color: #d4a574; box-shadow: 0 0 8px rgba(212,165,116,0.2); }
         .search-bar input::placeholder { color: #999; }
         nav ul { display: flex; list-style: none; align-items: center; }
         nav ul li { margin-left: 1.25rem; }
         nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; font-size: 0.9rem; letter-spacing: 0.5px; }
         nav a:hover { color: #d4a574; }
-        .nav-icons { display: flex; gap: 1rem; }
+        .nav-icons { display: flex; gap: 2rem; }
         .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: opacity 0.3s; }
         .nav-icon:hover { opacity: 0.7; }
         
         /* Hero Section */
-        .hero { background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; margin-top: 0; padding-top: 120px; position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23d4a574" opacity="0.1"/></svg>') repeat; }
-        .hero-content { position: relative; z-index: 2; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 4rem; margin-bottom: 1.5rem; color: #2c2c2c; font-weight: 600; line-height: 1.2; }
-        .hero p { font-size: 1.3rem; margin-bottom: 2.5rem; color: #666; font-weight: 300; }
-        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .hero { 
+            min-height: 100vh;
+            height: 100vh;
+            display: flex; 
+            align-items: center; 
+            margin-top: 0; 
+            padding-top: 120px; 
+            position: relative; 
+            overflow: hidden; 
+            background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%);
+        }
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-text {
+            text-align: left;
+        }
+        .hero-image-container {
+            text-align: center;
+        }
+        .hero-image-container img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(212,165,116,0.3);
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-slide.active {
+            opacity: 0.4;
+        }
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(248,246,240,0.4) 0%, rgba(255,248,231,0.4) 100%);
+        }
+        .hero-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 30px;
+            z-index: 10;
+            transition: all 0.3s;
+            color: rgba(255,255,255,0.8);
+        }
+        .hero-nav:hover {
+            color: #d4a574;
+            transform: translateY(-50%) scale(1.2);
+        }
+        .hero-prev {
+            left: 20px;
+        }
+        .hero-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        .hero-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .hero-next {
+            right: 20px;
+        }
+        .hero-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .hero-dot.active {
+            background: #d4a574;
+            transform: scale(1.2);
+        }
+        .hero-content { 
+            position: relative; 
+            z-index: 2; 
+            max-width: 800px; 
+            padding: 2rem; 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px); 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(212,165,116,0.2); 
+        }
+        .hero h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 4rem; 
+            margin-bottom: 1.5rem; 
+            color: #2c2c2c; 
+            font-weight: 600; 
+            line-height: 1.2; 
+        }
+        .hero p { 
+            font-size: 1.3rem; 
+            margin-bottom: 2.5rem; 
+            color: #555; 
+            font-weight: 400; 
+        }
+        .hero-buttons { 
+            display: flex; 
+            gap: 1rem; 
+            justify-content: flex-start; 
+            flex-wrap: wrap; 
+        }
         
         /* Buttons */
         .btn { background: #d4a574; color: white; padding: 1rem 2.5rem; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; display: inline-block; font-size: 0.9rem; letter-spacing: 0.5px; }
-        .btn:hover { background: #b8860b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,165,116,0.3); }
+        .btn:hover { background: #c19653; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,165,116,0.3); }
         .btn-outline { background: transparent; color: #d4a574; border: 2px solid #d4a574; }
         .btn-outline:hover { background: #d4a574; color: white; }
         
@@ -167,6 +339,14 @@
         .about-content { max-width: 800px; margin: 0 auto; text-align: center; }
         .about p { font-size: 1.1rem; color: #555; line-height: 1.8; margin-bottom: 1.5rem; }
         
+        /* Reviews */
+        .reviews { background: #fafafa; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .review-card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); text-align: center; }
+        .stars { font-size: 1.2rem; margin-bottom: 1rem; }
+        .review-card p { color: #555; font-style: italic; margin-bottom: 1.5rem; line-height: 1.6; }
+        .review-card h4 { color: #d4a574; font-weight: 600; }
+        
         /* Contact */
         .contact { background: white; }
         .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
@@ -185,9 +365,11 @@
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            .hero { background-attachment: scroll; }
+            .hero-content { margin: 1rem; padding: 1.5rem; }
             .hero h1 { font-size: 2.8rem; }
             .hero p { font-size: 1.1rem; }
-            .hero-buttons { flex-direction: column; align-items: center; }
+            .hero-buttons { justify-content: center; }
             nav ul { display: none; }
             .trust-items { gap: 1.5rem; }
             .section-title { font-size: 2.2rem; }
@@ -307,7 +489,8 @@
             <div class="brand-tagline">Jewellery & Accessories</div>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search jewelry...">
+            <svg class="search-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" id="searchInput" placeholder="Search jewelry...">
         </div>
         </div>
         </div>
@@ -316,41 +499,63 @@
         <div class="nav-menu">
             <ul>
                 <li><a href="#home">HOME</a></li>
-                <li><a href="#products">SHOP</a></li>
-                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#products">OUR COLLECTION</a></li>
+                <li><a href="#about">ABOUT US</a></li>
+                <li><a href="#reviews">REVIEWS</a></li>
                 <li><a href="#contact">CONTACT</a></li>
             </ul>
         </div>
         <div class="nav-icons">
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/></svg>
-            <svg class="nav-icon" id="loginIcon" fill="currentColor" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/></svg>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" id="loginIcon" fill="currentColor" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span class="nav-label">Profile</span>
+            </div>
         </div>
         <nav>
         </nav>
     </header>
 
     <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Anti-Tarnish Jewellery<br>for Everyday You</h1>
-            <p>Handcrafted minimal jewelry that stays beautiful, designed for your daily elegance</p>
-            <div class="hero-buttons">
-                <a href="#products" class="btn">SHOP COLLECTION</a>
-                <a href="#about" class="btn btn-outline">OUR STORY</a>
+        <div class="hero-slide active" style="background-image: url('hero-image.webp');"></div>
+        <div class="hero-slide" style="background-image: url('hero-image2.webp');"></div>
+        <div class="hero-slide" style="background-image: url('hero-image3.webp');"></div>
+        <div class="hero-slide" style="background-image: url('hero-image4.webp');"></div>
+        <div class="hero-slide" style="background-image: url('hero-image5.webp');"></div>
+        
+        <button class="hero-nav hero-prev" onclick="changeSlide(-1)">‹</button>
+        <button class="hero-nav hero-next" onclick="changeSlide(1)">›</button>
+        
+        <div class="hero-dots">
+            <div class="hero-dot active" onclick="goToSlide(0)"></div>
+            <div class="hero-dot" onclick="goToSlide(1)"></div>
+            <div class="hero-dot" onclick="goToSlide(2)"></div>
+            <div class="hero-dot" onclick="goToSlide(3)"></div>
+            <div class="hero-dot" onclick="goToSlide(4)"></div>
+        </div>
+        
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Anti-Tarnish Jewellery<br>for Everyday You</h1>
+                <p>Handcrafted minimal jewelry that stays beautiful, designed for your daily elegance</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn">SHOP COLLECTION</a>
+                </div>
+            </div>
+            <div class="hero-image-container">
+                <img id="heroImage" src="hero-image.webp" alt="HerAura Jewelry Model">
             </div>
         </div>
     </section>
     
-    <div class="trust-bar">
-        <div class="container">
-            <div class="trust-items">
-                <div class="trust-item">✓ Anti-Tarnish Guarantee</div>
-                <div class="trust-item">✓ Free Shipping Above ₹999</div>
-                <div class="trust-item">✓ 30-Day Returns</div>
-                <div class="trust-item">✓ Lifetime Support</div>
-            </div>
-        </div>
-    </div>
+
 
     <section id="products" class="products">
         <div class="container">
@@ -416,10 +621,34 @@
     <section id="about" class="about">
         <div class="container">
             <div class="about-content">
-                <h2 class="section-title">Our Story</h2>
+                <h2 class="section-title">About Us</h2>
                 <p>We create anti-tarnish, daily-wear jewellery designed to be simple, elegant, and easy to wear. Our pieces are thoughtfully selected with a focus on quality, comfort, and timeless style, making them perfect for everyday use.</p>
                 <p>We believe jewellery should blend effortlessly into your routine while adding a subtle touch of elegance. As a growing brand, our goal is to offer minimal, reliable jewellery that you can wear every day with confidence.</p>
                 <p>Every piece in our collection is crafted with love, designed to celebrate the everyday moments that make you uniquely beautiful.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <h2 class="section-title">Customer Reviews</h2>
+            <p class="section-subtitle">What our customers say about us</p>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Amazing quality! The anti-tarnish coating really works. I've been wearing my necklace daily for 3 months and it still looks brand new."</p>
+                    <h4>- Priya Sharma</h4>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Beautiful minimal designs that go with everything. Perfect for everyday wear and the customer service is excellent!"</p>
+                    <h4>- Ananya Gupta</h4>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Love my HerAura earrings! They're comfortable, stylish, and I get compliments all the time. Highly recommend!"</p>
+                    <h4>- Kavya Reddy</h4>
+                </div>
             </div>
         </div>
     </section>
@@ -513,6 +742,109 @@
 
 </body>
 <script>
+    // Hero Slider Functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const totalSlides = slides.length;
+    let slideInterval;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        
+        // Update dots
+        document.querySelectorAll('.hero-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+        
+        const heroContainer = document.querySelector('.hero-container');
+        const heroImage = document.getElementById('heroImage');
+        const imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
+        
+        heroContainer.style.display = 'grid';
+        
+        // Fade out hero image, change source, then fade in
+        heroImage.style.opacity = '0';
+        setTimeout(() => {
+            heroImage.src = imageNames[index];
+            heroImage.style.opacity = '1';
+        }, 500);
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        showSlide(currentSlide);
+        resetInterval();
+    }
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide >= totalSlides) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = totalSlides - 1;
+        showSlide(currentSlide);
+        resetInterval();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    function resetInterval() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Start auto-slide
+    slideInterval = setInterval(nextSlide, 5000);
+
+    // Search placeholder typewriter animation
+    const searchInput = document.getElementById('searchInput');
+    const placeholders = [
+        'Search for rings...',
+        'Search for pendants...',
+        'Search for earrings...',
+        'Search for necklaces...',
+        'Gift your loved ones...',
+        'Gift for her...',
+        'Search jewelry...'
+    ];
+    
+    let currentIndex = 0;
+    let currentText = '';
+    let isDeleting = false;
+    let charIndex = 0;
+    
+    function typeWriter() {
+        const fullText = placeholders[currentIndex];
+        
+        if (isDeleting) {
+            currentText = fullText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            currentText = fullText.substring(0, charIndex + 1);
+            charIndex++;
+        }
+        
+        searchInput.placeholder = currentText;
+        
+        let typeSpeed = isDeleting ? 50 : 100;
+        
+        if (!isDeleting && charIndex === fullText.length) {
+            typeSpeed = 2000; // Pause at end
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            currentIndex = (currentIndex + 1) % placeholders.length;
+            typeSpeed = 500; // Pause before next word
+        }
+        
+        setTimeout(typeWriter, typeSpeed);
+    }
+    
+    // Start the typewriter animation
+    typeWriter();
+    
     let lastScrollTop = 0;
     const header = document.querySelector('header');
     
