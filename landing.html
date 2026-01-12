@@ -7,11 +7,289 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: white; overflow-x: hidden; }
+        
+        #products { scroll-margin-top: 120px; }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 50%, #d4a574 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            align-items: center;
+            position: relative;
+        }
+        
+        .loading-divider {
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            bottom: 20%;
+            width: 2px;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(139, 69, 19, 0.3) 20%, 
+                rgba(139, 69, 19, 0.6) 50%, 
+                rgba(139, 69, 19, 0.3) 80%, 
+                transparent 100%);
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: dividerAppear 1s ease 0.5s forwards;
+        }
+        
+        @keyframes dividerAppear {
+            from { opacity: 0; transform: translateX(-50%) scaleY(0); }
+            to { opacity: 1; transform: translateX(-50%) scaleY(1); }
+        }
+        
+        .loading-left {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .loading-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 4rem 2rem 2rem;
+        }
+        
+        .loading-logo {
+            text-align: center;
+            opacity: 0;
+            animation: logoAppear 0.5s ease 0s forwards;
+        }
+        
+        .loading-brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            font-weight: 700;
+            color: #8B4513;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .loading-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #8B4513;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .welcome-section {
+            opacity: 0;
+            animation: welcomeAppear 0.8s ease 0.3s forwards;
+        }
+        
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #8B4513;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .welcome-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: #8B4513;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+        
+        .welcome-tagline {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #d4a574;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-description {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #8B4513;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+        
+        @keyframes logoAppear {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        @keyframes welcomeAppear {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .loading-brand-name.animate {
+            animation: jewelryGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .loading-tagline.animate {
+            animation: jewelryGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .welcome-section.animate {
+            animation: welcomeGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes jewelryGlow {
+            0% { 
+                transform: scale(1);
+                opacity: 0.8;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            }
+            100% { 
+                transform: scale(1.05);
+                opacity: 1;
+                text-shadow: 
+                    0 0 15px rgba(212, 165, 116, 0.7),
+                    0 0 25px rgba(212, 165, 116, 0.5),
+                    0 0 35px rgba(212, 165, 116, 0.3),
+                    1px 1px 2px rgba(0,0,0,0.1);
+            }
+        }
+        
+        @keyframes welcomeGlow {
+            0% { 
+                opacity: 0.9;
+            }
+            100% { 
+                opacity: 1;
+                text-shadow: 0 0 8px rgba(212, 165, 116, 0.3);
+            }
+        }
+        
+        .loading-brand-name.fade-to-black {
+            animation: fadeToBlack 1s ease forwards;
+        }
+        
+        .loading-tagline.fade-to-black {
+            animation: fadeToBlack 1s ease forwards;
+        }
+        
+        @keyframes fadeToBlack {
+            from { 
+                color: #8B4513;
+            }
+            to { 
+                color: #333;
+            }
+        }
+        
+        .logo-transition {
+            position: fixed;
+            z-index: 8888;
+            transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+        
+        .logo-transition .loading-brand-name {
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            animation: none;
+        }
+        
+        .logo-transition .loading-tagline {
+            color: #333;
+            animation: none;
+        }
+        
+        /* Image Transition Animation */
+        .image-transition {
+            position: fixed;
+            z-index: 8887;
+            pointer-events: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(212,165,116,0.3);
+            transition: none;
+            object-fit: cover;
+        }
+        
+        .hero-image-container img {
+            transition: opacity 0.3s ease;
+        }
+        
+        .collection-image.transition-target {
+            transition: opacity 0.5s ease;
+        }
+        
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        
+        .main-content.show {
+            opacity: 1;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-fade-in-left { animation: fadeInLeft 0.8s ease-out forwards; }
+        .animate-fade-in-right { animation: fadeInRight 0.8s ease-out forwards; }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .opacity-0 { opacity: 0; }
+        .transition-all { transition: all 0.3s ease; }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 5px; }
         
         /* Header */
-        header { background: white; backdrop-filter: blur(10px); padding: 0.1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(212,165,116,0.15); border-bottom: 1px solid rgba(212,165,116,0.2); transition: transform 0.3s ease, background 0.3s ease; height: 120px; }
+        header { background: white; backdrop-filter: blur(10px); padding: 0.1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(212,165,116,0.15); border-bottom: 1px solid rgba(212,165,116,0.2); transition: all 0.3s ease; height: 120px; }
+        header.scrolled { background: rgba(255,255,255,0.95); box-shadow: 0 4px 30px rgba(212,165,116,0.2); }
         header.slide-up { transform: translateY(-100%); }
         
         nav {
@@ -38,7 +316,7 @@
         
         .nav-menu {
             position: absolute;
-            top: 5.5rem;
+            top: 2rem;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -71,6 +349,12 @@
             top: 0.5rem;
             left: 2rem;
             z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .signature-logo.show {
+            opacity: 1;
         }
         
         .brand-name {
@@ -80,6 +364,12 @@
             color: #333;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
         }
         
         .brand-tagline {
@@ -116,45 +406,28 @@
         .logo img:hover { transform: scale(1.05); opacity: 1; }
         
         .nav-right { display: flex; align-items: center; gap: 0.5rem; }
-        .search-bar {
-            position: absolute;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            position: relative;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            color: #666;
-            z-index: 1;
-        }
-        
-        .search-bar input { 
-            width: 100%; 
-            padding: 0.6rem 1rem 0.6rem 2.5rem; 
-            border: 1px solid rgba(212,165,116,0.4); 
-            border-radius: 15px; 
-            background: rgba(255,255,255,0.95); 
-            font-size: 0.85rem; 
-            outline: none; 
-            transition: all 0.3s; 
-        }
-        .search-bar input:focus { border-color: #d4a574; box-shadow: 0 0 8px rgba(212,165,116,0.2); }
-        .search-bar input::placeholder { color: #999; }
+
         nav ul { display: flex; list-style: none; align-items: center; }
         nav ul li { margin-left: 1.25rem; }
-        nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; font-size: 0.9rem; letter-spacing: 0.5px; }
-        nav a:hover { color: #d4a574; }
+        nav a { text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s ease; font-size: 0.9rem; letter-spacing: 0.5px; position: relative; }
+        nav a:hover { color: #d4a574; transform: translateY(-2px); }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4a574;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
         .nav-icons { display: flex; gap: 2rem; }
-        .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: opacity 0.3s; }
-        .nav-icon:hover { opacity: 0.7; }
+        .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: all 0.3s ease; }
+        .nav-icon:hover { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
         
         /* Hero Section */
         .hero { 
@@ -171,27 +444,51 @@
         .hero-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 2rem;
             align-items: center;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
             position: relative;
             z-index: 2;
+            height: 100%;
         }
         .hero-text {
             text-align: left;
+            z-index: 3;
+            position: relative;
         }
         .hero-image-container {
-            text-align: center;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0;
         }
         .hero-image-container img {
             width: 100%;
-            max-width: 500px;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(212,165,116,0.3);
-            transition: opacity 1s ease-in-out;
+            max-width: 650px;
+            height: 550px;
+            object-fit: cover;
+            border-radius: 0;
+            box-shadow: none;
+            transition: all 1s ease-in-out;
+            position: relative;
+            z-index: 2;
+            margin-right: 0;
+            mask: linear-gradient(135deg, 
+                rgba(0,0,0,1) 0%, 
+                rgba(0,0,0,0.95) 30%, 
+                rgba(0,0,0,0.8) 60%, 
+                rgba(0,0,0,0.3) 85%, 
+                rgba(0,0,0,0) 100%);
+            -webkit-mask: linear-gradient(135deg, 
+                rgba(0,0,0,1) 0%, 
+                rgba(0,0,0,0.95) 30%, 
+                rgba(0,0,0,0.8) 60%, 
+                rgba(0,0,0,0.3) 85%, 
+                rgba(0,0,0,0) 100%);
         }
         .hero-slide {
             position: absolute;
@@ -203,10 +500,11 @@
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
+            filter: blur(8px);
         }
         .hero-slide.active {
-            opacity: 0.4;
+            opacity: 0.6;
         }
         .hero-slide::before {
             content: '';
@@ -215,7 +513,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(248,246,240,0.4) 0%, rgba(255,248,231,0.4) 100%);
+            background: linear-gradient(135deg, 
+                rgba(248,246,240,0.2) 0%, 
+                rgba(255,248,231,0.3) 30%,
+                rgba(212,165,116,0.1) 70%,
+                transparent 100%);
         }
         .hero-nav {
             position: absolute;
@@ -302,8 +604,37 @@
         }
         
         /* Buttons */
-        .btn { background: #d4a574; color: white; padding: 1rem 2.5rem; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; display: inline-block; font-size: 0.9rem; letter-spacing: 0.5px; }
-        .btn:hover { background: #c19653; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,165,116,0.3); }
+        .btn { 
+            background: linear-gradient(145deg, #e6b885, #d4a574, #c19653);
+            color: white; 
+            padding: 1rem 2.5rem; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+            display: inline-block; 
+            font-size: 0.9rem; 
+            letter-spacing: 0.5px;
+            box-shadow: 
+                0 6px 12px rgba(212, 165, 116, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        .btn:hover { 
+            background: linear-gradient(145deg, #9d6b2a, #8B4513, #7a3e11);
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 
+                0 8px 20px rgba(139, 69, 19, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 
+                0 3px 8px rgba(139, 69, 19, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
         .btn-outline { background: transparent; color: #d4a574; border: 2px solid #d4a574; }
         .btn-outline:hover { background: #d4a574; color: white; }
         
@@ -313,26 +644,221 @@
         .trust-item { display: flex; align-items: center; gap: 0.5rem; color: #666; font-size: 0.9rem; }
         
         /* Sections */
-        section { padding: 1rem 0; margin: 0; }
-        .section-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; text-align: center; color: #2c2c2c; margin-bottom: 1rem; }
-        .section-subtitle { text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 2rem; font-weight: 300; }
+        section { padding: 3rem 0; margin: 0; }
+        .section-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.5rem; 
+            text-align: center; 
+            color: #2c2c2c; 
+            margin-bottom: 1.5rem; 
+            position: relative;
+            background: linear-gradient(135deg, #8B4513 0%, #d4a574 50%, #8B4513 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(212,165,116,0.3);
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            border-radius: 2px;
+        }
+        .section-title::after {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+        .section-subtitle { 
+            text-align: center; 
+            color: #666; 
+            font-size: 1.2rem; 
+            margin-bottom: 3rem; 
+            font-weight: 300; 
+            font-style: italic;
+            position: relative;
+        }
+        .section-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+        }
         
-        /* Products */
-        .products { background: #fafafa; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .product-card { background: white; text-align: center; padding: 1rem; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); transition: all 0.3s; position: relative; overflow: hidden; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
-        .product-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 1.5rem; filter: contrast(1.1) brightness(1.05); }
-        .product-card h3 { color: #2c2c2c; margin-bottom: 0.8rem; font-size: 1.3rem; font-weight: 600; }
-        .product-price { color: #d4a574; font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; }
+        /* Our Collection */
+        .collection { background: #fafafa; padding: 5rem 0 5rem 0; margin-top: 0; }
+        .collection-grid { display: flex; flex-direction: column; gap: 2.5rem; margin-top: 3rem; }
+        .collection-item { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+        .collection-item:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(212,165,116,0.15); }
+        .collection-item .collection-image { order: 1; }
+        .collection-item .collection-content { order: 2; }
         
-        /* Features */
-        .features { background: white; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem; }
-        .feature-card { text-align: center; padding: 2rem; }
-        .feature-icon { width: 60px; height: 60px; background: #f8f6f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
-        .feature-card h3 { color: #2c2c2c; margin-bottom: 1rem; font-size: 1.2rem; }
-        .feature-card p { color: #666; line-height: 1.6; }
+        .collection-image { position: relative; overflow: hidden; border-radius: 15px; }
+        .collection-image img { width: 100%; height: 350px; object-fit: cover; transition: transform 0.5s ease; }
+        .collection-image:hover img { transform: scale(1.05); }
+        
+        .collection-content { padding: 1rem 0; }
+        .collection-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 600; color: #2c2c2c; margin-bottom: 1rem; }
+        .collection-description { font-size: 1.1rem; color: #666; line-height: 1.7; margin-bottom: 2rem; }
+        .collection-features { list-style: none; margin-bottom: 2.5rem; }
+        .collection-features li { font-size: 0.95rem; color: #555; margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
+        .collection-features li::before { content: '✨'; position: absolute; left: 0; color: #d4a574; }
+        
+        .shop-category-btn { 
+            background: linear-gradient(145deg, #e6b885, #d4a574, #c19653);
+            color: white; 
+            padding: 1rem 2rem; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+            display: inline-block; 
+            font-size: 0.9rem; 
+            letter-spacing: 0.5px;
+            box-shadow: 
+                0 6px 12px rgba(212, 165, 116, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        .shop-category-btn:hover { 
+            background: linear-gradient(145deg, #9d6b2a, #8B4513, #7a3e11);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 8px 20px rgba(139, 69, 19, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Features - Why Choose HerAura Slideshow */
+        .features { 
+            background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); 
+            padding: 6rem 0;
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+        }
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+        }
+        .features-slideshow {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            height: 500px;
+            overflow: hidden;
+        }
+        .feature-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+            border-radius: 25px;
+            padding: 4rem 3rem;
+            box-shadow: 0 25px 80px rgba(212,165,116,0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-in-out;
+            overflow: hidden;
+        }
+        .feature-slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(212,165,116,0.1), rgba(139,69,19,0.05));
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .feature-slide::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(212,165,116,0.08), rgba(139,69,19,0.03));
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .feature-slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .feature-slide .slide-number {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: rgba(212,165,116,0.3);
+            font-weight: 700;
+            z-index: 2;
+        }
+        .feature-slide h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 600;
+            z-index: 2;
+            position: relative;
+            background: linear-gradient(135deg, #8B4513 0%, #d4a574 50%, #8B4513 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .feature-slide p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            max-width: 650px;
+            z-index: 2;
+            position: relative;
+        }
+        .feature-slide .decorative-line {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            z-index: 2;
+        }
         
         /* About */
         .about { background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); }
@@ -483,18 +1009,33 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-container">
+            <div class="loading-divider"></div>
+            <div class="loading-left">
+                <div class="loading-logo" id="loadingLogo">
+                    <div class="loading-brand-name">HerAura</div>
+                    <div class="loading-tagline">Jewellery & Accessories</div>
+                </div>
+            </div>
+            <div class="loading-right">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Welcome to Elegance</h1>
+                    <p class="welcome-subtitle">Discover the art of timeless beauty</p>
+                    <p class="welcome-tagline">"Where everyday moments become extraordinary"</p>
+                    <p class="welcome-description">Experience anti-tarnish jewelry crafted for the modern woman who values both style and substance. Each piece tells a story of elegance that lasts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
     <header>
         <div class="signature-logo">
             <div class="brand-name">HerAura</div>
             <div class="brand-tagline">Jewellery & Accessories</div>
-        </div>
-        <div class="search-bar">
-            <svg class="search-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <input type="text" id="searchInput" placeholder="Search jewelry...">
-        </div>
-        </div>
-        </div>
-        </div>
         </div>
         <div class="nav-menu">
             <ul>
@@ -507,20 +1048,18 @@
         </div>
         <div class="nav-icons">
             <div class="nav-icon-wrapper">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                 <span class="nav-label">Wishlist</span>
             </div>
             <div class="nav-icon-wrapper">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/></svg>
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                 <span class="nav-label">Cart</span>
             </div>
             <div class="nav-icon-wrapper">
-                <svg class="nav-icon" id="loginIcon" fill="currentColor" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <svg class="nav-icon" id="loginIcon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 <span class="nav-label">Profile</span>
             </div>
         </div>
-        <nav>
-        </nav>
     </header>
 
     <section id="home" class="hero">
@@ -557,34 +1096,89 @@
     
 
 
-    <section id="products" class="products">
+    <section id="products" class="collection">
         <div class="container">
-            <h2 class="section-title">Made for You</h2>
-            <p class="section-subtitle">Minimal jewellery, timelessly yours</p>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="product-image.png" alt="Elegant Earrings">
-                    <h3>Elegant Earrings</h3>
-                    <div class="product-price">₹1,299 - ₹2,499</div>
-                    <a href="#" class="btn">SHOP NOW</a>
+            <h2 class="section-title">Our Exquisite Collection</h2>
+            <p class="section-subtitle">Discover timeless elegance crafted for the modern woman</p>
+            <div class="collection-grid">
+                <div class="collection-item">
+                    <div class="collection-image">
+                        <img src="our_collection_1 (2).webp" alt="HerAura Neckpiece Collection">
+                    </div>
+                    <div class="collection-content">
+                        <h3 class="collection-title">Neckpieces</h3>
+                        <p class="collection-description">Make a statement with our curated neckpiece collection. Each piece is designed to be the perfect finishing touch to your ensemble, day or night.</p>
+                        <ul class="collection-features">
+                            <li>Multiple chain length options</li>
+                            <li>Elegant clasp mechanisms</li>
+                            <li>Sophisticated layering possibilities</li>
+                        </ul>
+                        <a href="#" class="shop-category-btn">SHOP NECKPIECES</a>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="product-image.png" alt="Minimal Necklace">
-                    <h3>Minimal Necklace</h3>
-                    <div class="product-price">₹1,899 - ₹3,999</div>
-                    <a href="#" class="btn">SHOP NOW</a>
+                
+                <div class="collection-item">
+                    <div class="collection-image">
+                        <img src="our_collection_2.webp" alt="HerAura Pendants Collection">
+                    </div>
+                    <div class="collection-content">
+                        <h3 class="collection-title">Pendants</h3>
+                        <p class="collection-description">Express your personality with our pendant collection. From minimalist charms to intricate designs, find the perfect piece that resonates with your inner elegance.</p>
+                        <ul class="collection-features">
+                            <li>Meaningful symbolic designs</li>
+                            <li>Premium chain compatibility</li>
+                            <li>Personalized engraving options</li>
+                        </ul>
+                        <a href="#" class="shop-category-btn">SHOP PENDANTS</a>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="product-image.png" alt="Beautiful Rings">
-                    <h3>Beautiful Rings</h3>
-                    <div class="product-price">₹999 - ₹2,299</div>
-                    <a href="#" class="btn">SHOP NOW</a>
+                
+                <div class="collection-item">
+                    <div class="collection-image">
+                        <img src="our_collection_3.webp" alt="HerAura Rings Collection">
+                    </div>
+                    <div class="collection-content">
+                        <h3 class="collection-title">Rings</h3>
+                        <p class="collection-description">Elegant rings that speak volumes without saying a word. From delicate bands to statement pieces, each ring is crafted to complement your unique style and grace.</p>
+                        <ul class="collection-features">
+                            <li>Anti-tarnish coating for lasting brilliance</li>
+                            <li>Comfortable everyday wear design</li>
+                            <li>Versatile styles for any occasion</li>
+                        </ul>
+                        <a href="#" class="shop-category-btn">SHOP RINGS</a>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="product-image.png" alt="Everyday Bracelet">
-                    <h3>Everyday Bracelet</h3>
-                    <div class="product-price">₹1,499 - ₹2,999</div>
-                    <a href="#" class="btn">SHOP NOW</a>
+                
+                <div class="collection-item">
+                    <div class="collection-image">
+                        <img src="our_collection_4.webp" alt="HerAura Earrings Collection">
+                    </div>
+                    <div class="collection-content">
+                        <h3 class="collection-title">Earrings</h3>
+                        <p class="collection-description">Frame your face with sophistication. Our earring collection features designs that enhance your natural beauty, from subtle studs to elegant drops.</p>
+                        <ul class="collection-features">
+                            <li>Lightweight for all-day comfort</li>
+                            <li>Hypoallergenic materials</li>
+                            <li>Classic to contemporary designs</li>
+                        </ul>
+                        <a href="#" class="shop-category-btn">SHOP EARRINGS</a>
+                    </div>
+                </div>
+                
+                <div class="collection-item">
+                    <div class="collection-image">
+                        <img src="our_collection_5.webp" alt="HerAura Bracelets Collection">
+                    </div>
+                    <div class="collection-content">
+                        <h3 class="collection-title">Bracelets</h3>
+                        <p class="collection-description">Adorn your wrists with pieces that tell your story. Our bracelet collection combines modern aesthetics with timeless appeal for the discerning woman.</p>
+                        <ul class="collection-features">
+                            <li>Adjustable sizing for perfect fit</li>
+                            <li>Stackable designs for versatility</li>
+                            <li>Durable construction for daily wear</li>
+                        </ul>
+                        <a href="#" class="shop-category-btn">SHOP BRACELETS</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -592,27 +1186,44 @@
     
     <section class="features">
         <div class="container">
-            <h2 class="section-title">Why Choose HerAura?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
+            <h2 class="section-title">Why Choose HerAura</h2>
+            <p class="section-subtitle">Discover what makes our jewelry exceptional</p>
+            <div class="features-slideshow">
+                <div class="feature-slide active">
+                    <div class="slide-number">01</div>
                     <h3>Anti-Tarnish Technology</h3>
-                    <p>Our jewelry maintains its shine and beauty with advanced anti-tarnish coating</p>
+                    <p>Our revolutionary coating ensures your jewelry maintains its lustrous shine for years. No more worrying about discoloration or frequent polishing - just enduring beauty that lasts.</p>
+                    <div class="decorative-line"></div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✨</div>
+                <div class="feature-slide">
+                    <div class="slide-number">02</div>
                     <h3>Everyday Elegance</h3>
-                    <p>Designed for daily wear without compromising on style or comfort</p>
+                    <p>Thoughtfully designed for daily wear without compromising sophistication. Each piece seamlessly transitions from morning meetings to evening gatherings with effortless grace.</p>
+                    <div class="decorative-line"></div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Handcrafted Quality</h3>
-                    <p>Each piece is carefully crafted with attention to detail and quality</p>
+                <div class="feature-slide">
+                    <div class="slide-number">03</div>
+                    <h3>Handcrafted Excellence</h3>
+                    <p>Every piece is meticulously crafted by skilled artisans who understand the art of jewelry making. Attention to detail and quality craftsmanship in every curve and finish.</p>
+                    <div class="decorative-line"></div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💎</div>
-                    <h3>Timeless Design</h3>
-                    <p>Minimal, classic designs that never go out of style</p>
+                <div class="feature-slide">
+                    <div class="slide-number">04</div>
+                    <h3>Timeless Design Philosophy</h3>
+                    <p>Our minimal, classic designs transcend fleeting trends. Invest in pieces that remain stylish and relevant, becoming treasured additions to your jewelry collection for decades.</p>
+                    <div class="decorative-line"></div>
+                </div>
+                <div class="feature-slide">
+                    <div class="slide-number">05</div>
+                    <h3>Premium Materials</h3>
+                    <p>We source only the finest materials and use advanced techniques to ensure durability. Hypoallergenic metals and carefully selected components for sensitive skin compatibility.</p>
+                    <div class="decorative-line"></div>
+                </div>
+                <div class="feature-slide">
+                    <div class="slide-number">06</div>
+                    <h3>Confidence & Comfort</h3>
+                    <p>Lightweight designs that feel as good as they look. Our jewelry enhances your natural confidence while providing all-day comfort for your active lifestyle.</p>
+                    <div class="decorative-line"></div>
                 </div>
             </div>
         </div>
@@ -710,6 +1321,7 @@
             </div>
         </div>
     </footer>
+    </div> <!-- End Main Content -->
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -742,64 +1354,160 @@
 
 </body>
 <script>
-    // Hero Slider Functionality
+    // Loading Animation
+    window.addEventListener('load', function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingLogo = document.getElementById('loadingLogo');
+        const loadingBrandName = document.querySelector('.loading-brand-name');
+        const loadingTagline = document.querySelector('.loading-tagline');
+        const welcomeSection = document.querySelector('.welcome-section');
+        const mainContent = document.getElementById('mainContent');
+        const signatureLogo = document.querySelector('.signature-logo');
+        
+        // Step 1: Logo appears normally (1 second)
+        setTimeout(() => {
+            // Step 2: Add elegant glow effect (5 seconds for reading)
+            loadingBrandName.classList.add('animate');
+            loadingTagline.classList.add('animate');
+            welcomeSection.classList.add('animate');
+            
+            setTimeout(() => {
+                // Step 3: Remove glow animations smoothly
+                loadingBrandName.classList.remove('animate');
+                loadingTagline.classList.remove('animate');
+                welcomeSection.classList.remove('animate');
+                
+                // Step 4: Start seamless transition
+                const transitionLogo = loadingLogo.cloneNode(true);
+                transitionLogo.className = 'logo-transition';
+                
+                // Position at current logo location
+                const logoRect = loadingLogo.getBoundingClientRect();
+                transitionLogo.style.position = 'fixed';
+                transitionLogo.style.top = (logoRect.top + logoRect.height/2) + 'px';
+                transitionLogo.style.left = (logoRect.left + logoRect.width/2) + 'px';
+                transitionLogo.style.transform = 'translate(-50%, -50%)';
+                transitionLogo.style.zIndex = '8888';
+                document.body.appendChild(transitionLogo);
+                
+                // Fade welcome section first
+                document.querySelector('.loading-right').style.transition = 'opacity 0.8s ease';
+                document.querySelector('.loading-right').style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Show main content
+                    mainContent.classList.add('show');
+                    
+                    // Move logo to final position
+                    const finalLogoRect = signatureLogo.getBoundingClientRect();
+                    transitionLogo.style.top = (finalLogoRect.top + finalLogoRect.height/2) + 'px';
+                    transitionLogo.style.left = (finalLogoRect.left + finalLogoRect.width/2) + 'px';
+                    transitionLogo.style.transform = 'translate(-50%, -50%) scale(0.6)';
+                    
+                    // Hide loading screen after logo starts moving
+                    setTimeout(() => {
+                        loadingScreen.classList.add('fade-out');
+                    }, 200);
+                    
+                    // Show final logo and cleanup
+                    setTimeout(() => {
+                        transitionLogo.style.opacity = '0';
+                        signatureLogo.classList.add('show');
+                        
+                        // Ensure page stays at top
+                        window.scrollTo(0, 0);
+                        
+                        // Remove initial auto-transition - now scroll-based only
+                        
+                        setTimeout(() => {
+                            transitionLogo.remove();
+                            loadingScreen.remove();
+                        }, 500);
+                    }, 1200);
+                }, 300);
+            }, 5000); // 5 seconds glow for reading
+        }, 1000); // 1 second normal display
+    });
+
+    // Hero Slider - Simple Working Version
     let currentSlide = 0;
-    const slides = document.querySelectorAll('.hero-slide');
-    const totalSlides = slides.length;
+    const imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
     let slideInterval;
 
     function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index].classList.add('active');
+        const heroImage = document.getElementById('heroImage');
+        const dots = document.querySelectorAll('.hero-dot');
+        const slides = document.querySelectorAll('.hero-slide');
         
         // Update dots
-        document.querySelectorAll('.hero-dot').forEach((dot, i) => {
+        dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
         
-        const heroContainer = document.querySelector('.hero-container');
-        const heroImage = document.getElementById('heroImage');
-        const imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
+        // Update background slides
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
         
-        heroContainer.style.display = 'grid';
-        
-        // Fade out hero image, change source, then fade in
-        heroImage.style.opacity = '0';
-        setTimeout(() => {
-            heroImage.src = imageNames[index];
-            heroImage.style.opacity = '1';
-        }, 500);
+        // Change front image
+        heroImage.src = imageNames[index];
     }
 
     function goToSlide(index) {
         currentSlide = index;
         showSlide(currentSlide);
-        resetInterval();
-    }
-
-    function changeSlide(direction) {
-        currentSlide += direction;
-        if (currentSlide >= totalSlides) currentSlide = 0;
-        if (currentSlide < 0) currentSlide = totalSlides - 1;
-        showSlide(currentSlide);
-        resetInterval();
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        showSlide(currentSlide);
-    }
-
-    function resetInterval() {
         clearInterval(slideInterval);
         slideInterval = setInterval(nextSlide, 5000);
     }
 
-    // Start auto-slide
-    slideInterval = setInterval(nextSlide, 5000);
+    function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide >= imageNames.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = imageNames.length - 1;
+        showSlide(currentSlide);
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    }
 
-    // Search placeholder typewriter animation
-    const searchInput = document.getElementById('searchInput');
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % imageNames.length;
+        showSlide(currentSlide);
+    }
+
+    // Start with 15 seconds for first slide, then 5 seconds for others
+    setTimeout(() => {
+        slideInterval = setInterval(nextSlide, 5000);
+        nextSlide();
+    }, 15000);
+
+    // Features slideshow
+    let currentFeature = 0;
+    const features = document.querySelectorAll('.feature-slide');
+    let featureInterval;
+
+    function showFeature(index) {
+        features.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+    }
+
+    function nextFeature() {
+        currentFeature = (currentFeature + 1) % features.length;
+        showFeature(currentFeature);
+    }
+
+    // Start features slideshow
+    setTimeout(() => {
+        console.log('Starting features slideshow with', features.length, 'slides');
+        if (features.length > 0) {
+            showFeature(0); // Ensure first slide is visible
+            featureInterval = setInterval(nextFeature, 5000);
+        }
+    }, 2000);
+
+
+
+
     const placeholders = [
         'Search for rings...',
         'Search for pendants...',
@@ -831,109 +1539,52 @@
         let typeSpeed = isDeleting ? 50 : 100;
         
         if (!isDeleting && charIndex === fullText.length) {
-            typeSpeed = 2000; // Pause at end
+            typeSpeed = 2000;
             isDeleting = true;
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             currentIndex = (currentIndex + 1) % placeholders.length;
-            typeSpeed = 500; // Pause before next word
+            typeSpeed = 500;
         }
         
         setTimeout(typeWriter, typeSpeed);
     }
     
-    // Start the typewriter animation
     typeWriter();
     
-    let lastScrollTop = 0;
-    const header = document.querySelector('header');
-    
-    window.addEventListener('scroll', function() {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scrolling down - hide header
-            header.classList.add('slide-up');
-        } else {
-            // Scrolling up - show header
-            header.classList.remove('slide-up');
-        }
-        
-        lastScrollTop = scrollTop;
-    });
-
-    // Login Modal Functionality
+    // Login Modal
     const loginIcon = document.getElementById('loginIcon');
     const loginModal = document.getElementById('loginModal');
     const closeModal = document.querySelector('.close');
     const loginForm = document.getElementById('loginForm');
 
-    // Open modal when person icon is clicked
     loginIcon.addEventListener('click', function() {
         loginModal.style.display = 'block';
     });
 
-    // Close modal when X is clicked
     closeModal.addEventListener('click', function() {
         loginModal.style.display = 'none';
     });
 
-    // Close modal when clicking outside
     window.addEventListener('click', function(event) {
         if (event.target === loginModal) {
             loginModal.style.display = 'none';
         }
     });
 
-    // Handle form submission
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const userType = document.getElementById('userType').value;
 
-        // Basic validation
         if (!email || !password || !userType) {
             alert('Please fill in all fields');
             return;
         }
 
-        // Simulate authentication (replace with actual API call)
-        authenticateUser(email, password, userType);
+        console.log('Login attempt:', { email, userType });
+        alert('Login functionality will be implemented in backend');
     });
-
-    function authenticateUser(email, password, userType) {
-        // Simulate API call - replace with actual authentication
-        console.log('Authenticating:', { email, userType });
-        
-        // Mock authentication - replace with real logic
-        if (email && password) {
-            // Store user info in localStorage
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userType', userType);
-            
-            // Redirect based on user type
-            redirectToDashboard(userType);
-        } else {
-            alert('Invalid credentials');
-        }
-    }
-
-    function redirectToDashboard(userType) {
-        switch(userType) {
-            case 'customer':
-                window.location.href = 'customer-dashboard.html';
-                break;
-            case 'owner':
-                window.location.href = 'admin-dashboard.html';
-                break;
-            case 'logistics':
-                window.location.href = 'logistics-dashboard.html';
-                break;
-            default:
-                alert('Invalid user type');
-        }
-    }
 </script>
 </html>
