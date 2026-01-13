@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Policy - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fafafa; }
+        .container { max-width: 100%; margin: 0; padding: 2rem; padding-top: 140px; }
+        
+        /* Header */
+        header { 
+            background: white; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            height: 120px; 
+        }
+        
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5px;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -15px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 2rem;
+            right: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: all 0.3s ease; }
+        .nav-icon:hover { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
+        
+        .content { background: none; padding: 0; border-radius: 0; box-shadow: none; margin-top: 0; }
+        h2 { font-family: 'Playfair Display', serif; color: #8B4513; margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        h3 { color: #d4a574; margin: 1.5rem 0 0.5rem 0; }
+        p { margin-bottom: 1rem; }
+
+        .shipping-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .shipping-table th, .shipping-table td { border: 1px solid #ddd; padding: 0.8rem; text-align: left; }
+        .shipping-table th { background: #f8f4ef; color: #8B4513; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jewellery & Accessories</div>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="nav-label">Profile</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+
+        <div class="content">
+            <h1>Shipping Policy</h1>
+            <p><strong>Last Updated:</strong> January 1, 2024</p>
+            
+            <h2>1. Shipping Areas</h2>
+            <p>We currently ship to all locations within India. International shipping is not available at this time but will be introduced soon.</p>
+            
+            <h2>2. Processing Time</h2>
+            <p>All orders are processed within 1-2 business days (Monday to Friday, excluding holidays). Orders placed on weekends will be processed on the next business day.</p>
+            
+            <h2>3. Shipping Methods & Delivery Times</h2>
+            <table class="shipping-table">
+                <tr>
+                    <th>Shipping Method</th>
+                    <th>Delivery Time</th>
+                    <th>Cost</th>
+                </tr>
+                <tr>
+                    <td>Standard Shipping</td>
+                    <td>5-7 business days</td>
+                    <td>₹99 (Free on orders above ₹999)</td>
+                </tr>
+                <tr>
+                    <td>Express Shipping</td>
+                    <td>2-3 business days</td>
+                    <td>₹199</td>
+                </tr>
+                <tr>
+                    <td>Same Day Delivery (Select Cities)</td>
+                    <td>Within 24 hours</td>
+                    <td>₹299</td>
+                </tr>
+            </table>
+            
+            <h2>4. Free Shipping</h2>
+            <p>Enjoy free standard shipping on all orders above ₹999. This offer is automatically applied at checkout.</p>
+            
+            <h2>5. Order Tracking</h2>
+            <p>Once your order is shipped, you will receive a tracking number via email and SMS. You can track your package using:</p>
+            <ul>
+                <li>Our website's order tracking page</li>
+                <li>Direct carrier tracking websites</li>
+                <li>WhatsApp updates on your registered number</li>
+            </ul>
+            
+            <h2>6. Shipping Address</h2>
+            <p>Please ensure your shipping address is complete and accurate. We are not responsible for packages delivered to incorrect addresses provided by the customer.</p>
+            
+            <h3>Address Requirements:</h3>
+            <ul>
+                <li>Full name of recipient</li>
+                <li>Complete address with landmark</li>
+                <li>Correct PIN code</li>
+                <li>Active phone number</li>
+            </ul>
+            
+            <h2>7. Delivery Attempts</h2>
+            <p>Our delivery partners will make up to 3 delivery attempts. If delivery is unsuccessful after 3 attempts, the package will be returned to us, and you may be charged for re-shipping.</p>
+            
+            <h2>8. Packaging</h2>
+            <p>All jewelry is carefully packaged in our signature HerAura boxes with protective padding to ensure safe delivery. Each package includes:</p>
+            <ul>
+                <li>Elegant HerAura jewelry box</li>
+                <li>Care instructions card</li>
+                <li>Authenticity certificate</li>
+                <li>Protective bubble wrap</li>
+            </ul>
+            
+            <h2>9. Damaged or Lost Packages</h2>
+            <p>If your package arrives damaged or is lost during transit, please contact us immediately at heraura26@gmail.com with your order number and photos (if applicable). We will arrange for a replacement or full refund.</p>
+            
+            <h2>10. Holidays and Delays</h2>
+            <p>Shipping times may be extended during peak seasons, festivals, or due to unforeseen circumstances. We will notify customers of any expected delays.</p>
+            
+            <h2>11. Contact Information</h2>
+            <p>For shipping-related queries, contact us:</p>
+            <p>Email: heraura26@gmail.com<br>
+            Phone: +91 9356948452<br>
+            WhatsApp: +91 9356948452</p>
+        </div>
+    </div>
+</body>
+</html>

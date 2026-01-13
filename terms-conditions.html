@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fafafa; }
+        .container { max-width: 100%; margin: 0; padding: 2rem; padding-top: 140px; }
+        
+        /* Header */
+        header { 
+            background: white; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            height: 120px; 
+        }
+        
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5px;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -15px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 2rem;
+            right: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: all 0.3s ease; }
+        .nav-icon:hover { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
+        
+        .content { background: none; padding: 0; border-radius: 0; box-shadow: none; margin-top: 0; }
+        h2 { font-family: 'Playfair Display', serif; color: #8B4513; margin: 2rem 0 1rem 0; font-size: 1.8rem; }
+        h3 { color: #d4a574; margin: 1.5rem 0 0.5rem 0; }
+        p { margin-bottom: 1rem; }
+
+        .important-note { background: #f8f4ef; border: 1px solid #d4a574; padding: 1rem; margin: 1rem 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jewellery & Accessories</div>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="nav-label">Profile</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+
+        <div class="content">
+            <h1>Terms & Conditions</h1>
+            <p><strong>Effective Date:</strong> January 1, 2024</p>
+            
+            <div class="important-note">
+                <p><strong>Important:</strong> By accessing and using the HerAura website and services, you agree to be bound by these Terms & Conditions. Please read them carefully.</p>
+            </div>
+            
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing, browsing, or using the HerAura website (heraura.com), you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and our Privacy Policy.</p>
+            
+            <h2>2. About HerAura</h2>
+            <p>HerAura is an online jewelry retailer specializing in anti-tarnish jewelry and accessories. We are committed to providing high-quality, affordable jewelry for everyday elegance.</p>
+            
+            <h2>3. Eligibility</h2>
+            <p>You must be at least 18 years old to make purchases on our website. By using our services, you represent that you meet this age requirement and have the legal capacity to enter into binding agreements.</p>
+            
+            <h2>4. Account Registration</h2>
+            <p>To make purchases, you may need to create an account. You agree to:</p>
+            <ul>
+                <li>Provide accurate and complete information</li>
+                <li>Keep your account information updated</li>
+                <li>Maintain the confidentiality of your password</li>
+                <li>Accept responsibility for all activities under your account</li>
+            </ul>
+            
+            <h2>5. Product Information</h2>
+            <p>We strive to display our products as accurately as possible. However:</p>
+            <ul>
+                <li>Colors may vary due to monitor settings</li>
+                <li>Product descriptions are provided for general information</li>
+                <li>We reserve the right to correct errors in pricing or descriptions</li>
+                <li>All jewelry comes with anti-tarnish coating as described</li>
+            </ul>
+            
+            <h2>6. Pricing and Payment</h2>
+            <h3>Pricing:</h3>
+            <ul>
+                <li>All prices are in Indian Rupees (INR) and include applicable taxes</li>
+                <li>Prices are subject to change without notice</li>
+                <li>We reserve the right to correct pricing errors</li>
+            </ul>
+            
+            <h3>Payment:</h3>
+            <ul>
+                <li>We accept major credit cards, debit cards, UPI, and net banking</li>
+                <li>Payment must be received before order processing</li>
+                <li>All transactions are processed securely through trusted payment gateways</li>
+            </ul>
+            
+            <h2>7. Order Processing</h2>
+            <p>When you place an order:</p>
+            <ul>
+                <li>You will receive an order confirmation email</li>
+                <li>We reserve the right to refuse or cancel orders</li>
+                <li>Orders are subject to product availability</li>
+                <li>Processing time is 1-2 business days</li>
+            </ul>
+            
+            <h2>8. Shipping and Delivery</h2>
+            <p>Please refer to our Shipping Policy for detailed information. Key points:</p>
+            <ul>
+                <li>We ship within India only</li>
+                <li>Delivery times are estimates and not guaranteed</li>
+                <li>Risk of loss passes to you upon delivery</li>
+                <li>You are responsible for providing accurate shipping information</li>
+            </ul>
+            
+            <h2>9. Returns and Exchanges</h2>
+            <p>Please refer to our Return & Refund Policy for complete details. Summary:</p>
+            <ul>
+                <li>15-day return period from delivery date</li>
+                <li>Items must be in original condition</li>
+                <li>Some items may not be eligible for return</li>
+                <li>Return shipping costs may apply</li>
+            </ul>
+            
+            <h2>10. Intellectual Property</h2>
+            <p>All content on our website, including but not limited to text, graphics, logos, images, and software, is the property of HerAura and is protected by copyright and other intellectual property laws.</p>
+            
+            <h2>11. User Conduct</h2>
+            <p>You agree not to:</p>
+            <ul>
+                <li>Use our website for any unlawful purpose</li>
+                <li>Attempt to gain unauthorized access to our systems</li>
+                <li>Interfere with the proper functioning of our website</li>
+                <li>Post or transmit harmful or offensive content</li>
+            </ul>
+            
+            <h2>12. Product Warranty</h2>
+            <h3>Anti-Tarnish Guarantee:</h3>
+            <p>We guarantee that our jewelry will not tarnish under normal wear conditions for 6 months from purchase date. This warranty does not cover:</p>
+            <ul>
+                <li>Damage from misuse or accidents</li>
+                <li>Normal wear and tear</li>
+                <li>Exposure to harsh chemicals</li>
+                <li>Improper storage or care</li>
+            </ul>
+            
+            <h2>13. Limitation of Liability</h2>
+            <p>HerAura's liability is limited to the purchase price of the product. We are not liable for any indirect, incidental, or consequential damages arising from the use of our products or services.</p>
+            
+            <h2>14. Privacy</h2>
+            <p>Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and protect your personal information.</p>
+            
+            <h2>15. Modifications to Terms</h2>
+            <p>We reserve the right to modify these Terms & Conditions at any time. Changes will be effective immediately upon posting on our website. Your continued use of our services constitutes acceptance of the modified terms.</p>
+            
+            <h2>16. Governing Law</h2>
+            <p>These Terms & Conditions are governed by the laws of India. Any disputes will be subject to the exclusive jurisdiction of the courts in [Your City], India.</p>
+            
+            <h2>17. Contact Information</h2>
+            <p>If you have any questions about these Terms & Conditions, please contact us:</p>
+            <p>Email: heraura26@gmail.com<br>
+            Phone: +91 9356948452<br>
+            Address: [Your Business Address]</p>
+            
+            <h2>18. Severability</h2>
+            <p>If any provision of these Terms & Conditions is found to be invalid or unenforceable, the remaining provisions will continue to be valid and enforceable.</p>
+            
+            <div class="important-note">
+                <p><strong>Last Updated:</strong> January 1, 2024<br>
+                <strong>Version:</strong> 1.0</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

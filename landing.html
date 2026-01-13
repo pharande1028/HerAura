@@ -11,6 +11,9 @@
         body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: white; overflow-x: hidden; }
         
         #products { scroll-margin-top: 120px; }
+        #reviews { scroll-margin-top: 120px; }
+        #contact { scroll-margin-top: 120px; }
+        #about { scroll-margin-top: 120px; }
         
         /* Loading Screen */
         .loading-screen {
@@ -288,8 +291,32 @@
         .container { max-width: 1400px; margin: 0 auto; padding: 0 5px; }
         
         /* Header */
-        header { background: white; backdrop-filter: blur(10px); padding: 0.1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(212,165,116,0.15); border-bottom: 1px solid rgba(212,165,116,0.2); transition: all 0.3s ease; height: 120px; }
-        header.scrolled { background: rgba(255,255,255,0.95); box-shadow: 0 4px 30px rgba(212,165,116,0.2); }
+        header { 
+            background: white; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            transition: all 0.3s ease; 
+            height: 120px; 
+        }
+        header.scrolled { 
+            background: rgba(255,255,255,0.95); 
+            box-shadow: 
+                0 6px 30px rgba(212,165,116,0.25),
+                0 12px 50px rgba(139,69,19,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                inset 0 -1px 0 rgba(212,165,116,0.2); 
+        }
         header.slide-up { transform: translateY(-100%); }
         
         nav {
@@ -409,21 +436,34 @@
 
         nav ul { display: flex; list-style: none; align-items: center; }
         nav ul li { margin-left: 1.25rem; }
-        nav a { text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s ease; font-size: 0.9rem; letter-spacing: 0.5px; position: relative; }
-        nav a:hover { color: #d4a574; transform: translateY(-2px); }
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 50%;
-            background: #d4a574;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+        nav a { 
+            text-decoration: none; 
+            color: #333; 
+            font-weight: 500; 
+            transition: all 0.3s ease; 
+            font-size: 0.9rem; 
+            letter-spacing: 0.5px; 
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f4ef 100%);
+            box-shadow: 
+                2px 2px 6px rgba(139,69,19,0.1),
+                -1px -1px 3px rgba(255,255,255,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.5);
         }
-        nav a:hover::after {
-            width: 100%;
+        nav a:hover { 
+            color: #d4a574; 
+            transform: translateY(-1px);
+            background: linear-gradient(145deg, #f8f4ef 0%, #f0e8dd 100%);
+            box-shadow: 
+                3px 3px 8px rgba(139,69,19,0.15),
+                -2px -2px 4px rgba(255,255,255,0.9),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.1);
+        }
+        nav a::after {
+            display: none;
         }
         .nav-icons { display: flex; gap: 2rem; }
         .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: all 0.3s ease; }
@@ -747,7 +787,7 @@
                 inset 0 -1px 0 rgba(0, 0, 0, 0.2);
         }
         
-        /* Features - Why Choose HerAura Slideshow */
+        /* Features - Why Choose HerAura Horizontal Carousel */
         .features { 
             background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); 
             padding: 6rem 0;
@@ -767,17 +807,25 @@
         }
         .features-slideshow {
             position: relative;
-            max-width: 900px;
-            margin: 0 auto;
+            width: 100%;
             height: 500px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .features-carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
         .feature-slide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            width: 350px;
+            height: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -785,12 +833,12 @@
             text-align: center;
             background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
             border-radius: 25px;
-            padding: 4rem 3rem;
-            box-shadow: 0 25px 80px rgba(212,165,116,0.2);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease-in-out;
+            padding: 3rem 2rem;
+            box-shadow: 0 15px 40px rgba(212,165,116,0.15);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             overflow: hidden;
+            opacity: 0.7;
+            transform: scale(0.85);
         }
         .feature-slide::before {
             content: '';
@@ -814,25 +862,50 @@
             border-radius: 50%;
             z-index: 1;
         }
-        .feature-slide.active {
+        .feature-slide.center {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1.1) translateX(0);
+            box-shadow: 0 25px 80px rgba(212,165,116,0.3);
+            z-index: 3;
+        }
+        .feature-slide.left {
+            transform: scale(0.85) translateX(-400px);
+            z-index: 1;
+        }
+        .feature-slide.right {
+            transform: scale(0.85) translateX(400px);
+            z-index: 1;
+        }
+        .feature-slide.hidden-left {
+            transform: scale(0.7) translateX(-800px);
+            opacity: 0;
+        }
+        .feature-slide.hidden-right {
+            transform: scale(0.7) translateX(800px);
+            opacity: 0;
         }
         .feature-slide .slide-number {
             position: absolute;
-            top: 2rem;
-            left: 2rem;
+            top: 1.5rem;
+            left: 1.5rem;
             font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: rgba(212,165,116,0.3);
             font-weight: 700;
             z-index: 2;
+            margin-bottom: 1rem;
+        }
+        .feature-slide.center .slide-number {
+            font-size: 3rem;
+            color: rgba(212,165,116,0.4);
+            margin-bottom: 1.5rem;
         }
         .feature-slide h3 {
             font-family: 'Playfair Display', serif;
             color: #8B4513;
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            margin-top: 3rem;
+            font-size: 2rem;
             font-weight: 600;
             z-index: 2;
             position: relative;
@@ -841,29 +914,55 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .feature-slide.center h3 {
+            font-size: 2.3rem;
+            margin-bottom: 2rem;
+            margin-top: 3.5rem;
+        }
         .feature-slide p {
             color: #666;
-            line-height: 1.8;
-            font-size: 1.2rem;
-            max-width: 650px;
+            line-height: 1.6;
+            font-size: 1rem;
             z-index: 2;
             position: relative;
         }
+        .feature-slide.center p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
         .feature-slide .decorative-line {
             position: absolute;
-            bottom: 2rem;
+            bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
+            width: 80px;
             height: 2px;
             background: linear-gradient(90deg, transparent, #d4a574, transparent);
             z-index: 2;
         }
+        .feature-slide.center .decorative-line {
+            width: 100px;
+            bottom: 2rem;
+        }
         
         /* About */
         .about { background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); }
-        .about-content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .about-content { max-width: 900px; margin: 0 auto; text-align: left; }
         .about p { font-size: 1.1rem; color: #555; line-height: 1.8; margin-bottom: 1.5rem; }
+        .about-story, .about-promise, .about-craftsmanship, .about-vision {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(212,165,116,0.1);
+        }
+        .about-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #8B4513;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
         
         /* Reviews */
         .reviews { background: #fafafa; }
@@ -878,8 +977,29 @@
         .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .contact-card { background: #fafafa; padding: 2rem; border-radius: 15px; text-align: center; }
         .contact-card h3 { color: #d4a574; margin-bottom: 1rem; }
-        .contact-card a { color: #333; text-decoration: none; }
-        .contact-card a:hover { color: #d4a574; }
+        .contact-card a { 
+            color: #333; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem; 
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #f8f4ef 0%, #f0e8dd 100%);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(212,165,116,0.2);
+            transition: all 0.3s ease;
+        }
+        .contact-card a:hover { 
+            color: #d4a574; 
+            background: linear-gradient(135deg, #f0e8dd 0%, #e8d5c4 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,165,116,0.3);
+        }
+        .contact-icon { width: 20px; height: 20px; }
         
         /* Footer */
         footer { background: #2c2c2c; color: #ccc; padding: 3rem 0 2rem; }
@@ -1041,9 +1161,9 @@
             <ul>
                 <li><a href="#home">HOME</a></li>
                 <li><a href="#products">OUR COLLECTION</a></li>
-                <li><a href="#about">ABOUT US</a></li>
                 <li><a href="#reviews">REVIEWS</a></li>
                 <li><a href="#contact">CONTACT</a></li>
+                <li><a href="#about">ABOUT US</a></li>
             </ul>
         </div>
         <div class="nav-icons">
@@ -1189,53 +1309,44 @@
             <h2 class="section-title">Why Choose HerAura</h2>
             <p class="section-subtitle">Discover what makes our jewelry exceptional</p>
             <div class="features-slideshow">
-                <div class="feature-slide active">
+                <div class="features-carousel">
+                <div class="feature-slide center">
                     <div class="slide-number">01</div>
                     <h3>Anti-Tarnish Technology</h3>
                     <p>Our revolutionary coating ensures your jewelry maintains its lustrous shine for years. No more worrying about discoloration or frequent polishing - just enduring beauty that lasts.</p>
                     <div class="decorative-line"></div>
                 </div>
-                <div class="feature-slide">
+                <div class="feature-slide right">
                     <div class="slide-number">02</div>
                     <h3>Everyday Elegance</h3>
                     <p>Thoughtfully designed for daily wear without compromising sophistication. Each piece seamlessly transitions from morning meetings to evening gatherings with effortless grace.</p>
                     <div class="decorative-line"></div>
                 </div>
-                <div class="feature-slide">
+                <div class="feature-slide hidden-right">
                     <div class="slide-number">03</div>
                     <h3>Handcrafted Excellence</h3>
                     <p>Every piece is meticulously crafted by skilled artisans who understand the art of jewelry making. Attention to detail and quality craftsmanship in every curve and finish.</p>
                     <div class="decorative-line"></div>
                 </div>
-                <div class="feature-slide">
+                <div class="feature-slide hidden-right">
                     <div class="slide-number">04</div>
                     <h3>Timeless Design Philosophy</h3>
                     <p>Our minimal, classic designs transcend fleeting trends. Invest in pieces that remain stylish and relevant, becoming treasured additions to your jewelry collection for decades.</p>
                     <div class="decorative-line"></div>
                 </div>
-                <div class="feature-slide">
+                <div class="feature-slide hidden-right">
                     <div class="slide-number">05</div>
                     <h3>Premium Materials</h3>
                     <p>We source only the finest materials and use advanced techniques to ensure durability. Hypoallergenic metals and carefully selected components for sensitive skin compatibility.</p>
                     <div class="decorative-line"></div>
                 </div>
-                <div class="feature-slide">
+                <div class="feature-slide hidden-left">
                     <div class="slide-number">06</div>
                     <h3>Confidence & Comfort</h3>
                     <p>Lightweight designs that feel as good as they look. Our jewelry enhances your natural confidence while providing all-day comfort for your active lifestyle.</p>
                     <div class="decorative-line"></div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <h2 class="section-title">About Us</h2>
-                <p>We create anti-tarnish, daily-wear jewellery designed to be simple, elegant, and easy to wear. Our pieces are thoughtfully selected with a focus on quality, comfort, and timeless style, making them perfect for everyday use.</p>
-                <p>We believe jewellery should blend effortlessly into your routine while adding a subtle touch of elegance. As a growing brand, our goal is to offer minimal, reliable jewellery that you can wear every day with confidence.</p>
-                <p>Every piece in our collection is crafted with love, designed to celebrate the everyday moments that make you uniquely beautiful.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1271,18 +1382,70 @@
             <div class="contact-grid">
                 <div class="contact-card">
                     <h3>Follow Us</h3>
-                    <a href="https://instagram.com/HerAurajewels">@HerAurajewels</a>
-                    <p>Daily inspiration & new arrivals</p>
+                    <a href="https://instagram.com/heraura_jewel" target="_blank">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        @heraura_jewel
+                    </a>
+                    <p>Visit our Instagram to see our latest collections and follow for daily jewelry inspiration</p>
                 </div>
                 <div class="contact-card">
                     <h3>Email Us</h3>
-                    <a href="mailto:heraural@gmail.com">heraural@gmail.com</a>
-                    <p>Customer support & inquiries</p>
+                    <a href="mailto:heraura26@gmail.com">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        heraura26@gmail.com
+                    </a>
+                    <p>Connect with our team for any issues, inquiries, or customer support</p>
                 </div>
                 <div class="contact-card">
                     <h3>Call Us</h3>
-                    <a href="tel:+919356948452">+91 9356948452</a>
-                    <p>Mon-Sat, 10AM-7PM</p>
+                    <a href="tel:+919356948452">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        +91 9356948452
+                    </a>
+                    <p>Direct customer support line for emergencies and immediate assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">About HerAura</h2>
+                <p class="section-subtitle">Where everyday elegance meets lasting beauty</p>
+                
+                <div class="about-story">
+                    <h3>Jewelry That Belongs in Your Daily Story</h3>
+                    <p>At HerAura, we believe beautiful jewelry shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.</p>
+                    
+                    <p>We create affordable, stylish pieces designed for the modern woman who wants to feel confident and elegant every single day, without breaking the bank or worrying about maintenance.</p>
+                </div>
+                
+                <div class="about-promise">
+                    <h3>Beauty That Lasts, Prices That Don't Hurt</h3>
+                    <p>Why choose between looking good and staying within budget? Our anti-tarnish technology ensures your jewelry maintains its shine through busy days, long weeks, and countless memories.</p>
+                    
+                    <p>No more jewelry that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jewelry that works as hard as you do.</p>
+                </div>
+                
+                <div class="about-craftsmanship">
+                    <h3>Thoughtfully Designed, Carefully Made</h3>
+                    <p>Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jewelry should enhance your confidence, not limit your activities.</p>
+                    
+                    <p>From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jewelry that looks expensive without the expensive price tag.</p>
+                </div>
+                
+                <div class="about-vision">
+                    <h3>For Every Woman, Every Day</h3>
+                    <p>HerAura is for women who appreciate quality without compromise. Who want jewelry that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.</p>
+                    
+                    <p>Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jewelry for your real life. Comfortable, elegant, and refreshingly affordable.</p>
                 </div>
             </div>
         </div>
@@ -1299,20 +1462,28 @@
                     <h3>Quick Links</h3>
                     <a href="#home">Home</a>
                     <a href="#products">Shop</a>
-                    <a href="#about">About</a>
+                    <a href="#reviews">Reviews</a>
                     <a href="#contact">Contact</a>
+                    <a href="#about">About</a>
                 </div>
                 <div class="footer-section">
                     <h3>Customer Care</h3>
-                    <a href="#">Shipping Info</a>
-                    <a href="#">Returns</a>
                     <a href="#">Size Guide</a>
                     <a href="#">Care Instructions</a>
+                    <a href="#">Track Your Order</a>
+                    <a href="#">Exchange & Returns</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Policies</h3>
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="shipping-policy.html">Shipping Policy</a>
+                    <a href="return-refund-policy.html">Exchange Return & Refund Policy</a>
+                    <a href="terms-conditions.html">Terms & Conditions</a>
                 </div>
                 <div class="footer-section">
                     <h3>Connect</h3>
-                    <a href="https://instagram.com/HerAurajewels">Instagram</a>
-                    <a href="mailto:heraural@gmail.com">Email</a>
+                    <a href="https://instagram.com/heraura_jewel" target="_blank">Instagram</a>
+                    <a href="mailto:heraura26@gmail.com">Email</a>
                     <a href="tel:+919356948452">Phone</a>
                 </div>
             </div>
@@ -1354,8 +1525,27 @@
 
 </body>
 <script>
-    // Loading Animation
+    // Loading Animation - Only for first-time visitors in session
     window.addEventListener('load', function() {
+        // Check if animation has been shown in this session
+        const animationShown = sessionStorage.getItem('heraura_animation_shown');
+        
+        if (animationShown) {
+            // Skip animation if already shown in this session
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            const signatureLogo = document.querySelector('.signature-logo');
+            
+            loadingScreen.style.display = 'none';
+            mainContent.classList.add('show');
+            signatureLogo.classList.add('show');
+            window.scrollTo(0, 0);
+            return;
+        }
+        
+        // Mark animation as shown for this session
+        sessionStorage.setItem('heraura_animation_shown', 'true');
+        
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingLogo = document.getElementById('loadingLogo');
         const loadingBrandName = document.querySelector('.loading-brand-name');
@@ -1480,28 +1670,43 @@
         nextSlide();
     }, 15000);
 
-    // Features slideshow
+    // Features horizontal carousel
     let currentFeature = 0;
     const features = document.querySelectorAll('.feature-slide');
     let featureInterval;
+    const totalFeatures = features.length;
 
-    function showFeature(index) {
-        features.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
+    function updateCarousel() {
+        features.forEach((slide, index) => {
+            slide.className = 'feature-slide';
+            
+            const position = (index - currentFeature + totalFeatures) % totalFeatures;
+            
+            if (position === 0) {
+                slide.classList.add('center');
+            } else if (position === 1) {
+                slide.classList.add('right');
+            } else if (position === totalFeatures - 1) {
+                slide.classList.add('left');
+            } else if (position < totalFeatures / 2) {
+                slide.classList.add('hidden-right');
+            } else {
+                slide.classList.add('hidden-left');
+            }
         });
     }
 
     function nextFeature() {
-        currentFeature = (currentFeature + 1) % features.length;
-        showFeature(currentFeature);
+        currentFeature = (currentFeature + 1) % totalFeatures;
+        updateCarousel();
     }
 
-    // Start features slideshow
+    // Start features carousel
     setTimeout(() => {
-        console.log('Starting features slideshow with', features.length, 'slides');
+        console.log('Starting features carousel with', features.length, 'slides');
         if (features.length > 0) {
-            showFeature(0); // Ensure first slide is visible
-            featureInterval = setInterval(nextFeature, 5000);
+            updateCarousel(); // Initialize positions
+            featureInterval = setInterval(nextFeature, 4000);
         }
     }, 2000);
 
