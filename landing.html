@@ -235,23 +235,7 @@
         }
         
         /* Image Transition Animation */
-        .image-transition {
-            position: fixed;
-            z-index: 8887;
-            pointer-events: none;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(212,165,116,0.3);
-            transition: none;
-            object-fit: cover;
-        }
-        
-        .hero-image-container img {
-            transition: opacity 0.3s ease;
-        }
-        
-        .collection-image.transition-target {
-            transition: opacity 0.5s ease;
-        }
+
         
         .main-content {
             opacity: 0;
@@ -261,33 +245,7 @@
         .main-content.show {
             opacity: 1;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
-        .animate-fade-in-left { animation: fadeInLeft 0.8s ease-out forwards; }
-        .animate-fade-in-right { animation: fadeInRight 0.8s ease-out forwards; }
-        .animate-pulse { animation: pulse 2s infinite; }
-        .animate-float { animation: float 3s ease-in-out infinite; }
-        .opacity-0 { opacity: 0; }
-        .transition-all { transition: all 0.3s ease; }
+
         .container { max-width: 1400px; margin: 0 auto; padding: 0 5px; }
         
         /* Header */
@@ -337,9 +295,7 @@
             margin-bottom: 0.5rem;
         }
         
-        .nav-middle {
-            display: none;
-        }
+
         
         .nav-menu {
             position: absolute;
@@ -428,46 +384,29 @@
             color: #666;
             font-weight: 500;
         }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #d4a574; }
-        .logo img { height: 160px; width: auto; max-width: 600px; object-fit: contain; filter: contrast(1.2) brightness(1.1) saturate(1.1); transition: transform 0.3s ease; mix-blend-mode: multiply; opacity: 0.9; }
-        .logo img:hover { transform: scale(1.05); opacity: 1; }
-        
-        .nav-right { display: flex; align-items: center; gap: 0.5rem; }
-
-        nav ul { display: flex; list-style: none; align-items: center; }
-        nav ul li { margin-left: 1.25rem; }
-        nav a { 
-            text-decoration: none; 
-            color: #333; 
-            font-weight: 500; 
-            transition: all 0.3s ease; 
-            font-size: 0.9rem; 
-            letter-spacing: 0.5px; 
-            position: relative;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: linear-gradient(145deg, #ffffff 0%, #f8f4ef 100%);
-            box-shadow: 
-                2px 2px 6px rgba(139,69,19,0.1),
-                -1px -1px 3px rgba(255,255,255,0.8),
-                inset 0 1px 0 rgba(255,255,255,0.5);
-        }
-        nav a:hover { 
-            color: #d4a574; 
-            transform: translateY(-1px);
-            background: linear-gradient(145deg, #f8f4ef 0%, #f0e8dd 100%);
-            box-shadow: 
-                3px 3px 8px rgba(139,69,19,0.15),
-                -2px -2px 4px rgba(255,255,255,0.9),
-                inset 0 1px 0 rgba(255,255,255,0.6),
-                inset 0 -1px 0 rgba(212,165,116,0.1);
-        }
-        nav a::after {
-            display: none;
-        }
         .nav-icons { display: flex; gap: 2rem; }
-        .nav-icon { width: 24px; height: 24px; cursor: pointer; transition: all 0.3s ease; }
-        .nav-icon:hover { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
+        
+        .nav-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .icon-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d4a574;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+        }
         
         /* Hero Section */
         .hero { 
@@ -577,9 +516,8 @@
             color: #d4a574;
             transform: translateY(-50%) scale(1.2);
         }
-        .hero-prev {
-            left: 20px;
-        }
+        .hero-prev { left: 20px; }
+        .hero-next { right: 20px; }
         .hero-dots {
             position: absolute;
             bottom: 30px;
@@ -597,31 +535,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .hero-next {
-            right: 20px;
-        }
-        .hero-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
         .hero-dot.active {
             background: #d4a574;
             transform: scale(1.2);
         }
-        .hero-content { 
-            position: relative; 
-            z-index: 2; 
-            max-width: 800px; 
-            padding: 2rem; 
-            background: rgba(255,255,255,0.1); 
-            backdrop-filter: blur(10px); 
-            border-radius: 20px; 
-            box-shadow: 0 20px 60px rgba(212,165,116,0.2); 
-        }
+
         .hero h1 { 
             font-family: 'Playfair Display', serif; 
             font-size: 4rem; 
@@ -1161,23 +1079,30 @@
             <ul>
                 <li><a href="#home">HOME</a></li>
                 <li><a href="#products">OUR COLLECTION</a></li>
+                <li><a href="shop.html">SHOP</a></li>
                 <li><a href="#reviews">REVIEWS</a></li>
                 <li><a href="#contact">CONTACT</a></li>
                 <li><a href="#about">ABOUT US</a></li>
             </ul>
         </div>
         <div class="nav-icons">
-            <div class="nav-icon-wrapper">
-                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                <span class="nav-label">Wishlist</span>
+            <div class="nav-icon-wrapper" onclick="window.location.href='wishlist.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="icon-badge" id="wishlistBadge">0</span>
+            </div>
+            <div class="nav-icon-wrapper" onclick="window.location.href='cart.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="icon-badge" id="cartBadge">0</span>
             </div>
             <div class="nav-icon-wrapper">
-                <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <span class="nav-label">Cart</span>
-            </div>
-            <div class="nav-icon-wrapper">
-                <svg class="nav-icon" id="loginIcon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="cursor: pointer;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span class="nav-label">Profile</span>
+                <svg id="loginIcon" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="cursor: pointer;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
             </div>
         </div>
     </header>
@@ -1205,7 +1130,7 @@
                 <h1>Anti-Tarnish Jewellery<br>for Everyday You</h1>
                 <p>Handcrafted minimal jewelry that stays beautiful, designed for your daily elegance</p>
                 <div class="hero-buttons">
-                    <a href="#products" class="btn">SHOP COLLECTION</a>
+                    <a href="shop.html" class="btn">SHOP COLLECTION</a>
                 </div>
             </div>
             <div class="hero-image-container">
@@ -1233,7 +1158,7 @@
                             <li>Elegant clasp mechanisms</li>
                             <li>Sophisticated layering possibilities</li>
                         </ul>
-                        <a href="#" class="shop-category-btn">SHOP NECKPIECES</a>
+                        <a href="shop.html" class="shop-category-btn">SHOP NECKPIECES</a>
                     </div>
                 </div>
                 
@@ -1249,7 +1174,7 @@
                             <li>Premium chain compatibility</li>
                             <li>Personalized engraving options</li>
                         </ul>
-                        <a href="#" class="shop-category-btn">SHOP PENDANTS</a>
+                        <a href="shop.html" class="shop-category-btn">SHOP PENDANTS</a>
                     </div>
                 </div>
                 
@@ -1265,7 +1190,7 @@
                             <li>Comfortable everyday wear design</li>
                             <li>Versatile styles for any occasion</li>
                         </ul>
-                        <a href="#" class="shop-category-btn">SHOP RINGS</a>
+                        <a href="shop.html" class="shop-category-btn">SHOP RINGS</a>
                     </div>
                 </div>
                 
@@ -1281,7 +1206,7 @@
                             <li>Hypoallergenic materials</li>
                             <li>Classic to contemporary designs</li>
                         </ul>
-                        <a href="#" class="shop-category-btn">SHOP EARRINGS</a>
+                        <a href="shop.html" class="shop-category-btn">SHOP EARRINGS</a>
                     </div>
                 </div>
                 
@@ -1297,7 +1222,7 @@
                             <li>Stackable designs for versatility</li>
                             <li>Durable construction for daily wear</li>
                         </ul>
-                        <a href="#" class="shop-category-btn">SHOP BRACELETS</a>
+                        <a href="shop.html" class="shop-category-btn">SHOP BRACELETS</a>
                     </div>
                 </div>
             </div>
@@ -1489,6 +1414,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2024 HerAura. All rights reserved. | Made with ❤️ for everyday elegance</p>
+                <a href="admin.html" style="color: #2c2c2c; font-size: 8px; opacity: 0.1; text-decoration: none;">•</a>
             </div>
         </div>
     </footer>
@@ -1513,8 +1439,7 @@
                     <select id="userType" name="userType" required>
                         <option value="">Select Role</option>
                         <option value="customer">Customer</option>
-                        <option value="owner">Owner/Admin</option>
-                        <option value="logistics">Logistics Partner</option>
+                        <option value="seller">Seller</option>
                     </select>
                 </div>
                 <button type="submit" class="btn login-btn">Sign In</button>
@@ -1606,9 +1531,7 @@
                         
                         // Ensure page stays at top
                         window.scrollTo(0, 0);
-                        
-                        // Remove initial auto-transition - now scroll-based only
-                        
+
                         setTimeout(() => {
                             transitionLogo.remove();
                             loadingScreen.remove();
@@ -1679,20 +1602,13 @@
     function updateCarousel() {
         features.forEach((slide, index) => {
             slide.className = 'feature-slide';
-            
             const position = (index - currentFeature + totalFeatures) % totalFeatures;
             
-            if (position === 0) {
-                slide.classList.add('center');
-            } else if (position === 1) {
-                slide.classList.add('right');
-            } else if (position === totalFeatures - 1) {
-                slide.classList.add('left');
-            } else if (position < totalFeatures / 2) {
-                slide.classList.add('hidden-right');
-            } else {
-                slide.classList.add('hidden-left');
-            }
+            if (position === 0) slide.classList.add('center');
+            else if (position === 1) slide.classList.add('right');
+            else if (position === totalFeatures - 1) slide.classList.add('left');
+            else if (position < totalFeatures / 2) slide.classList.add('hidden-right');
+            else slide.classList.add('hidden-left');
         });
     }
 
@@ -1703,73 +1619,62 @@
 
     // Start features carousel
     setTimeout(() => {
-        console.log('Starting features carousel with', features.length, 'slides');
         if (features.length > 0) {
-            updateCarousel(); // Initialize positions
+            updateCarousel();
             featureInterval = setInterval(nextFeature, 4000);
         }
     }, 2000);
-
-
-
-
-    const placeholders = [
-        'Search for rings...',
-        'Search for pendants...',
-        'Search for earrings...',
-        'Search for necklaces...',
-        'Gift your loved ones...',
-        'Gift for her...',
-        'Search jewelry...'
-    ];
-    
-    let currentIndex = 0;
-    let currentText = '';
-    let isDeleting = false;
-    let charIndex = 0;
-    
-    function typeWriter() {
-        const fullText = placeholders[currentIndex];
-        
-        if (isDeleting) {
-            currentText = fullText.substring(0, charIndex - 1);
-            charIndex--;
-        } else {
-            currentText = fullText.substring(0, charIndex + 1);
-            charIndex++;
-        }
-        
-        searchInput.placeholder = currentText;
-        
-        let typeSpeed = isDeleting ? 50 : 100;
-        
-        if (!isDeleting && charIndex === fullText.length) {
-            typeSpeed = 2000;
-            isDeleting = true;
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            currentIndex = (currentIndex + 1) % placeholders.length;
-            typeSpeed = 500;
-        }
-        
-        setTimeout(typeWriter, typeSpeed);
-    }
-    
-    typeWriter();
-    
-    // Login Modal
+    // Navigation Icons
     const loginIcon = document.getElementById('loginIcon');
     const loginModal = document.getElementById('loginModal');
     const closeModal = document.querySelector('.close');
     const loginForm = document.getElementById('loginForm');
 
-    loginIcon.addEventListener('click', function() {
-        loginModal.style.display = 'block';
+    // Update badge counts
+    function updateBadges() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        
+        const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+        const wishlistCount = wishlist.length;
+        
+        const cartBadge = document.getElementById('cartBadge');
+        const wishlistBadge = document.getElementById('wishlistBadge');
+        
+        if (cartBadge) {
+            cartBadge.textContent = cartCount;
+            cartBadge.style.display = 'flex';
+        }
+        
+        if (wishlistBadge) {
+            wishlistBadge.textContent = wishlistCount;
+            wishlistBadge.style.display = 'flex';
+        }
+    }
+
+// Secret admin access - Press Ctrl+Shift+A
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+            // Clear any seller session data before accessing admin
+            sessionStorage.removeItem('sellerLoggedIn');
+            sessionStorage.removeItem('currentSeller');
+            localStorage.removeItem('currentSellerData');
+            
+            window.location.href = 'admin.html';
+        }
     });
 
-    closeModal.addEventListener('click', function() {
-        loginModal.style.display = 'none';
-    });
+    if (loginIcon && loginModal) {
+        loginIcon.addEventListener('click', function() {
+            loginModal.style.display = 'block';
+        });
+    }
+
+    if (closeModal && loginModal) {
+        closeModal.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+        });
+    }
 
     window.addEventListener('click', function(event) {
         if (event.target === loginModal) {
@@ -1777,19 +1682,33 @@
         }
     });
 
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const userType = document.getElementById('userType').value;
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
 
-        if (!email || !password || !userType) {
-            alert('Please fill in all fields');
-            return;
-        }
+            if (!email || !password || !userType) {
+                alert('Please fill in all fields');
+                return;
+            }
 
-        console.log('Login attempt:', { email, userType });
-        alert('Login functionality will be implemented in backend');
-    });
+            // Simple demo login
+            if (userType === 'seller') {
+                alert('Redirecting to seller portal...');
+                window.location.href = 'seller-login.html';
+            } else {
+                alert('Login successful! (Demo mode) - UserType: ' + userType);
+                loginModal.style.display = 'none';
+            }
+        });
+    }
+    
+    // Initialize badges on page load
+    document.addEventListener('DOMContentLoaded', updateBadges);
+    
+    // Update badges every 2 seconds to sync with other pages
+    setInterval(updateBadges, 2000);
 </script>
 </html>

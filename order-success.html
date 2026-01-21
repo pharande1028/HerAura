@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fafafa; }
+        
+        /* Header */
+        header { 
+            background: white; 
+            padding: 1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 2rem 2rem;
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            animation: bounce 0.6s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            80% { transform: translateY(-10px); }
+        }
+        
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        
+        .success-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .order-details {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        
+        .order-id {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .detail-value {
+            color: #666;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #8B4513;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #d4a574;
+            border: 2px solid #d4a574;
+        }
+        
+        .btn-secondary:hover {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .tracking-info {
+            background: #f8f6f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .tracking-title {
+            font-weight: 600;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tracking-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="landing.html" class="brand-name">HerAura</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="success-icon">
+            <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+        </div>
+        
+        <h1 class="success-title">Order Confirmed!</h1>
+        <p class="success-message">Thank you for your purchase. Your order has been successfully placed.</p>
+        
+        <div class="order-details" id="orderDetails">
+            <!-- Order details will be loaded here -->
+        </div>
+        
+        <div class="tracking-info">
+            <div class="tracking-title">What's Next?</div>
+            <div class="tracking-text">
+                We'll send you an email confirmation shortly. Your order will be processed within 1-2 business days, 
+                and you'll receive tracking information once it ships.
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="shop.html" class="btn btn-secondary">Continue Shopping</a>
+            <a href="landing.html" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function loadOrderDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            
+            if (!orderId) {
+                window.location.href = 'landing.html';
+                return;
+            }
+            
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (!order) {
+                window.location.href = 'landing.html';
+                return;
+            }
+            
+            const orderDetails = document.getElementById('orderDetails');
+            const orderDate = new Date(order.orderDate).toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            orderDetails.innerHTML = `
+                <div class="order-id">Order ID: ${order.id}</div>
+                <div class="detail-row">
+                    <span class="detail-label">Order Date:</span>
+                    <span class="detail-value">${orderDate}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Customer:</span>
+                    <span class="detail-value">${order.customer.firstName} ${order.customer.lastName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">${order.customer.email}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value">${order.customer.phone}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Shipping Address:</span>
+                    <span class="detail-value">${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pincode}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Method:</span>
+                    <span class="detail-value">${order.customer.payment.toUpperCase()}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Total Amount:</span>
+                    <span class="detail-value">₹${order.total}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Items:</span>
+                    <span class="detail-value">${order.items.length} item(s)</span>
+                </div>
+            `;
+        }
+        
+        // Initialize
+        loadOrderDetails();
+    </script>
+</body>
+</html>
