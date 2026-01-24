@@ -12,12 +12,21 @@
         /* Header */
         header { 
             background: white; 
-            padding: 1rem 0; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
             position: fixed; 
             width: 100%; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            transition: all 0.3s ease; 
+            height: 140px; 
         }
         
         nav {
@@ -31,16 +40,159 @@
         
         .brand-name {
             font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
             text-decoration: none;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -15px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .nav-menu {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         .nav-menu ul {
             display: flex;
             list-style: none;
+            align-items: center;
+        }
+        
+        .nav-menu ul li {
+            margin-left: 1.25rem;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 1.2rem;
+            right: 4rem;
+            display: flex;
             gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-icon-wrapper:hover {
+            color: #d4a574;
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon-wrapper:hover svg {
+            stroke: #d4a574;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-icon-wrapper:hover .nav-label {
+            color: #d4a574;
+        }
+        
+        .nav-buttons {
+            position: absolute;
+            top: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            position: relative;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            white-space: nowrap;
+        }
+        
+        .nav-btn:hover {
+            color: #d4a574;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            min-width: 200px;
+            z-index: 1001;
+        }
+        
+        .nav-btn:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.2rem;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.1);
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(212, 165, 116, 0.1);
+            color: #8B4513;
+            padding-left: 1.5rem;
         }
         
         .nav-menu a {
@@ -48,14 +200,32 @@
             color: #333;
             font-weight: 500;
             transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
         
-        .nav-menu a:hover { color: #d4a574; }
+        .search-section {
+            position: absolute;
+            top: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
         
-        .nav-icons {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+        .search-bar {
+            width: 500px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(212, 165, 116, 0.4);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fefdf8;
+        }
+        
+        .search-bar:focus {
+            border-color: rgba(139, 69, 19, 0.6);
+            box-shadow: 0 0 8px rgba(212,165,116,0.2);
+            background-color: #fdfcf5;
         }
         
         .cart-icon {
@@ -76,13 +246,124 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 20px;
+            transition: background-color 0.3s ease;
         }
+        
+        .cart-count.has-items {
+            background: #dc3545;
+        }
+        
+        .nav-icon-wrapper.logged-in svg {
+            stroke: #dc3545;
+        }
+        
+        .nav-icon-wrapper.logged-in .nav-label {
+            color: #dc3545;
+        }
+        
+
+        
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            background: white;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            min-width: 250px;
+            z-index: 1001;
+            margin-top: 10px;
+        }
+        
+        .nav-icon-wrapper:hover .profile-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .profile-auth-buttons {
+            display: flex;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+        }
+        
+        .profile-auth-btn {
+            flex: 1;
+            padding: 0.8rem;
+            color: #dc3545;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .profile-auth-btn:first-child {
+            border-right: 1px solid rgba(212, 165, 116, 0.3);
+        }
+        
+        .profile-auth-btn:hover {
+            background: rgba(212, 165, 116, 0.1);
+            color: #8B4513;
+        }
+        
+        .profile-dropdown-item {
+            padding: 0.7rem 1.2rem;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .profile-dropdown-item:hover {
+            background: rgba(212, 165, 116, 0.1);
+            color: #8B4513;
+            padding-left: 1.5rem;
+        }
+        
+        .dropdown-section {
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+            padding: 0.3rem 0;
+        }
+        
+        .dropdown-section:last-child {
+            border-bottom: none;
+        }
+        
+        .seller-highlight {
+            background: linear-gradient(135deg, #f8f4ef 0%, #f0e8dd 100%);
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .seller-highlight:hover {
+            background: linear-gradient(135deg, #f0e8dd 0%, #e8d5c4 100%);
+            color: #d4a574;
+        }
+        
+        .section-title {
+            font-size: 0.75rem;
+            color: #8B4513;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(212, 165, 116, 0.1);
+        }
+        
+
         
         /* Main Content */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 120px 2rem 2rem;
+            padding: 160px 3rem 3rem;
         }
         
         .shop-header {
@@ -125,21 +406,25 @@
         /* Product Grid */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2.5rem;
+            margin: 0 auto;
+            max-width: 1200px;
         }
         
         .product-card {
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212,165,116,0.2);
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: rgba(212,165,116,0.4);
         }
         
         .product-image {
@@ -210,56 +495,164 @@
             border-color: #dc3545;
             color: white;
         }
+        
+        /* Footer */
+        footer { background: #2c2c2c; color: #ccc; padding: 2rem 0 1rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+        .footer-section h3 { color: white; margin-bottom: 0.8rem; }
+        .footer-section a { color: #ccc; text-decoration: none; display: block; margin-bottom: 0.4rem; }
+        .footer-section a:hover { color: #d4a574; }
+        .footer-bottom { border-top: 1px solid #444; padding-top: 1.5rem; text-align: center; }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="landing.html" class="brand-name">HerAura</a>
-            <div class="nav-menu">
-                <ul>
-                    <li><a href="landing.html">Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                </ul>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jewellery & Accessories</div>
+        </div>
+        <div class="search-section">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search for rings, earrings, neckpieces...">
+        </div>
+        <div class="nav-buttons">
+            <a href="landing.html" class="nav-btn">HOME</a>
+            <div class="nav-btn">
+                SHOP BY CATEGORY
+                <div class="dropdown">
+                    <a href="#" class="dropdown-item" onclick="filterProducts('rings')">Rings</a>
+                    <a href="#" class="dropdown-item" onclick="filterProducts('earrings')">Earrings</a>
+                    <a href="#" class="dropdown-item" onclick="filterProducts('neckpieces')">Neckpieces</a>
+                    <a href="#" class="dropdown-item" onclick="filterProducts('pendants')">Pendants</a>
+                    <a href="#" class="dropdown-item" onclick="filterProducts('bracelets')">Bracelets</a>
+                </div>
             </div>
-                <div class="nav-icons">
-                    <div class="cart-icon" onclick="window.location.href='wishlist.html'" style="margin-right: 1rem;">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                        <span class="cart-count" id="wishlistCount">0</span>
+            <div class="nav-btn">
+                NEW ARRIVALS
+                <div class="dropdown">
+                    <a href="#" class="dropdown-item" onclick="filterByNewArrivals()">Latest Products</a>
+                    <a href="#" class="dropdown-item" onclick="filterByNewArrivals('today')">Added Today</a>
+                    <a href="#" class="dropdown-item" onclick="filterByNewArrivals('week')">This Week</a>
+                </div>
+            </div>
+            <div class="nav-btn">
+                BEST SELLERS
+                <div class="dropdown">
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('all')">All Best Sellers</a>
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('rings')">Best Selling Rings</a>
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('earrings')">Best Selling Earrings</a>
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('neckpieces')">Best Selling Neckpieces</a>
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('pendants')">Best Selling Pendants</a>
+                    <a href="#" class="dropdown-item" onclick="filterByBestSellers('bracelets')">Best Selling Bracelets</a>
+                </div>
+            </div>
+            <a href="#" class="nav-btn" onclick="filterByLimitedEdition('all')">LIMITED EDITION</a>
+            <div class="nav-btn">
+                GIFTING
+                <div class="dropdown">
+                    <a href="#" class="dropdown-item" onclick="filterByOccasion('birthday')">Birthday Gifts</a>
+                    <a href="#" class="dropdown-item" onclick="filterByOccasion('anniversary')">Anniversary Gifts</a>
+                    <a href="#" class="dropdown-item" onclick="filterByOccasion('wedding')">Wedding Gifts</a>
+                    <a href="#" class="dropdown-item" onclick="filterByOccasion('valentine')">Valentine's Day</a>
+                    <a href="#" class="dropdown-item" onclick="filterByOccasion('mothers-day')">Mother's Day</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper" title="Wishlist" onclick="window.location.href='wishlist.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="cart-count" id="wishlistCount">0</span>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Cart" onclick="window.location.href='cart.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="cart-count" id="cartCount">0</span>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Profile">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="cursor: pointer;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label" id="profileLabel">Profile</span>
+                <div class="profile-dropdown">
+                    <div id="authButtons" class="profile-auth-buttons">
+                        <div class="profile-auth-btn" onclick="window.location.href='customer-auth.html'">Login</div>
+                        <div class="profile-auth-btn" onclick="window.location.href='customer-auth.html'">Sign Up</div>
                     </div>
-                    <div class="cart-icon" onclick="window.location.href='cart.html'">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                        </svg>
-                        <span class="cart-count" id="cartCount">0</span>
+                    <div class="profile-logout" id="logoutButton" style="display: none;">
+                        <div class="profile-dropdown-item" onclick="logout()" style="color: #dc3545; font-weight: 600;">Logout</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item" onclick="alert('Your Account - Coming Soon!')">Your Account</div>
+                        <div class="profile-dropdown-item" onclick="alert('Your Orders - Coming Soon!')">Your Orders</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='wishlist.html'">Wishlist</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='cart.html'">Cart</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item" onclick="alert('Returns - Coming Soon!')">Returns</div>
+                        <div class="profile-dropdown-item" onclick="alert('Track Your Order - Coming Soon!')">Track Your Order</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='landing.html#contact'">Contact Us</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item seller-highlight" onclick="window.location.href='seller-login.html'">Seller Account</div>
                     </div>
                 </div>
-        </nav>
+            </div>
+        </div>
     </header>
 
     <div class="container">
-        <div class="shop-header">
-            <h1 class="shop-title">Shop Collection</h1>
-            <p>Discover our exquisite range of anti-tarnish jewelry</p>
-        </div>
-
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
-            <button class="filter-btn" onclick="filterProducts('neckpieces')">Neckpieces</button>
-            <button class="filter-btn" onclick="filterProducts('earrings')">Earrings</button>
-            <button class="filter-btn" onclick="filterProducts('rings')">Rings</button>
-            <button class="filter-btn" onclick="filterProducts('bracelets')">Bracelets</button>
-            <button class="filter-btn" onclick="filterProducts('pendants')">Pendants</button>
-        </div>
-
         <div class="products-grid" id="productsGrid">
             <!-- Products will be loaded here -->
         </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>HerAura</h3>
+                    <p>Anti-tarnish jewellery for everyday elegance</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="landing.html">Home</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="landing.html#reviews">Reviews</a>
+                    <a href="landing.html#contact">Contact</a>
+                    <a href="landing.html#about">About</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Care</h3>
+                    <a href="#">Size Guide</a>
+                    <a href="#">Care Instructions</a>
+                    <a href="#">Track Your Order</a>
+                    <a href="#">Exchange & Returns</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Policies</h3>
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="shipping-policy.html">Shipping Policy</a>
+                    <a href="return-refund-policy.html">Exchange Return & Refund Policy</a>
+                    <a href="terms-conditions.html">Terms & Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="https://instagram.com/heraura_jewel" target="_blank">Instagram</a>
+                    <a href="mailto:heraura26@gmail.com">Email</a>
+                    <a href="tel:+919356948452">Phone</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HerAura. All rights reserved. | Made with ❤️ for everyday elegance</p>
+                <a href="admin.html" style="color: #2c2c2c; font-size: 8px; opacity: 0.1; text-decoration: none;">•</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Sample product data - now loads from localStorage
@@ -343,11 +736,51 @@
 
         function updateCartCount() {
             const count = cart.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
+            const cartBadge = document.getElementById('cartCount');
+            if (cartBadge) {
+                cartBadge.textContent = count;
+                cartBadge.className = count > 0 ? 'cart-count has-items' : 'cart-count';
+            }
         }
 
         function updateWishlistCount() {
-            document.getElementById('wishlistCount').textContent = wishlist.length;
+            const wishlistBadge = document.getElementById('wishlistCount');
+            if (wishlistBadge) {
+                wishlistBadge.textContent = wishlist.length;
+                wishlistBadge.className = wishlist.length > 0 ? 'cart-count has-items' : 'cart-count';
+            }
+        }
+        
+        function updateProfileIcon() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn');
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            const profileIcon = document.querySelector('.nav-icon-wrapper[title="Profile"]');
+            const profileLabel = document.getElementById('profileLabel');
+            const authButtons = document.getElementById('authButtons');
+            const logoutButton = document.getElementById('logoutButton');
+            
+            if (profileIcon && profileLabel) {
+                if (isLoggedIn) {
+                    profileIcon.classList.add('logged-in');
+                    const firstName = customerData.name ? customerData.name.split(' ')[0] : 
+                                     customerData.email ? customerData.email.split('@')[0] : 'User';
+                    profileLabel.textContent = firstName;
+                    if (authButtons) authButtons.style.display = 'none';
+                    if (logoutButton) logoutButton.style.display = 'block';
+                } else {
+                    profileIcon.classList.remove('logged-in');
+                    profileLabel.textContent = 'Profile';
+                    if (authButtons) authButtons.style.display = 'flex';
+                    if (logoutButton) logoutButton.style.display = 'none';
+                }
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('customerData');
+            updateProfileIcon();
+            alert('Logged out successfully!');
         }
 
         function refreshProducts() {
@@ -359,15 +792,202 @@
             updateWishlistCount();
         }
         
+        // Typewriter effect for search placeholders
+        const searchPlaceholders = [
+            "Search for rings, earrings, neckpieces...",
+            "Find gifts for her special moments...",
+            "Discover everyday elegance pieces...",
+            "Browse anniversary gifts collection...",
+            "Explore anti-tarnish jewelry...",
+            "Shop bracelets and pendants...",
+            "Find your perfect jewelry match..."
+        ];
+        
+        let placeholderIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typewriterTimeout;
+        
+        function typewriterEffect() {
+            const searchBar = document.getElementById('searchBar');
+            if (!searchBar || searchBar === document.activeElement) return;
+            
+            const currentText = searchPlaceholders[placeholderIndex];
+            
+            if (!isDeleting) {
+                searchBar.placeholder = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                
+                if (charIndex === currentText.length) {
+                    setTimeout(() => {
+                        isDeleting = true;
+                        typewriterEffect();
+                    }, 4000); // Show complete text for 4 seconds
+                    return;
+                }
+            } else {
+                searchBar.placeholder = currentText.substring(0, charIndex - 1);
+                charIndex--;
+                
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    placeholderIndex = (placeholderIndex + 1) % searchPlaceholders.length;
+                }
+            }
+            
+            const speed = isDeleting ? 50 : 100;
+            typewriterTimeout = setTimeout(typewriterEffect, speed);
+        }
+        
+        // Navigation functions
+        function filterByNewArrivals(period = 'all') {
+            const allProducts = JSON.parse(localStorage.getItem('shopProducts')) || products;
+            let filteredProducts = [...allProducts];
+            
+            // Sort by newest first (assuming higher IDs are newer)
+            filteredProducts.sort((a, b) => b.id - a.id);
+            
+            if (period === 'today') {
+                // For demo, show last 2 products as "today"
+                filteredProducts = filteredProducts.slice(0, 2);
+            } else if (period === 'week') {
+                // For demo, show last 4 products as "this week"
+                filteredProducts = filteredProducts.slice(0, 4);
+            }
+            
+            displaySearchResults(filteredProducts, `New Arrivals ${period !== 'all' ? '(' + period + ')' : ''}`);
+        }
+        
+        function filterByBestSellers(category = 'all') {
+            // For demo, simulate sales data
+            const salesData = {
+                1: 15, 2: 8, 3: 22, 4: 12, 5: 18, 6: 25, 7: 6, 8: 20
+            };
+            
+            let filteredProducts = products.filter(product => {
+                if (category === 'all') return true;
+                return product.category === category;
+            });
+            
+            // Sort by sales count (simulated)
+            filteredProducts.sort((a, b) => (salesData[b.id] || 0) - (salesData[a.id] || 0));
+            
+            displaySearchResults(filteredProducts, `Best Sellers ${category !== 'all' ? '(' + category + ')' : ''}`);
+        }
+        
+        function filterByOccasion(occasion) {
+            const occasionMap = {
+                'birthday': ['rings', 'earrings', 'pendants'],
+                'anniversary': ['neckpieces', 'rings', 'bracelets'],
+                'wedding': ['neckpieces', 'earrings', 'bracelets'],
+                'valentine': ['pendants', 'rings', 'neckpieces'],
+                'mothers-day': ['earrings', 'bracelets', 'pendants']
+            };
+            
+            const categories = occasionMap[occasion] || [];
+            const filteredProducts = products.filter(product => 
+                categories.includes(product.category)
+            );
+            
+            displaySearchResults(filteredProducts, `${occasion.charAt(0).toUpperCase() + occasion.slice(1).replace('-', ' ')} Gifts`);
+        }
+        
+        function filterByLimitedEdition(type) {
+            // Show all limited edition products (simulate by showing premium items)
+            const limitedEditionIds = [1, 3, 5, 6, 8]; // Simulate limited edition items
+            const filteredProducts = products.filter(product => 
+                limitedEditionIds.includes(product.id)
+            );
+            
+            displaySearchResults(filteredProducts, 'Limited Edition Collection');
+        }
+        
+        function performSearch(query) {
+            if (!query) {
+                loadProducts();
+                return;
+            }
+            
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(query.toLowerCase()) ||
+                product.category.toLowerCase().includes(query.toLowerCase()) ||
+                query.toLowerCase().includes(product.category.toLowerCase())
+            );
+            
+            displaySearchResults(filteredProducts, query);
+        }
+        
+        function displaySearchResults(results, query) {
+            const grid = document.getElementById('productsGrid');
+            
+            if (results.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No products found for "${query}"</div>`;
+                return;
+            }
+            
+            grid.innerHTML = results.map(product => {
+                const isInWishlist = wishlist.some(item => item.id === product.id);
+                return `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-price">₹${product.price}</p>
+                            <div class="product-actions">
+                                <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                                <button class="wishlist-btn ${isInWishlist ? 'active' : ''}" onclick="toggleWishlist(${product.id})">
+                                    <svg width="20" height="20" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts();
             updateCartCount();
             updateWishlistCount();
+            updateProfileIcon();
+            
+            // Start typewriter effect
+            setTimeout(typewriterEffect, 1000);
+            
+            // Add search event listener
+            const searchBar = document.getElementById('searchBar');
+            searchBar.addEventListener('input', function() {
+                performSearch(this.value);
+            });
+            
+            // Stop typewriter when user focuses on search bar
+            searchBar.addEventListener('focus', function() {
+                clearTimeout(typewriterTimeout);
+            });
+            
+            // Resume typewriter when user leaves search bar (if empty)
+            searchBar.addEventListener('blur', function() {
+                if (!this.value) {
+                    setTimeout(typewriterEffect, 500);
+                }
+            });
         });
         
         // Refresh products every 5 seconds to show new additions
-        setInterval(refreshProducts, 5000);
+        setInterval(() => {
+            refreshProducts();
+            updateProfileIcon();
+        }, 5000);
+        
+        // Handle footer navigation
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="landing.html#"]')) {
+                e.preventDefault();
+                window.location.href = e.target.getAttribute('href');
+            }
+        });
     </script>
 </body>
 </html>

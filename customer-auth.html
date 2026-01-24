@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - HerAura</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #d4a574;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #d4a574;
+            border-bottom-color: #d4a574;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .phone-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .country-code {
+            width: 80px;
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f9f9f9;
+            font-size: 14px;
+        }
+
+        .otp-container {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .otp-input {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .resend-otp {
+            color: #d4a574;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .resend-otp:hover {
+            text-decoration: underline;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .auth-btn:hover {
+            background: #c19660;
+        }
+
+        .auth-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #eee;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .google-btn:hover {
+            background: #f9f9f9;
+            border-color: #d4a574;
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #d4a574;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            z-index: 9999;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.success {
+            background: #4CAF50;
+        }
+
+        .notification.error {
+            background: #f44336;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .timer {
+            color: #d4a574;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">
+            <h1>HerAura</h1>
+        </div>
+
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue shopping</p>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="tab-btn active" onclick="switchTab('phone')">Phone</button>
+            <button class="tab-btn" onclick="switchTab('email')">Email</button>
+        </div>
+
+        <!-- Phone Login Form -->
+        <form class="auth-form active" id="phoneForm">
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <div class="phone-input">
+                    <select class="country-code" id="countryCode">
+                        <option value="+91">+91</option>
+                        <option value="+1">+1</option>
+                        <option value="+44">+44</option>
+                    </select>
+                    <input type="tel" class="form-input" id="phoneNumber" placeholder="Enter mobile number" maxlength="10" required>
+                </div>
+            </div>
+            <button type="submit" class="auth-btn" id="phoneSubmitBtn">Send OTP</button>
+        </form>
+
+        <!-- Email Login Form -->
+        <form class="auth-form" id="emailForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" class="form-input" id="emailAddress" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-input" id="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+
+        <!-- OTP Verification -->
+        <div class="otp-container" id="otpContainer">
+            <h3>Verify OTP</h3>
+            <p>Enter the 6-digit code sent to <span id="sentTo"></span></p>
+            <div class="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 0)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 1)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 5)">
+            </div>
+            <button class="auth-btn" onclick="verifyOTP()">Verify OTP</button>
+            <a href="#" class="resend-otp" onclick="resendOTP()">Resend OTP <span class="timer" id="timer"></span></a>
+        </div>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <button class="google-btn" onclick="signInWithGoogle()">
+            <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+        </button>
+
+        <div class="back-link">
+            <a href="landing.html">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        let otpTimer;
+        let resendTimer = 30;
+
+        function switchTab(type) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(type + 'Form').classList.add('active');
+
+            // Hide OTP container
+            document.getElementById('otpContainer').style.display = 'none';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function moveToNext(current, index) {
+            if (current.value.length === 1 && index < 5) {
+                document.querySelectorAll('.otp-input')[index + 1].focus();
+            }
+            if (current.value.length === 0 && index > 0) {
+                document.querySelectorAll('.otp-input')[index - 1].focus();
+            }
+        }
+
+        function startResendTimer() {
+            resendTimer = 30;
+            const timerElement = document.getElementById('timer');
+            const resendLink = document.querySelector('.resend-otp');
+            
+            resendLink.style.pointerEvents = 'none';
+            resendLink.style.opacity = '0.6';
+            
+            otpTimer = setInterval(() => {
+                timerElement.textContent = `(${resendTimer}s)`;
+                resendTimer--;
+                
+                if (resendTimer < 0) {
+                    clearInterval(otpTimer);
+                    timerElement.textContent = '';
+                    resendLink.style.pointerEvents = 'auto';
+                    resendLink.style.opacity = '1';
+                }
+            }, 1000);
+        }
+
+        // Phone form submission
+        document.getElementById('phoneForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const countryCode = document.getElementById('countryCode').value;
+            
+            if (phoneNumber.length !== 10) {
+                showNotification('Please enter a valid 10-digit mobile number', 'error');
+                return;
+            }
+
+            // Simulate OTP sending
+            showNotification('OTP sent successfully!');
+            document.getElementById('sentTo').textContent = countryCode + ' ' + phoneNumber;
+            document.querySelector('.auth-form.active').style.display = 'none';
+            document.getElementById('otpContainer').style.display = 'block';
+            startResendTimer();
+        });
+
+        // Email form submission
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailAddress').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Simulate login
+            showNotification('Login successful!');
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('customerData', JSON.stringify({
+                email: email,
+                loginTime: new Date().toISOString(),
+                loginMethod: 'email'
+            }));
+            
+            setTimeout(() => {
+                window.location.href = 'landing.html';
+            }, 1500);
+        });
+
+        function verifyOTP() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const otp = Array.from(otpInputs).map(input => input.value).join('');
+            
+            if (otp.length !== 6) {
+                showNotification('Please enter complete OTP', 'error');
+                return;
+            }
+
+            // Simulate OTP verification
+            if (otp === '123456' || otp.length === 6) {
+                showNotification('OTP verified successfully!');
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('customerData', JSON.stringify({
+                    phone: document.getElementById('countryCode').value + document.getElementById('phoneNumber').value,
+                    loginTime: new Date().toISOString(),
+                    loginMethod: 'phone'
+                }));
+                
+                setTimeout(() => {
+                    window.location.href = 'landing.html';
+                }, 1500);
+            } else {
+                showNotification('Invalid OTP. Please try again.', 'error');
+            }
+        }
+
+        function resendOTP() {
+            if (resendTimer > 0) return;
+            
+            showNotification('OTP resent successfully!');
+            startResendTimer();
+        }
+
+        function signInWithGoogle() {
+            // Simulate Google Sign-In
+            showNotification('Redirecting to Google Sign-In...');
+            
+            setTimeout(() => {
+                showNotification('Google Sign-In successful!');
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('customerData', JSON.stringify({
+                    email: 'user@gmail.com',
+                    name: 'Google User',
+                    loginTime: new Date().toISOString(),
+                    loginMethod: 'google'
+                }));
+                
+                setTimeout(() => {
+                    window.location.href = 'landing.html';
+                }, 1500);
+            }, 2000);
+        }
+
+        // Auto-focus first OTP input when container is shown
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.target.id === 'otpContainer' && mutation.target.style.display === 'block') {
+                    document.querySelector('.otp-input').focus();
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('otpContainer'), {
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    </script>
+</body>
+</html>

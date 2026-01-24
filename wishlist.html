@@ -68,6 +68,11 @@
             align-items: center;
             justify-content: center;
             min-width: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .icon-badge.has-items {
+            background: #dc3545;
         }
         
         /* Main Content */
@@ -254,11 +259,13 @@
             if (cartBadge) {
                 cartBadge.textContent = cartCount;
                 cartBadge.style.display = 'flex';
+                cartBadge.className = cartCount > 0 ? 'icon-badge has-items' : 'icon-badge';
             }
             
             if (wishlistBadge) {
                 wishlistBadge.textContent = wishlistCount;
                 wishlistBadge.style.display = 'flex';
+                wishlistBadge.className = wishlistCount > 0 ? 'icon-badge has-items' : 'icon-badge';
             }
         }
         // Load wishlist from localStorage

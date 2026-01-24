@@ -389,6 +389,31 @@
         .nav-icon-wrapper {
             position: relative;
             cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-icon-wrapper:hover {
+            color: #d4a574;
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon-wrapper:hover svg {
+            stroke: #d4a574;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-icon-wrapper:hover .nav-label {
+            color: #d4a574;
         }
         
         .icon-badge {
@@ -406,6 +431,110 @@
             align-items: center;
             justify-content: center;
             min-width: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .icon-badge.has-items {
+            background: #dc3545;
+        }
+        
+        .nav-icon-wrapper.logged-in svg {
+            stroke: #dc3545;
+        }
+        
+        .nav-icon-wrapper.logged-in .nav-label {
+            color: #dc3545;
+        }
+        
+        .dropdown-section {
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+            padding: 0.3rem 0;
+        }
+        
+        .dropdown-section:last-child {
+            border-bottom: none;
+        }
+        
+        .seller-highlight {
+            background: linear-gradient(135deg, #f8f4ef 0%, #f0e8dd 100%);
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 0.75rem;
+            color: #8B4513;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(212, 165, 116, 0.1);
+        }
+        
+
+        
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            background: white;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            min-width: 250px;
+            z-index: 1001;
+            margin-top: 10px;
+        }
+        
+        .nav-icon-wrapper:hover .profile-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .profile-auth-buttons {
+            display: flex;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+            align-items: center;
+        }
+        
+        .profile-auth-btn {
+            flex: 1;
+            padding: 0.8rem;
+            color: #dc3545;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .profile-auth-btn:first-child {
+            border-right: 1px solid rgba(212, 165, 116, 0.3);
+        }
+        
+        .profile-auth-btn:hover {
+            background: rgba(212, 165, 116, 0.1);
+            color: #8B4513;
+        }
+        
+        .profile-dropdown-item {
+            padding: 0.7rem 1.2rem;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .profile-dropdown-item:hover {
+            background: rgba(212, 165, 116, 0.1);
+            color: #8B4513;
+            padding-left: 1.5rem;
         }
         
         /* Hero Section */
@@ -563,8 +692,8 @@
         
         /* Buttons */
         .btn { 
-            background: linear-gradient(145deg, #e6b885, #d4a574, #c19653);
-            color: white; 
+            background: linear-gradient(145deg, #f8f6f0, #e8d5c4, #d4a574);
+            color: #8B4513; 
             padding: 1rem 2.5rem; 
             text-decoration: none; 
             border-radius: 50px; 
@@ -577,20 +706,21 @@
                 0 6px 12px rgba(212, 165, 116, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(139, 69, 19, 0.2);
+            border: 1px solid rgba(212, 165, 116, 0.3);
         }
         .btn:hover { 
-            background: linear-gradient(145deg, #9d6b2a, #8B4513, #7a3e11);
+            background: #d4a574;
+            color: white;
             transform: translateY(-1px) scale(1.02);
             box-shadow: 
-                0 8px 20px rgba(139, 69, 19, 0.4),
+                0 8px 20px rgba(212, 165, 116, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.2);
         }
         .btn:active {
             transform: translateY(0) scale(0.98);
             box-shadow: 
-                0 3px 8px rgba(139, 69, 19, 0.3),
+                0 3px 8px rgba(212, 165, 116, 0.3),
                 inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .btn-outline { background: transparent; color: #d4a574; border: 2px solid #d4a574; }
@@ -662,14 +792,14 @@
         
         /* Our Collection */
         .collection { background: #fafafa; padding: 5rem 0 5rem 0; margin-top: 0; }
-        .collection-grid { display: flex; flex-direction: column; gap: 2.5rem; margin-top: 3rem; }
-        .collection-item { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+        .collection-grid { display: flex; flex-direction: column; gap: 3rem; margin-top: 3rem; }
+        .collection-item { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; margin: 0 1rem; }
         .collection-item:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(212,165,116,0.15); }
         .collection-item .collection-image { order: 1; }
         .collection-item .collection-content { order: 2; }
         
-        .collection-image { position: relative; overflow: hidden; border-radius: 15px; }
-        .collection-image img { width: 100%; height: 350px; object-fit: cover; transition: transform 0.5s ease; }
+        .collection-image { position: relative; overflow: hidden; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .collection-image img { width: 100%; height: 400px; object-fit: cover; transition: transform 0.5s ease; }
         .collection-image:hover img { transform: scale(1.05); }
         
         .collection-content { padding: 1rem 0; }
@@ -680,8 +810,8 @@
         .collection-features li::before { content: '✨'; position: absolute; left: 0; color: #d4a574; }
         
         .shop-category-btn { 
-            background: linear-gradient(145deg, #e6b885, #d4a574, #c19653);
-            color: white; 
+            background: linear-gradient(145deg, #f8f6f0, #e8d5c4, #d4a574);
+            color: #8B4513; 
             padding: 1rem 2rem; 
             text-decoration: none; 
             border-radius: 50px; 
@@ -694,13 +824,14 @@
                 0 6px 12px rgba(212, 165, 116, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(139, 69, 19, 0.2);
+            border: 1px solid rgba(212, 165, 116, 0.3);
         }
         .shop-category-btn:hover { 
-            background: linear-gradient(145deg, #9d6b2a, #8B4513, #7a3e11);
+            background: #d4a574;
+            color: white;
             transform: translateY(-2px) scale(1.02);
             box-shadow: 
-                0 8px 20px rgba(139, 69, 19, 0.4),
+                0 8px 20px rgba(212, 165, 116, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.2);
         }
@@ -1086,23 +1217,49 @@
             </ul>
         </div>
         <div class="nav-icons">
-            <div class="nav-icon-wrapper" onclick="window.location.href='wishlist.html'">
+            <div class="nav-icon-wrapper" title="Wishlist" onclick="window.location.href='wishlist.html'">
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                 </svg>
                 <span class="icon-badge" id="wishlistBadge">0</span>
+                <span class="nav-label">Wishlist</span>
             </div>
-            <div class="nav-icon-wrapper" onclick="window.location.href='cart.html'">
+            <div class="nav-icon-wrapper" title="Cart" onclick="window.location.href='cart.html'">
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 </svg>
                 <span class="icon-badge" id="cartBadge">0</span>
+                <span class="nav-label">Cart</span>
             </div>
-            <div class="nav-icon-wrapper">
+            <div class="nav-icon-wrapper" title="Profile">
                 <svg id="loginIcon" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="cursor: pointer;">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                 </svg>
+                <span class="nav-label" id="profileLabel">Profile</span>
+                <div class="profile-dropdown">
+                    <div id="authButtons" style="display: flex; border-bottom: 1px solid rgba(212, 165, 116, 0.3);">
+                        <div style="flex: 1; padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; border-right: 1px solid rgba(212, 165, 116, 0.3); transition: all 0.3s ease;" onclick="window.location.href='customer-auth.html'" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">Login</div>
+                        <div style="flex: 1; padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="window.location.href='customer-auth.html'" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">Sign Up</div>
+                    </div>
+                    <div class="profile-logout" id="logoutButton" style="display: none;">
+                        <div class="profile-dropdown-item" onclick="logout()" style="color: #dc3545; font-weight: 600;">Logout</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item" onclick="alert('Your Account - Coming Soon!')">Your Account</div>
+                        <div class="profile-dropdown-item" onclick="alert('Your Orders - Coming Soon!')">Your Orders</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='wishlist.html'">Wishlist</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='cart.html'">Cart</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item" onclick="alert('Returns - Coming Soon!')">Returns</div>
+                        <div class="profile-dropdown-item" onclick="alert('Track Your Order - Coming Soon!')">Track Your Order</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='landing.html#contact'">Contact Us</div>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="profile-dropdown-item seller-highlight" onclick="window.location.href='seller-login.html'">Seller Account</div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -1634,21 +1791,46 @@
     function updateBadges() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const isLoggedIn = localStorage.getItem('userLoggedIn');
+        const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
         
         const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
         const wishlistCount = wishlist.length;
         
         const cartBadge = document.getElementById('cartBadge');
         const wishlistBadge = document.getElementById('wishlistBadge');
+        const profileIcon = document.querySelector('.nav-icon-wrapper[title="Profile"]');
+        const profileLabel = document.getElementById('profileLabel');
         
         if (cartBadge) {
             cartBadge.textContent = cartCount;
             cartBadge.style.display = 'flex';
+            cartBadge.className = cartCount > 0 ? 'icon-badge has-items' : 'icon-badge';
         }
         
         if (wishlistBadge) {
             wishlistBadge.textContent = wishlistCount;
             wishlistBadge.style.display = 'flex';
+            wishlistBadge.className = wishlistCount > 0 ? 'icon-badge has-items' : 'icon-badge';
+        }
+        
+        if (profileIcon && profileLabel) {
+            const authButtons = document.getElementById('authButtons');
+            const logoutButton = document.getElementById('logoutButton');
+            
+            if (isLoggedIn) {
+                profileIcon.classList.add('logged-in');
+                const firstName = customerData.name ? customerData.name.split(' ')[0] : 
+                                 customerData.email ? customerData.email.split('@')[0] : 'User';
+                profileLabel.textContent = firstName;
+                if (authButtons) authButtons.style.display = 'none';
+                if (logoutButton) logoutButton.style.display = 'block';
+            } else {
+                profileIcon.classList.remove('logged-in');
+                profileLabel.textContent = 'Profile';
+                if (authButtons) authButtons.style.display = 'flex';
+                if (logoutButton) logoutButton.style.display = 'none';
+            }
         }
     }
 
@@ -1664,9 +1846,29 @@
         }
     });
 
-    if (loginIcon && loginModal) {
-        loginIcon.addEventListener('click', function() {
+    // Profile dropdown functions
+    function openLoginModal() {
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
             loginModal.style.display = 'block';
+        }
+    }
+    
+    function openSignupModal() {
+        // For now, redirect to seller registration as signup
+        window.location.href = 'seller-registration.html';
+    }
+    
+    function logout() {
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('customerData');
+        updateBadges();
+        alert('Logged out successfully!');
+    }
+
+    if (loginIcon && loginModal) {
+        loginIcon.addEventListener('click', function(e) {
+            e.stopPropagation();
         });
     }
 
