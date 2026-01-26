@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fafafa; }
+        
+        /* Header - Same as shipping page */
+        header { 
+            background: white; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            transition: all 0.3s ease; 
+            height: 120px; 
+        }
+        
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5px;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -15px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .search-section {
+            position: absolute;
+            top: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .search-bar {
+            width: 500px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(212, 165, 116, 0.4);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fefdf8;
+        }
+        
+        .nav-menu {
+            position: absolute;
+            top: 4.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-menu ul li {
+            margin-left: 1.25rem;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-menu a:hover {
+            color: #d4a574;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 1.2rem;
+            right: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-icon-wrapper:hover {
+            color: #d4a574;
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon-wrapper:hover svg {
+            stroke: #d4a574;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-icon-wrapper:hover .nav-label {
+            color: #d4a574;
+        }
+        
+        .icon-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d4a574;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .icon-badge.has-items {
+            background: #dc3545;
+        }
+        
+        /* Timeline Steps */
+        .checkout-timeline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            border: 3px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step-icon.active {
+            background: #d4a574;
+            border-color: #d4a574;
+            color: white;
+        }
+        
+        .step-icon.completed {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+        }
+        
+        .step-label.active {
+            color: #d4a574;
+            font-weight: 600;
+        }
+        
+        .timeline-connector {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: #ddd;
+            z-index: -1;
+        }
+        
+        .timeline-connector.active {
+            background: #d4a574;
+        }
+        
+        .timeline-step:last-child .timeline-connector {
+            display: none;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 140px 2rem 2rem;
+        }
+        
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+        
+        .payment-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .order-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .form-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-method {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: #d4a574;
+        }
+        
+        .payment-method.selected {
+            border-color: #d4a574;
+            background: rgba(212, 165, 116, 0.1);
+        }
+        
+        .payment-method input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        
+        .payment-method label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .card-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .card-details.show {
+            display: block;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #d4a574;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .place-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .place-order-btn:hover {
+            background: #8B4513;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jwellery & Accessories</div>
+        </div>
+        <div class="search-section">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search for rings, earrings, neckpieces...">
+        </div>
+        <div class="nav-menu">
+            <ul>
+                <li><a href="landing.html">HOME</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+            </ul>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper" title="Wishlist" onclick="window.location.href='wishlist.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="icon-badge" id="wishlistBadge">0</span>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Cart" onclick="window.location.href='cart.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="icon-badge" id="cartBadge">0</span>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Profile">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="cursor: pointer;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label" id="profileLabel">Profile</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="checkout-timeline">
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                </div>
+                <span class="step-label">Cart</span>
+                <div class="timeline-connector active"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.9 1 3 1.9 3 3V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V9H21ZM19 21H5V3H13.5L19 8.5V21Z"/>
+                    </svg>
+                </div>
+                <span class="step-label">Shipping</span>
+                <div class="timeline-connector active"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon active">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V12H20V18ZM20 8H4V6H20V8Z"/>
+                    </svg>
+                </div>
+                <span class="step-label active">Payment</span>
+                <div class="timeline-connector"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.2L4.8 12L3.4 13.4L9 19L21 7L19.6 5.6L9 16.2Z"/>
+                    </svg>
+                </div>
+                <span class="step-label">Order Confirmed</span>
+            </div>
+        </div>
+
+        <div class="payment-container">
+            <div class="payment-form">
+                <div class="form-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method" onclick="selectPaymentMethod('card')">
+                            <input type="radio" id="card" name="payment" value="card">
+                            <label for="card">Credit/Debit Card</label>
+                            <div class="card-details" id="cardDetails">
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number</label>
+                                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="expiry">Expiry Date</label>
+                                        <input type="text" id="expiry" placeholder="MM/YY">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvv">CVV</label>
+                                        <input type="text" id="cvv" placeholder="123">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardName">Name on Card</label>
+                                    <input type="text" id="cardName" placeholder="John Doe">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                            <input type="radio" id="upi" name="payment" value="upi">
+                            <label for="upi">UPI Payment</label>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('netbanking')">
+                            <input type="radio" id="netbanking" name="payment" value="netbanking">
+                            <label for="netbanking">Net Banking</label>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('cod')">
+                            <input type="radio" id="cod" name="payment" value="cod">
+                            <label for="cod">Cash on Delivery</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div id="orderItems"></div>
+                <div class="summary-item">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Shipping:</span>
+                    <span id="shipping">₹99</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total:</span>
+                    <span id="total">₹99</span>
+                </div>
+                <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectPaymentMethod(method) {
+            // Remove selected class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.card-details').forEach(el => el.classList.remove('show'));
+            
+            // Add selected class to clicked method
+            event.currentTarget.classList.add('selected');
+            
+            // Check the radio button
+            document.getElementById(method).checked = true;
+            
+            // Show card details if card is selected
+            if (method === 'card') {
+                document.getElementById('cardDetails').classList.add('show');
+            }
+        }
+        
+        function loadOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItemsDiv = document.getElementById('orderItems');
+            
+            if (cart.length === 0) {
+                orderItemsDiv.innerHTML = '<p>No items in cart</p>';
+                return;
+            }
+            
+            let subtotal = 0;
+            orderItemsDiv.innerHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                return `
+                    <div class="summary-item">
+                        <span>${item.name} (${item.quantity})</span>
+                        <span>₹${itemTotal}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            const shipping = subtotal > 2000 ? 0 : 99;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `₹${shipping}`;
+            document.getElementById('total').textContent = `₹${total}`;
+        }
+        
+        function placeOrder() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            // Save order data
+            const orderData = {
+                items: JSON.parse(localStorage.getItem('cart')) || [],
+                shipping: JSON.parse(localStorage.getItem('shippingData')) || {},
+                payment: selectedPayment.value,
+                orderDate: new Date().toISOString(),
+                orderId: 'HA' + Date.now()
+            };
+            
+            localStorage.setItem('currentOrder', JSON.stringify(orderData));
+            
+            // Clear cart
+            localStorage.removeItem('cart');
+            
+            // Redirect to order confirmation
+            window.location.href = 'order-confirmed.html';
+        }
+        
+        // Update badge counts
+        function updateBadges() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlist.length;
+            
+            const cartBadge = document.getElementById('cartBadge');
+            const wishlistBadge = document.getElementById('wishlistBadge');
+            
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.style.display = 'flex';
+                cartBadge.className = cartCount > 0 ? 'icon-badge has-items' : 'icon-badge';
+            }
+            
+            if (wishlistBadge) {
+                wishlistBadge.textContent = wishlistCount;
+                wishlistBadge.style.display = 'flex';
+                wishlistBadge.className = wishlistCount > 0 ? 'icon-badge has-items' : 'icon-badge';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderSummary();
+            updateBadges();
+        });
+        
+        // Update badges every 2 seconds to sync with other pages
+        setInterval(updateBadges, 2000);
+    </script>
+</body>
+</html>

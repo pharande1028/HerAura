@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #fafafa; }
+        
+        /* Header - Same as other pages */
+        header { 
+            background: white; 
+            backdrop-filter: blur(10px); 
+            padding: 0.1rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15); 
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            transition: all 0.3s ease; 
+            height: 120px; 
+        }
+        
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5px;
+        }
+        
+        .signature-logo {
+            position: absolute;
+            top: 0.5rem;
+            left: 2rem;
+            z-index: 1001;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .brand-name:hover {
+            color: #d4a574;
+            transform: scale(1.05);
+        }
+        
+        .brand-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #666;
+            margin: -15px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .search-section {
+            position: absolute;
+            top: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .search-bar {
+            width: 500px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(212, 165, 116, 0.4);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fefdf8;
+        }
+        
+        .nav-menu {
+            position: absolute;
+            top: 4.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-menu ul li {
+            margin-left: 1.25rem;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-menu a:hover {
+            color: #d4a574;
+        }
+        
+        .nav-icons {
+            position: absolute;
+            top: 1.2rem;
+            right: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-icon-wrapper:hover {
+            color: #d4a574;
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon-wrapper:hover svg {
+            stroke: #d4a574;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-icon-wrapper:hover .nav-label {
+            color: #d4a574;
+        }
+        
+        .icon-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d4a574;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .icon-badge.has-items {
+            background: #dc3545;
+        }
+        
+        /* Timeline Steps */
+        .checkout-timeline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            border: 3px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step-icon.active {
+            background: #d4a574;
+            border-color: #d4a574;
+            color: white;
+        }
+        
+        .step-icon.completed {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+        }
+        
+        .step-label.active {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .timeline-connector {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: #ddd;
+            z-index: -1;
+        }
+        
+        .timeline-connector.active {
+            background: #28a745;
+        }
+        
+        .timeline-step:last-child .timeline-connector {
+            display: none;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 140px 2rem 2rem;
+        }
+        
+        .confirmation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .confirmation-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        
+        .confirmation-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .order-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .order-details h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #8B4513;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #d4a574;
+            border: 2px solid #d4a574;
+        }
+        
+        .btn-secondary:hover {
+            background: #d4a574;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="signature-logo">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jwellery & Accessories</div>
+        </div>
+        <div class="search-section">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search for rings, earrings, neckpieces...">
+        </div>
+        <div class="nav-menu">
+            <ul>
+                <li><a href="landing.html">HOME</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+            </ul>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper" title="Wishlist" onclick="window.location.href='wishlist.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="icon-badge" id="wishlistBadge">0</span>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Cart" onclick="window.location.href='cart.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="icon-badge" id="cartBadge">0</span>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper" title="Profile">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="cursor: pointer;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label" id="profileLabel">Profile</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="checkout-timeline">
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                </div>
+                <span class="step-label">Cart</span>
+                <div class="timeline-connector active"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.9 1 3 1.9 3 3V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V9H21ZM19 21H5V3H13.5L19 8.5V21Z"/>
+                    </svg>
+                </div>
+                <span class="step-label">Shipping</span>
+                <div class="timeline-connector active"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V12H20V18ZM20 8H4V6H20V8Z"/>
+                    </svg>
+                </div>
+                <span class="step-label">Payment</span>
+                <div class="timeline-connector active"></div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-icon completed">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.2L4.8 12L3.4 13.4L9 19L21 7L19.6 5.6L9 16.2Z"/>
+                    </svg>
+                </div>
+                <span class="step-label active">Order Confirmed</span>
+            </div>
+        </div>
+
+        <div class="confirmation-card">
+            <div class="success-icon">
+                <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
+                    <path d="M9 16.2L4.8 12L3.4 13.4L9 19L21 7L19.6 5.6L9 16.2Z"/>
+                </svg>
+            </div>
+            
+            <h1 class="confirmation-title">Order Confirmed!</h1>
+            <p class="confirmation-subtitle">Thank you for your purchase. Your order has been successfully placed.</p>
+            
+            <div class="order-details" id="orderDetails">
+                <h3>Order Details</h3>
+                <!-- Order details will be loaded here -->
+            </div>
+            
+            <div class="action-buttons">
+                <a href="shop.html" class="btn btn-secondary">Continue Shopping</a>
+                <a href="landing.html" class="btn btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadOrderDetails() {
+            const orderData = JSON.parse(localStorage.getItem('currentOrder'));
+            const orderDetailsDiv = document.getElementById('orderDetails');
+            
+            if (!orderData) {
+                orderDetailsDiv.innerHTML = '<p>No order details found</p>';
+                return;
+            }
+            
+            const subtotal = orderData.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 2000 ? 0 : 99;
+            const total = subtotal + shipping;
+            
+            orderDetailsDiv.innerHTML = `
+                <div class="detail-row">
+                    <span>Order ID:</span>
+                    <span>${orderData.orderId}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Order Date:</span>
+                    <span>${new Date(orderData.orderDate).toLocaleDateString()}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Items:</span>
+                    <span>${orderData.items.length} item(s)</span>
+                </div>
+                <div class="detail-row">
+                    <span>Payment Method:</span>
+                    <span>${orderData.payment.toUpperCase()}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Subtotal:</span>
+                    <span>₹${subtotal}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Shipping:</span>
+                    <span>${shipping === 0 ? 'Free' : '₹' + shipping}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Total Amount:</span>
+                    <span>₹${total}</span>
+                </div>
+            `;
+        }
+        
+        // Update badge counts
+        function updateBadges() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlist.length;
+            
+            const cartBadge = document.getElementById('cartBadge');
+            const wishlistBadge = document.getElementById('wishlistBadge');
+            
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.style.display = 'flex';
+                cartBadge.className = cartCount > 0 ? 'icon-badge has-items' : 'icon-badge';
+            }
+            
+            if (wishlistBadge) {
+                wishlistBadge.textContent = wishlistCount;
+                wishlistBadge.style.display = 'flex';
+                wishlistBadge.className = wishlistCount > 0 ? 'icon-badge has-items' : 'icon-badge';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderDetails();
+            updateBadges();
+        });
+        
+        // Update badges every 2 seconds to sync with other pages
+        setInterval(updateBadges, 2000);
+    </script>
+</body>
+</html>

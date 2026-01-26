@@ -692,36 +692,22 @@
         
         /* Buttons */
         .btn { 
-            background: linear-gradient(145deg, #f8f6f0, #e8d5c4, #d4a574);
-            color: #8B4513; 
-            padding: 1rem 2.5rem; 
+            background: #d4a574;
+            color: white; 
+            padding: 0.8rem 1.5rem; 
             text-decoration: none; 
-            border-radius: 50px; 
-            font-weight: 600; 
-            transition: all 0.3s; 
-            display: inline-block; 
-            font-size: 0.9rem; 
-            letter-spacing: 0.5px;
-            box-shadow: 
-                0 6px 12px rgba(212, 165, 116, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            display: inline-block;
         }
         .btn:hover { 
-            background: #d4a574;
-            color: white;
-            transform: translateY(-1px) scale(1.02);
-            box-shadow: 
-                0 8px 20px rgba(212, 165, 116, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-        }
-        .btn:active {
-            transform: translateY(0) scale(0.98);
-            box-shadow: 
-                0 3px 8px rgba(212, 165, 116, 0.3),
-                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: #8B4513;
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.6);
         }
         .btn-outline { background: transparent; color: #d4a574; border: 2px solid #d4a574; }
         .btn-outline:hover { background: #d4a574; color: white; }
@@ -810,30 +796,21 @@
         .collection-features li::before { content: '✨'; position: absolute; left: 0; color: #d4a574; }
         
         .shop-category-btn { 
-            background: linear-gradient(145deg, #f8f6f0, #e8d5c4, #d4a574);
-            color: #8B4513; 
-            padding: 1rem 2rem; 
+            background: #d4a574;
+            color: white; 
+            padding: 0.8rem 1.5rem; 
             text-decoration: none; 
-            border-radius: 50px; 
-            font-weight: 600; 
-            transition: all 0.3s; 
-            display: inline-block; 
-            font-size: 0.9rem; 
-            letter-spacing: 0.5px;
-            box-shadow: 
-                0 6px 12px rgba(212, 165, 116, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
         }
         .shop-category-btn:hover { 
-            background: #d4a574;
-            color: white;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 
-                0 8px 20px rgba(212, 165, 116, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            background: #8B4513;
+            transform: translateY(-1px);
         }
         
         /* Features - Why Choose HerAura Horizontal Carousel */
@@ -1052,7 +1029,7 @@
         
         /* Footer */
         footer { background: #2c2c2c; color: #ccc; padding: 3rem 0 2rem; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; margin-bottom: 2rem; }
         .footer-section h3 { color: white; margin-bottom: 1rem; }
         .footer-section a { color: #ccc; text-decoration: none; display: block; margin-bottom: 0.5rem; }
         .footer-section a:hover { color: #d4a574; }
@@ -1204,7 +1181,7 @@
     <header>
         <div class="signature-logo">
             <div class="brand-name">HerAura</div>
-            <div class="brand-tagline">Jewellery & Accessories</div>
+            <div class="brand-tagline">Jwellery & Accessories</div>
         </div>
         <div class="nav-menu">
             <ul>
@@ -1284,8 +1261,8 @@
         
         <div class="hero-container">
             <div class="hero-text">
-                <h1>Anti-Tarnish Jewellery<br>for Everyday You</h1>
-                <p>Handcrafted minimal jewelry that stays beautiful, designed for your daily elegance</p>
+                <h1>Anti-Tarnish Jwellery<br>for Everyday You</h1>
+                <p>Handcrafted minimal jwellery that stays beautiful, designed for your daily elegance</p>
                 <div class="hero-buttons">
                     <a href="shop.html" class="btn">SHOP COLLECTION</a>
                 </div>
@@ -1395,7 +1372,7 @@
                 <div class="feature-slide center">
                     <div class="slide-number">01</div>
                     <h3>Anti-Tarnish Technology</h3>
-                    <p>Our revolutionary coating ensures your jewelry maintains its lustrous shine for years. No more worrying about discoloration or frequent polishing - just enduring beauty that lasts.</p>
+                    <p>Our revolutionary coating ensures your jwellery maintains its lustrous shine for years. No more worrying about discoloration or frequent polishing - just enduring beauty that lasts.</p>
                     <div class="decorative-line"></div>
                 </div>
                 <div class="feature-slide right">
@@ -1407,13 +1384,13 @@
                 <div class="feature-slide hidden-right">
                     <div class="slide-number">03</div>
                     <h3>Handcrafted Excellence</h3>
-                    <p>Every piece is meticulously crafted by skilled artisans who understand the art of jewelry making. Attention to detail and quality craftsmanship in every curve and finish.</p>
+                    <p>Every piece is meticulously crafted by skilled artisans who understand the art of jwellery making. Attention to detail and quality craftsmanship in every curve and finish.</p>
                     <div class="decorative-line"></div>
                 </div>
                 <div class="feature-slide hidden-right">
                     <div class="slide-number">04</div>
                     <h3>Timeless Design Philosophy</h3>
-                    <p>Our minimal, classic designs transcend fleeting trends. Invest in pieces that remain stylish and relevant, becoming treasured additions to your jewelry collection for decades.</p>
+                    <p>Our minimal, classic designs transcend fleeting trends. Invest in pieces that remain stylish and relevant, becoming treasured additions to your jwellery collection for decades.</p>
                     <div class="decorative-line"></div>
                 </div>
                 <div class="feature-slide hidden-right">
@@ -1425,7 +1402,7 @@
                 <div class="feature-slide hidden-left">
                     <div class="slide-number">06</div>
                     <h3>Confidence & Comfort</h3>
-                    <p>Lightweight designs that feel as good as they look. Our jewelry enhances your natural confidence while providing all-day comfort for your active lifestyle.</p>
+                    <p>Lightweight designs that feel as good as they look. Our jwellery enhances your natural confidence while providing all-day comfort for your active lifestyle.</p>
                     <div class="decorative-line"></div>
                 </div>
                 </div>
@@ -1470,7 +1447,7 @@
                         </svg>
                         @heraura_jewel
                     </a>
-                    <p>Visit our Instagram to see our latest collections and follow for daily jewelry inspiration</p>
+                    <p>Visit our Instagram to see our latest collections and follow for daily jwellery inspiration</p>
                 </div>
                 <div class="contact-card">
                     <h3>Email Us</h3>
@@ -1503,8 +1480,8 @@
                 <p class="section-subtitle">Where everyday elegance meets lasting beauty</p>
                 
                 <div class="about-story">
-                    <h3>Jewelry That Belongs in Your Daily Story</h3>
-                    <p>At HerAura, we believe beautiful jewelry shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.</p>
+                    <h3>Jwellery That Belongs in Your Daily Story</h3>
+                    <p>At HerAura, we believe beautiful jwellery shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.</p>
                     
                     <p>We create affordable, stylish pieces designed for the modern woman who wants to feel confident and elegant every single day, without breaking the bank or worrying about maintenance.</p>
                 </div>
@@ -1513,21 +1490,21 @@
                     <h3>Beauty That Lasts, Prices That Don't Hurt</h3>
                     <p>Why choose between looking good and staying within budget? Our anti-tarnish technology ensures your jewelry maintains its shine through busy days, long weeks, and countless memories.</p>
                     
-                    <p>No more jewelry that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jewelry that works as hard as you do.</p>
+                    <p>No more jwellery that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jwellery that works as hard as you do.</p>
                 </div>
                 
                 <div class="about-craftsmanship">
                     <h3>Thoughtfully Designed, Carefully Made</h3>
-                    <p>Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jewelry should enhance your confidence, not limit your activities.</p>
+                    <p>Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jwellery should enhance your confidence, not limit your activities.</p>
                     
-                    <p>From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jewelry that looks expensive without the expensive price tag.</p>
+                    <p>From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jwellery that looks expensive without the expensive price tag.</p>
                 </div>
                 
                 <div class="about-vision">
                     <h3>For Every Woman, Every Day</h3>
-                    <p>HerAura is for women who appreciate quality without compromise. Who want jewelry that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.</p>
+                    <p>HerAura is for women who appreciate quality without compromise. Who want jwellery that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.</p>
                     
-                    <p>Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jewelry for your real life. Comfortable, elegant, and refreshingly affordable.</p>
+                    <p>Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jwellery for your real life. Comfortable, elegant, and refreshingly affordable.</p>
                 </div>
             </div>
         </div>
@@ -1538,7 +1515,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>HerAura</h3>
-                    <p>Anti-tarnish jewellery for everyday elegance</p>
+                    <p>Anti-tarnish jwellery for everyday elegance</p>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
@@ -1546,7 +1523,7 @@
                     <a href="#products">Shop</a>
                     <a href="#reviews">Reviews</a>
                     <a href="#contact">Contact</a>
-                    <a href="#about">About</a>
+                    <a href="#about">About Us</a>
                 </div>
                 <div class="footer-section">
                     <h3>Customer Care</h3>
@@ -1554,6 +1531,7 @@
                     <a href="#">Care Instructions</a>
                     <a href="#">Track Your Order</a>
                     <a href="#">Exchange & Returns</a>
+                    <a href="#contact">Contact Us</a>
                 </div>
                 <div class="footer-section">
                     <h3>Policies</h3>
