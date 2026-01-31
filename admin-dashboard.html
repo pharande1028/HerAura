@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+        
+        /* Header */
+        .header {
+            background: white;
+            backdrop-filter: blur(10px);
+            color: #333;
+            padding: 1rem 2rem;
+            box-shadow: 
+                0 4px 20px rgba(212,165,116,0.2),
+                0 8px 40px rgba(139,69,19,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(212,165,116,0.15);
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, rgba(212,165,116,0.3) 20%, rgba(139,69,19,0.2) 50%, rgba(212,165,116,0.3) 80%, transparent 100%) 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #666;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: 1px solid #d4a574;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .logout-btn:hover {
+            background: #8B4513;
+            border-color: #8B4513;
+        }
+        
+        /* Sidebar */
+        .dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #8B4513;
+            margin-bottom: 2rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #d4a574;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Tables */
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .product-image-small {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .action-btn {
+            padding: 0.3rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .approve-btn {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .approve-btn:hover {
+            background: #8B4513;
+        }
+        
+        .reject-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .edit-btn {
+            background: #007bff;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-approved {
+            background: rgba(212, 165, 116, 0.2);
+            color: #8B4513;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span>Welcome, Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('add-product')">Add Product</a></li>
+                <li><a href="#" onclick="showSection('seller-approvals')">Seller Approvals</a></li>
+                <li><a href="#" onclick="showSection('product-approvals')">Product Approvals</a></li>
+                <li><a href="#" onclick="showSection('orders')">Orders Management</a></li>
+                <li><a href="#" onclick="showSection('analytics')">Analytics</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section">
+                <h1 class="page-title">Admin Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSellers">0</div>
+                        <div class="stat-label">Total Sellers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingSellers">0</div>
+                        <div class="stat-label">Pending Approvals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalOrders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                </div>
+                
+                <!-- Data Management Section -->
+                <div class="data-table" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: #8B4513;">Data Management</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button onclick="exportData()" style="background: #d4a574; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Export Products Data</button>
+                        <button onclick="importData()" style="background: #8B4513; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Import Products Data</button>
+                        <button onclick="clearAllData()" style="background: #dc3545; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Clear All Data</button>
+                    </div>
+                    <div id="dataInfo" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; font-size: 0.9rem; color: #666;"></div>
+                </div>
+            </div>
+
+            <!-- Add Product Section -->
+            <div id="add-product-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Add New Product</h1>
+                <div class="data-table">
+                    <form id="productForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Product Name</label>
+                                <input type="text" id="productName" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Category</label>
+                                <select id="category" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                                    <option value="">Select Category</option>
+                                    <option value="neckpieces">Neckpieces</option>
+                                    <option value="earrings">Earrings</option>
+                                    <option value="rings">Rings</option>
+                                    <option value="bracelets">Bracelets</option>
+                                    <option value="pendants">Pendants</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Price (₹)</label>
+                                <input type="number" id="price" min="0" step="0.01" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Stock Quantity</label>
+                                <input type="number" id="stock" min="0" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
+                            <textarea id="description" rows="3" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Product Image</label>
+                            <input type="file" id="imageInput" accept="image/*" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <button type="submit" style="background: #d4a574; color: white; border: none; padding: 1rem 2rem; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s ease;" onmouseover="this.style.background='#8B4513'" onmouseout="this.style.background='#d4a574'">Add Product to Website</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Seller Approvals Section -->
+            <div id="seller-approvals-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Seller Applications</h1>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Business Name</th>
+                                <th>Contact Person</th>
+                                <th>Email</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sellersTableBody">
+                            <!-- Sellers will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Product Approvals Section -->
+            <div id="product-approvals-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Product Approvals</h1>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Seller</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="orders-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Orders Management</h1>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="content-section" style="display: none;">
+                <h1 class="page-title">Analytics</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="monthlyRevenue">₹0</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="monthlyOrders">0</div>
+                        <div class="stat-label">Monthly Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgOrderValue">₹0</div>
+                        <div class="stat-label">Avg Order Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="conversionRate">0%</div>
+                        <div class="stat-label">Conversion Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check admin authentication
+        if (!localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Load data from main site's localStorage
+        let sellers = [];
+        let products = [];
+        let orders = [];
+
+        // Function to sync data from main site
+        function syncDataFromMainSite() {
+            // This would typically be done via API calls to your backend
+            // For now, we'll simulate with localStorage
+            try {
+                sellers = JSON.parse(localStorage.getItem('sellerApplications')) || [];
+                products = JSON.parse(localStorage.getItem('sellerProducts')) || [];
+                orders = JSON.parse(localStorage.getItem('orders')) || [];
+            } catch (e) {
+                console.log('No data to sync yet');
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Remove active class from all menu items
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Add active class to clicked menu item
+            event.target.classList.add('active');
+            
+            // Load section-specific data
+            if (sectionName === 'dashboard') {
+                loadDashboardStats();
+            } else if (sectionName === 'add-product') {
+                // No specific loading needed for add product form
+            } else if (sectionName === 'seller-approvals') {
+                loadSellersTable();
+            } else if (sectionName === 'product-approvals') {
+                loadProductsTable();
+            } else if (sectionName === 'orders') {
+                loadOrdersTable();
+            } else if (sectionName === 'analytics') {
+                loadAnalytics();
+            }
+        }
+
+        function loadDashboardStats() {
+            syncDataFromMainSite();
+            
+            document.getElementById('totalSellers').textContent = sellers.length;
+            document.getElementById('pendingSellers').textContent = sellers.filter(s => s.status === 'pending').length;
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            
+            updateDataInfo();
+        }
+
+        function loadSellersTable() {
+            syncDataFromMainSite();
+            const tbody = document.getElementById('sellersTableBody');
+            
+            tbody.innerHTML = sellers.map(seller => `
+                <tr>
+                    <td>${seller.businessName}</td>
+                    <td>${seller.contactName}</td>
+                    <td>${seller.email}</td>
+                    <td>${new Date(seller.appliedDate).toLocaleDateString()}</td>
+                    <td><span class="status-badge status-${seller.status}">${seller.status.charAt(0).toUpperCase() + seller.status.slice(1)}</span></td>
+                    <td>
+                        ${seller.status === 'pending' ? `
+                            <button class="action-btn approve-btn" onclick="approveSeller('${seller.id}')">Approve</button>
+                            <button class="action-btn reject-btn" onclick="rejectSeller('${seller.id}')">Reject</button>
+                        ` : 'No actions available'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadProductsTable() {
+            syncDataFromMainSite();
+            const tbody = document.getElementById('productsTableBody');
+            
+            tbody.innerHTML = products.map(product => `
+                <tr>
+                    <td><img src="${product.image}" class="product-image-small" alt="${product.name}"></td>
+                    <td>${product.name}</td>
+                    <td>${product.sellerId}</td>
+                    <td>${product.category}</td>
+                    <td>₹${product.price}</td>
+                    <td><span class="status-badge status-${product.status}">${product.status.charAt(0).toUpperCase() + product.status.slice(1)}</span></td>
+                    <td>
+                        ${product.status === 'pending' ? `
+                            <button class="action-btn approve-btn" onclick="approveProduct(${product.id})">Approve</button>
+                            <button class="action-btn reject-btn" onclick="rejectProduct(${product.id})">Reject</button>
+                        ` : 'No actions available'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadOrdersTable() {
+            syncDataFromMainSite();
+            const tbody = document.getElementById('ordersTableBody');
+            
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.customer.firstName} ${order.customer.lastName}</td>
+                    <td>${order.items.length} items</td>
+                    <td>₹${order.total}</td>
+                    <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                    <td><span class="status-badge status-approved">Confirmed</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function loadAnalytics() {
+            syncDataFromMainSite();
+            
+            const currentMonth = new Date().getMonth();
+            const monthlyOrders = orders.filter(order => 
+                new Date(order.orderDate).getMonth() === currentMonth
+            );
+            
+            const monthlyRevenue = monthlyOrders.reduce((sum, order) => sum + order.total, 0);
+            const avgOrderValue = monthlyOrders.length > 0 ? monthlyRevenue / monthlyOrders.length : 0;
+            
+            document.getElementById('monthlyRevenue').textContent = `₹${monthlyRevenue.toLocaleString()}`;
+            document.getElementById('monthlyOrders').textContent = monthlyOrders.length;
+            document.getElementById('avgOrderValue').textContent = `₹${Math.round(avgOrderValue)}`;
+            document.getElementById('conversionRate').textContent = '2.5%'; // Placeholder
+        }
+
+        function approveSeller(sellerId) {
+            const seller = sellers.find(s => s.id === sellerId);
+            if (seller) {
+                seller.status = 'approved';
+                localStorage.setItem('sellerApplications', JSON.stringify(sellers));
+                loadSellersTable();
+                loadDashboardStats();
+                alert(`Seller ${seller.businessName} has been approved!`);
+            }
+        }
+
+        function rejectSeller(sellerId) {
+            const seller = sellers.find(s => s.id === sellerId);
+            if (seller && confirm(`Are you sure you want to reject ${seller.businessName}?`)) {
+                seller.status = 'rejected';
+                localStorage.setItem('sellerApplications', JSON.stringify(sellers));
+                loadSellersTable();
+                loadDashboardStats();
+                alert(`Seller ${seller.businessName} has been rejected.`);
+            }
+        }
+
+        function approveProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                product.status = 'approved';
+                localStorage.setItem('sellerProducts', JSON.stringify(products));
+                
+                // Add to shop products
+                const shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+                shopProducts.push({
+                    id: product.id,
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    image: product.image,
+                    stock: product.stock,
+                    description: product.description
+                });
+                localStorage.setItem('shopProducts', JSON.stringify(shopProducts));
+                
+                loadProductsTable();
+                loadDashboardStats();
+                alert(`Product ${product.name} has been approved and is now live!`);
+            }
+        }
+
+        function rejectProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product && confirm(`Are you sure you want to reject ${product.name}?`)) {
+                product.status = 'rejected';
+                localStorage.setItem('sellerProducts', JSON.stringify(products));
+                loadProductsTable();
+                loadDashboardStats();
+                alert(`Product ${product.name} has been rejected.`);
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function exportData() {
+            const shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            const dataStr = JSON.stringify(shopProducts, null, 2);
+            
+            // Create downloadable file
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'heraura-products.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Also show in textarea for copy-paste
+            const textarea = document.createElement('textarea');
+            textarea.value = `localStorage.setItem('shopProducts', '${JSON.stringify(shopProducts)}');`;
+            textarea.style.position = 'fixed';
+            textarea.style.top = '50%';
+            textarea.style.left = '50%';
+            textarea.style.transform = 'translate(-50%, -50%)';
+            textarea.style.width = '80%';
+            textarea.style.height = '300px';
+            textarea.style.zIndex = '10000';
+            textarea.style.background = 'white';
+            textarea.style.border = '2px solid #d4a574';
+            textarea.style.borderRadius = '10px';
+            textarea.style.padding = '1rem';
+            textarea.style.fontSize = '12px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.background = 'rgba(0,0,0,0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.onclick = function() {
+                document.body.removeChild(textarea);
+                document.body.removeChild(overlay);
+            };
+            document.body.appendChild(overlay);
+            
+            alert('Products data exported! \n\n1. File downloaded as heraura-products.json\n2. Code shown in popup - copy and paste in your main website console\n3. Or use the downloaded JSON file');
+        }
+        
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedProducts = JSON.parse(e.target.result);
+                            localStorage.setItem('shopProducts', JSON.stringify(importedProducts));
+                            alert(`Successfully imported ${importedProducts.length} products!`);
+                            loadDashboardStats();
+                        } catch (error) {
+                            alert('Error importing data. Please check the file format.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+        
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+                localStorage.removeItem('shopProducts');
+                localStorage.removeItem('adminProducts');
+                localStorage.removeItem('sellerApplications');
+                localStorage.removeItem('sellerProducts');
+                localStorage.removeItem('orders');
+                alert('All data cleared!');
+                loadDashboardStats();
+            }
+        }
+        
+        function showExportButton() {
+            const infoDiv = document.getElementById('dataInfo');
+            if (infoDiv) {
+                infoDiv.innerHTML = `
+                    <strong>✅ Product Added Successfully!</strong><br>
+                    <span style="color: #d4a574;">💡 Tip:</span> If your main website doesn't show the new product, click "Export Products Data" above and import it to your main website.
+                `;
+            }
+        }
+        
+        function updateDataInfo() {
+            const infoDiv = document.getElementById('dataInfo');
+            const shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            if (infoDiv) {
+                infoDiv.innerHTML = `
+                    <strong>Current Data Status:</strong><br>
+                    📦 Products in database: ${shopProducts.length}<br>
+                    💾 Last updated: ${new Date().toLocaleString()}<br>
+                    <span style="color: #666;">Use Export/Import if your main website is on a different domain.</span>
+                `;
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardStats();
+            updateDataInfo();
+            
+            // Add product form handler
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const imageFile = document.getElementById('imageInput').files[0];
+                
+                if (!imageFile) {
+                    alert('Please select an image');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const product = {
+                        id: Date.now(),
+                        name: document.getElementById('productName').value,
+                        category: document.getElementById('category').value,
+                        price: parseFloat(document.getElementById('price').value),
+                        stock: parseInt(document.getElementById('stock').value),
+                        description: document.getElementById('description').value,
+                        image: e.target.result,
+                        dateAdded: new Date().toISOString()
+                    };
+                    
+                    // Add directly to shop products (live on website)
+                    const shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+                    shopProducts.push(product);
+                    localStorage.setItem('shopProducts', JSON.stringify(shopProducts));
+                    
+                    // Also save to admin products for tracking
+                    const adminProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+                    adminProducts.push({...product, status: 'approved', addedBy: 'admin'});
+                    localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+                    
+                    // Show success message with data export option
+                    alert('Product added successfully! \n\nIMPORTANT: If your main website is on a different domain, you need to copy the product data.\nClick "Export Data" in the dashboard to get the data for your main website.');
+                    document.getElementById('productForm').reset();
+                    loadDashboardStats();
+                    
+                    // Show export button
+                    showExportButton();
+                };
+                reader.readAsDataURL(imageFile);
+            });
+        });
+
+        // Auto-refresh data every 30 seconds
+        setInterval(syncDataFromMainSite, 30000);
+    </script>
+</body>
+</html>

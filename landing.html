@@ -1545,6 +1545,7 @@
                     <a href="https://instagram.com/heraura_jewel" target="_blank">Instagram</a>
                     <a href="mailto:heraura26@gmail.com">Email</a>
                     <a href="tel:+919356948452">Phone</a>
+                    <a href="admin-login.html" target="_blank" style="color: #d4a574; font-size: 0.8rem;">Admin Login</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1759,12 +1760,6 @@
             featureInterval = setInterval(nextFeature, 4000);
         }
     }, 2000);
-    // Navigation Icons
-    const loginIcon = document.getElementById('loginIcon');
-    const loginModal = document.getElementById('loginModal');
-    const closeModal = document.querySelector('.close');
-    const loginForm = document.getElementById('loginForm');
-
     // Update badge counts
     function updateBadges() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -1811,18 +1806,6 @@
             }
         }
     }
-
-// Secret admin access - Press Ctrl+Shift+A
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-            // Clear any seller session data before accessing admin
-            sessionStorage.removeItem('sellerLoggedIn');
-            sessionStorage.removeItem('currentSeller');
-            localStorage.removeItem('currentSellerData');
-            
-            window.location.href = 'admin.html';
-        }
-    });
 
     // Profile dropdown functions
     function openLoginModal() {
@@ -1890,5 +1873,23 @@
     
     // Update badges every 2 seconds to sync with other pages
     setInterval(updateBadges, 2000);
+    
+    // Quick admin access - Ctrl+Shift+A
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+            e.preventDefault();
+            window.open('admin-login.html', '_blank');
+        }
+    });
+    
+    // Add admin access button (hidden)
+    const adminBtn = document.createElement('button');
+    adminBtn.innerHTML = 'Admin';
+    adminBtn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;background:#8B4513;color:white;border:none;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;opacity:0.3;';
+    adminBtn.onclick = () => {
+        localStorage.setItem('adminLoggedIn', 'true');
+        window.open('admin-dashboard.html', '_blank');
+    };
+    document.body.appendChild(adminBtn);
 </script>
 </html>

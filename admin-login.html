@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HerAura Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f8f6f0 0%, #f0e8dd 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .admin-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .admin-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            background: #8B4513;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+        }
+        
+        .security-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #8B4513;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1 class="admin-logo">HerAura</h1>
+        <p class="admin-subtitle">Admin Portal</p>
+        
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="adminEmail">Admin Email</label>
+                <input type="email" id="adminEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="adminPassword">Admin Password</label>
+                <input type="password" id="adminPassword" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Access Admin Dashboard</button>
+        </form>
+        
+        <div class="security-note">
+            🔒 This is a secure admin portal. Only authorized personnel can access this system.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Replace with your actual admin credentials
+            if (email === 'admin@heraura.com' && password === 'HerAura@Admin2025') {
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminData', JSON.stringify({
+                    email: email,
+                    loginTime: new Date().toISOString()
+                }));
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                alert('Invalid admin credentials!');
+            }
+        });
+        
+        // Check if already logged in
+        if (localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+</html>
