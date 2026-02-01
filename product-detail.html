@@ -1527,6 +1527,7 @@
         </div>
         <div class="nav-buttons">
             <a href="landing.html" class="nav-btn">HOME</a>
+            <a href="shop.html" class="nav-btn">SHOP</a>
             <div class="nav-btn">
                 SHOP BY CATEGORY
                 <div class="dropdown">
@@ -1673,8 +1674,22 @@
                         <div class="size-options" id="sizeOptions">
                             <button class="size-option active" onclick="selectSize(this)" style="background: #ff6b6b; color: white; border-color: #ff6b6b;">One Size</button>
                         </div>
-                        <div id="sizeGuideSection" class="size-guide-section" style="display: none;">
-                            <img id="sizeGuideImage" src="" alt="Size Guide" class="size-guide-display-image">
+                        <div id="sizeGuideSection" class="size-guide-section" style="display: none; margin-top: 1rem;">
+                            <button onclick="openSizeGuideModal(document.getElementById('sizeGuideImage').src)" style="background: transparent; color: #333; border: 2px solid #d4a574; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.7rem;" onmouseover="this.style.backgroundColor='#d4a574'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#333';">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12h18"/>
+                                    <path d="M3 8v8"/>
+                                    <path d="M21 8v8"/>
+                                    <path d="M7 10v4"/>
+                                    <path d="M11 10v4"/>
+                                    <path d="M15 10v4"/>
+                                    <path d="M19 10v4"/>
+                                    <circle cx="3" cy="12" r="2" fill="currentColor"/>
+                                    <circle cx="21" cy="12" r="2" fill="currentColor"/>
+                                </svg>
+                                <span>Size Guide</span>
+                            </button>
+                            <img id="sizeGuideImage" src="" alt="Size Guide" class="size-guide-display-image" style="display: none;">
                         </div>
                     </div>
 
@@ -1713,24 +1728,20 @@
 
                 <div id="description" class="tab-content active">
                     <h3>Product Description</h3>
-                    <p>This elegant gold necklace is crafted with precision and care, featuring our signature anti-tarnish technology that ensures lasting beauty. Perfect for everyday wear, this piece combines modern aesthetics with timeless appeal.</p>
-                    <ul style="margin-top: 1rem; padding-left: 2rem;">
-                        <li>Premium gold plating with anti-tarnish coating</li>
-                        <li>Hypoallergenic materials suitable for sensitive skin</li>
-                        <li>Adjustable chain length for perfect fit</li>
-                        <li>Elegant design suitable for all occasions</li>
-                    </ul>
+                    <div id="productDescriptionContent">This elegant gold necklace is crafted with precision and care, featuring our signature anti-tarnish technology that ensures lasting beauty. Perfect for everyday wear, this piece combines modern aesthetics with timeless appeal.</div>
                 </div>
 
                 <div id="specifications" class="tab-content">
                     <h3>Specifications</h3>
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                        <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Material</td><td style="padding: 0.5rem;">Gold Plated Brass</td></tr>
-                        <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Chain Length</td><td style="padding: 0.5rem;">16-18 inches (adjustable)</td></tr>
-                        <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Weight</td><td style="padding: 0.5rem;">12 grams</td></tr>
-                        <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Clasp Type</td><td style="padding: 0.5rem;">Lobster Clasp</td></tr>
-                        <tr><td style="padding: 0.5rem; font-weight: 600;">Warranty</td><td style="padding: 0.5rem;">6 months manufacturing warranty</td></tr>
-                    </table>
+                    <div id="productSpecificationsContent">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                            <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Material</td><td style="padding: 0.5rem;">Gold Plated Brass</td></tr>
+                            <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Chain Length</td><td style="padding: 0.5rem;">16-18 inches (adjustable)</td></tr>
+                            <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Weight</td><td style="padding: 0.5rem;">12 grams</td></tr>
+                            <tr style="border-bottom: 1px solid #eee;"><td style="padding: 0.5rem; font-weight: 600;">Clasp Type</td><td style="padding: 0.5rem;">Lobster Clasp</td></tr>
+                            <tr><td style="padding: 0.5rem; font-weight: 600;">Warranty</td><td style="padding: 0.5rem;">6 months manufacturing warranty</td></tr>
+                        </table>
+                    </div>
                 </div>
 
                 <div id="shipping" class="tab-content">
@@ -1755,30 +1766,34 @@
 
                 <div id="supplier" class="tab-content">
                     <h3>Supplier Information</h3>
-                    <p><strong>HerAura Jewellery Private Limited</strong></p>
-                    <p>Registered Address: 123 Jewelry Street, Mumbai, Maharashtra 400001</p>
-                    <p>GSTIN: 27XXXXX1234X1ZX</p>
-                    <p>Customer Care: +91 9356948452</p>
-                    <p>Email: heraura26@gmail.com</p>
+                    <div id="productSupplierContent">
+                        <p><strong>HerAura Jewellery Private Limited</strong></p>
+                        <p>Registered Address: 123 Jewelry Street, Mumbai, Maharashtra 400001</p>
+                        <p>GSTIN: 27XXXXX1234X1ZX</p>
+                        <p>Customer Care: +91 9356948452</p>
+                        <p>Email: heraura26@gmail.com</p>
+                    </div>
                 </div>
 
                 <div id="care" class="tab-content">
                     <h3>Care Instructions</h3>
-                    <p><strong>Materials Used:</strong></p>
-                    <ul style="margin: 1rem 0; padding-left: 2rem;">
-                        <li>Base Metal: High-quality brass</li>
-                        <li>Plating: 18K gold plating</li>
-                        <li>Coating: Anti-tarnish protective layer</li>
-                    </ul>
-                    
-                    <p><strong>Care Instructions:</strong></p>
-                    <ul style="margin: 1rem 0; padding-left: 2rem;">
-                        <li>Store in a dry place, preferably in the provided jewelry box</li>
-                        <li>Avoid contact with perfumes, lotions, and chemicals</li>
-                        <li>Clean gently with a soft, dry cloth</li>
-                        <li>Remove before swimming, bathing, or exercising</li>
-                        <li>Keep away from direct sunlight and moisture</li>
-                    </ul>
+                    <div id="productCareContent">
+                        <p><strong>Materials Used:</strong></p>
+                        <ul style="margin: 1rem 0; padding-left: 2rem;">
+                            <li>Base Metal: High-quality brass</li>
+                            <li>Plating: 18K gold plating</li>
+                            <li>Coating: Anti-tarnish protective layer</li>
+                        </ul>
+                        
+                        <p><strong>Care Instructions:</strong></p>
+                        <ul style="margin: 1rem 0; padding-left: 2rem;">
+                            <li>Store in a dry place, preferably in the provided jewelry box</li>
+                            <li>Avoid contact with perfumes, lotions, and chemicals</li>
+                            <li>Clean gently with a soft, dry cloth</li>
+                            <li>Remove before swimming, bathing, or exercising</li>
+                            <li>Keep away from direct sunlight and moisture</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div id="sizeguide" class="tab-content">
@@ -2111,6 +2126,12 @@
                     src: item.src,
                     thumbnail: item.thumbnail
                 }));
+            } else if (currentProduct.images && currentProduct.images.length > 0) {
+                // Load from admin form images array
+                mediaItems = currentProduct.images.map(imgSrc => ({
+                    type: imgSrc.includes('.mp4') || imgSrc.includes('.webm') ? 'video' : 'image',
+                    src: imgSrc
+                }));
             } else if (currentProduct.image) {
                 // Fallback to single image
                 mediaItems = [{ type: 'image', src: currentProduct.image }];
@@ -2186,6 +2207,16 @@
             
             resetZoom();
         }
+        
+        // Close gallery when clicking outside the image
+        document.addEventListener('click', function(e) {
+            const overlay = document.getElementById('galleryOverlay');
+            const galleryContent = document.querySelector('.gallery-content');
+            
+            if (overlay.classList.contains('active') && e.target === overlay) {
+                closeGallery();
+            }
+        });
         
         function toggleZoom() {
             if (zoomLevel === 1) {
@@ -2285,22 +2316,33 @@
             document.getElementById('productCategory').textContent = product.category || 'Necklaces';
             document.getElementById('currentPrice').textContent = `₹${product.price.toLocaleString()}`;
             document.getElementById('originalPrice').textContent = product.originalPrice ? `₹${product.originalPrice.toLocaleString()}` : '';
-            document.getElementById('productDescription').textContent = product.description;
             
-            // Update both rating displays
-            const rating = product.rating || 4.8;
-            const reviews = product.reviews || 156;
-            const stars = '★'.repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? '★' : '') + '☆'.repeat(5 - Math.ceil(rating));
+            // Update product features
+            if (product.features && product.features.length > 0) {
+                const featuresContainer = document.querySelector('.product-features');
+                featuresContainer.innerHTML = product.features.map(feature => 
+                    `<div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(212,165,116,0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(212,165,116,0.3);">
+                        <span style="color: #333; font-weight: 500; font-size: 0.9rem;">${feature}</span>
+                    </div>`
+                ).join('');
+            }
             
-            // Image overlay rating
-            document.getElementById('productRating').textContent = rating;
-            document.getElementById('reviewCount').textContent = reviews;
-            document.getElementById('productStars').innerHTML = stars;
+            // Update tab content with admin data
+            if (product.description) {
+                document.getElementById('productDescriptionContent').innerHTML = product.description.replace(/\n/g, '<br>');
+            }
             
-            // Product info section rating
-            document.getElementById('productRatingInfo').textContent = rating;
-            document.getElementById('reviewCountInfo').textContent = reviews;
-            document.getElementById('productStarsInfo').innerHTML = stars;
+            if (product.specifications) {
+                document.getElementById('productSpecificationsContent').innerHTML = product.specifications.replace(/\n/g, '<br>');
+            }
+            
+            if (product.supplierInfo) {
+                document.getElementById('productSupplierContent').innerHTML = product.supplierInfo.replace(/\n/g, '<br>');
+            }
+            
+            if (product.careInstructions) {
+                document.getElementById('productCareContent').innerHTML = product.careInstructions.replace(/\n/g, '<br>');
+            }
             
             document.getElementById('mainProductImage').src = product.image;
             
@@ -2324,22 +2366,27 @@
             const sizeGuideImage = document.getElementById('sizeGuideImage');
             
             if (product.availableSizes && product.availableSizes.length > 0 && product.availableSizes[0] !== 'One Size') {
-                // Multiple sizes available
+                // Multiple sizes available - show size guide
                 sizeSelectionTitle.textContent = 'Select Size';
                 sizeOptions.innerHTML = product.availableSizes.map((size, index) => 
                     `<button class="size-option ${index === 0 ? 'active' : ''}" onclick="selectSize(this)">${size}</button>`
                 ).join('');
                 
-                // Show size guide if available
+                // Show size guide
+                sizeGuideSection.style.display = 'block';
                 if (product.sizeGuideImage) {
-                    sizeGuideSection.style.display = 'block';
                     sizeGuideImage.src = product.sizeGuideImage;
-                    sizeGuideImage.onclick = () => openSizeGuideModal(product.sizeGuideImage);
                 } else {
-                    sizeGuideSection.style.display = 'none';
+                    // Set default size guide based on category
+                    const category = product.category ? product.category.toLowerCase() : '';
+                    if (category.includes('ring')) {
+                        sizeGuideImage.src = 'sizeguide2.jpeg';
+                    } else {
+                        sizeGuideImage.src = 'sizeguide1.jpeg';
+                    }
                 }
             } else {
-                // One size only
+                // One size only - hide size guide
                 sizeSelectionTitle.textContent = 'Size';
                 sizeOptions.innerHTML = '<button class="size-option active" onclick="selectSize(this)" style="background: #ff6b6b; color: white; border-color: #ff6b6b;">One Size</button>';
                 sizeGuideSection.style.display = 'none';

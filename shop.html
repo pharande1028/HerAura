@@ -713,9 +713,29 @@
         }
 
         function filterProducts(category) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            loadProducts(category);
+            let filteredProducts = [];
+            
+            if (category === 'all') {
+                filteredProducts = products;
+            } else {
+                filteredProducts = products.filter(product => {
+                    // Check main categories array
+                    if (product.categories && product.categories.includes(category)) {
+                        return true;
+                    }
+                    // Check single category field (backward compatibility)
+                    if (product.category === category) {
+                        return true;
+                    }
+                    // Check if "all" is selected in categories
+                    if (product.categories && product.categories.includes('all')) {
+                        return true;
+                    }
+                    return false;
+                });
+            }
+            
+            displaySearchResults(filteredProducts, category === 'all' ? 'All Products' : category.charAt(0).toUpperCase() + category.slice(1));
         }
 
         function addToCart(productId) {
@@ -887,18 +907,24 @@
         }
         
         function filterByOccasion(occasion) {
+            // Map occasion names to admin form values
             const occasionMap = {
-                'birthday': ['rings', 'earrings', 'pendants'],
-                'anniversary': ['neckpieces', 'rings', 'bracelets'],
-                'wedding': ['neckpieces', 'earrings', 'bracelets'],
-                'valentine': ['pendants', 'rings', 'neckpieces'],
-                'mothers-day': ['earrings', 'bracelets', 'pendants']
+                'birthday': 'birthday',
+                'anniversary': 'anniversary', 
+                'wedding': 'wedding',
+                'valentine': 'valentines',
+                'mothers-day': 'mothers'
             };
             
-            const categories = occasionMap[occasion] || [];
-            const filteredProducts = products.filter(product => 
-                categories.includes(product.category)
-            );
+            const occasionValue = occasionMap[occasion];
+            
+            const filteredProducts = products.filter(product => {
+                // Check giftingOccasions array from admin form
+                if (product.giftingOccasions && product.giftingOccasions.includes(occasionValue)) {
+                    return true;
+                }
+                return false;
+            });
             
             displaySearchResults(filteredProducts, `${occasion.charAt(0).toUpperCase() + occasion.slice(1).replace('-', ' ')} Gifts`);
         }
@@ -929,10 +955,18 @@
         }
         
         function filterByLimitedEdition(type) {
-            // Show products marked as limited edition (if any)
-            const filteredProducts = products.filter(product => 
-                product.limitedEdition === true
-            );
+            // Show products marked as limited edition
+            const filteredProducts = products.filter(product => {
+                // Check limitedEdition array from admin form
+                if (product.limitedEdition && product.limitedEdition.includes('limitedEdition')) {
+                    return true;
+                }
+                // Check boolean field (backward compatibility)
+                if (product.limitedEdition === true) {
+                    return true;
+                }
+                return false;
+            });
             
             displaySearchResults(filteredProducts, 'Limited Edition Collection');
         }
