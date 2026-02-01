@@ -278,6 +278,431 @@
             margin-bottom: 2rem;
             border-radius: 5px;
         }
+        
+        /* Product Form Styles */
+        .product-form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(212,165,116,0.2);
+        }
+        
+        .form-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fefdf8 0%, #f8f4ef 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(212,165,116,0.15);
+        }
+        
+        .form-section h3.section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #8B4513;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(212,165,116,0.3);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 8px rgba(212,165,116,0.2);
+        }
+        
+        .form-group small {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+        
+        /* Media Upload Styles */
+        .media-upload-area {
+            margin-bottom: 1rem;
+        }
+        
+        .upload-zone {
+            border: 3px dashed #d4a574;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .upload-zone:hover {
+            border-color: #8B4513;
+            background: rgba(212,165,116,0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .media-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .media-preview-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+        
+        .media-preview-item img,
+        .media-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220,53,69,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Price Preview Styles */
+        .price-preview {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            margin-top: 1rem;
+        }
+        
+        .price-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .current-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4a574;
+        }
+        
+        .original-price {
+            font-size: 1.5rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Stock Status Styles */
+        .stock-status {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .stock-status.low-stock {
+            background: rgba(255,193,7,0.2);
+            color: #856404;
+        }
+        
+        .stock-status.in-stock {
+            background: rgba(40,167,69,0.2);
+            color: #155724;
+        }
+        
+        .stock-status.out-of-stock {
+            background: rgba(220,53,69,0.2);
+            color: #721c24;
+        }
+        
+        /* Size Options Styles */
+        .size-type-selection {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .select-size-options {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .size-guide-display {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .size-guide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .available-sizes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .size-option-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem;
+            background: rgba(212,165,116,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .size-option-checkbox input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .feature-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: white;
+            border: 2px solid rgba(212,165,116,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-checkbox:hover {
+            border-color: #d4a574;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .feature-checkbox input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .feature-checkbox input[type="checkbox"]:checked + span {
+            color: #d4a574;
+            font-weight: 600;
+        }
+        
+        /* Details Tabs */
+        .details-tabs {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .tab-buttons {
+            display: flex;
+            background: rgba(212,165,116,0.1);
+            border-bottom: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-btn.active {
+            color: #d4a574;
+            background: white;
+            border-bottom-color: #d4a574;
+        }
+        
+        .detail-tab {
+            display: none;
+            padding: 2rem;
+        }
+        
+        .detail-tab.active {
+            display: block;
+        }
+        
+        /* Category Selection */
+        .category-section {
+            margin-bottom: 2rem;
+        }
+        
+        .category-section h4 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        
+        .category-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            border: 2px solid rgba(212,165,116,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-checkbox:hover {
+            border-color: #d4a574;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .category-checkbox input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .category-checkbox input[type="checkbox"]:checked + span {
+            color: #d4a574;
+            font-weight: 600;
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .btn-preview {
+            background: transparent;
+            color: #d4a574;
+            border: 2px solid #d4a574;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-preview:hover {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .btn-submit {
+            background: #d4a574;
+            color: white;
+            border: 2px solid #d4a574;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            background: #8B4513;
+            border-color: #8B4513;
+        }
     </style>
 </head>
 <body>
@@ -337,50 +762,304 @@
                     <strong>Note:</strong> Your product will be reviewed by our team before it appears on the website. This process typically takes 24-48 hours.
                 </div>
                 
-                <div class="add-product-form">
+                <div class="product-form-container">
                     <form id="sellerProductForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="productName">Product Name</label>
-                                <input type="text" id="productName" name="productName" required>
+                        <!-- 1. Product Images & Videos -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Images & Videos</h3>
+                            <div class="media-upload-area">
+                                <input type="file" id="mediaInput" multiple accept="image/*,video/*" style="display: none;">
+                                <div class="upload-zone" onclick="document.getElementById('mediaInput').click()">
+                                    <div class="upload-icon">📁</div>
+                                    <p>Click to upload images and videos</p>
+                                    <small>Supports: JPG, PNG, WebP, MP4, WebM</small>
+                                </div>
+                                <div id="mediaPreview" class="media-preview-grid"></div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Product Name & Short Description -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Product Name *</label>
+                                    <input type="text" id="productName" required placeholder="Enter product name">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="category">Category</label>
-                                <select id="category" name="category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="neckpieces">Neckpieces</option>
-                                    <option value="earrings">Earrings</option>
-                                    <option value="rings">Rings</option>
-                                    <option value="bracelets">Bracelets</option>
-                                    <option value="pendants">Pendants</option>
-                                </select>
+                                <label>Short Description *</label>
+                                <input type="text" id="shortDescription" required placeholder="Premium anti-tarnish jewelry for everyday elegance" maxlength="100">
+                                <small>This appears below the product name (max 100 characters)</small>
                             </div>
+                        </div>
+
+                        <!-- 3. Price Setting -->
+                        <div class="form-section">
+                            <h3 class="section-title">Price Setting</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Actual Price (₹) *</label>
+                                    <input type="number" id="actualPrice" min="0" step="0.01" required placeholder="3999" oninput="calculateDiscount()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Discount (%) *</label>
+                                    <input type="number" id="discountPercent" min="0" max="90" step="0.01" required placeholder="25" oninput="calculateDiscount()">
+                                </div>
+                            </div>
+                            <div class="price-preview">
+                                <div class="price-display">
+                                    <span class="current-price" id="previewCurrentPrice">₹0</span>
+                                    <span class="original-price" id="previewOriginalPrice">₹0</span>
+                                    <span class="discount-badge" id="previewDiscount">0% OFF</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Stock Quantity -->
+                        <div class="form-section">
+                            <h3 class="section-title">Stock Management</h3>
                             <div class="form-group">
-                                <label for="price">Price (₹)</label>
-                                <input type="number" id="price" name="price" min="0" step="0.01" required>
+                                <label>Stock Quantity *</label>
+                                <input type="number" id="stockQuantity" min="0" required placeholder="50" oninput="updateStockStatus()">
+                                <div class="stock-status" id="stockStatus">Enter quantity to see stock status</div>
                             </div>
-                            <div class="form-group">
-                                <label for="stock">Stock Quantity</label>
-                                <input type="number" id="stock" name="stock" min="0" required>
+                        </div>
+
+                        <!-- 5. Size Selection -->
+                        <div class="form-section">
+                            <h3 class="section-title">Size Options</h3>
+                            <div class="size-type-selection">
+                                <label class="radio-option">
+                                    <input type="radio" name="sizeType" value="oneSize" checked onchange="toggleSizeOptions()">
+                                    <span>One Size</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="sizeType" value="selectSize" onchange="toggleSizeOptions()">
+                                    <span>Select Size</span>
+                                </label>
                             </div>
-                            <div class="form-group full-width">
-                                <label for="description">Description</label>
-                                <textarea id="description" name="description" rows="3" required></textarea>
+                            <div id="selectSizeOptions" class="select-size-options" style="display: none;">
+                                <div class="form-group">
+                                    <label>Product Category for Sizing</label>
+                                    <select id="sizeCategory" onchange="updateSizeGuideOptions()">
+                                        <option value="">Select Category</option>
+                                        <option value="rings">Rings</option>
+                                        <option value="bracelets">Bracelets</option>
+                                        <option value="neckpieces">Neckpieces & Pendants</option>
+                                    </select>
+                                </div>
+                                <div id="sizeGuideDisplay" class="size-guide-display"></div>
+                                <div id="availableSizesContainer" class="available-sizes-container"></div>
                             </div>
-                            <div class="form-group full-width">
-                                <label>Product Image</label>
-                                <div class="image-upload" onclick="document.getElementById('imageInput').click()">
-                                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                                    <div id="uploadArea">
-                                        <svg width="48" height="48" fill="#d4a574" viewBox="0 0 24 24">
-                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                        </svg>
-                                        <div>Click to upload product image</div>
+                        </div>
+
+                        <!-- 6. Product Features -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Features</h3>
+                            <div class="features-grid">
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Anti-Tarnish" checked>
+                                    <span>Anti-Tarnish</span>
+                                </label>
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Skin Safe" checked>
+                                    <span>Skin Safe</span>
+                                </label>
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Waterproof" checked>
+                                    <span>Waterproof</span>
+                                </label>
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Hypoallergenic">
+                                    <span>Hypoallergenic</span>
+                                </label>
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Nickel Free">
+                                    <span>Nickel Free</span>
+                                </label>
+                                <label class="feature-checkbox">
+                                    <input type="checkbox" name="features" value="Lead Free">
+                                    <span>Lead Free</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 7. Product Details -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Details</h3>
+                            <div class="details-tabs">
+                                <div class="tab-buttons">
+                                    <button type="button" class="tab-btn active" onclick="showDetailTab('description')">Description</button>
+                                    <button type="button" class="tab-btn" onclick="showDetailTab('specifications')">Specifications</button>
+                                    <button type="button" class="tab-btn" onclick="showDetailTab('supplier')">Supplier Info</button>
+                                    <button type="button" class="tab-btn" onclick="showDetailTab('care')">Care Instructions</button>
+                                    <button type="button" class="tab-btn" onclick="showDetailTab('sizeguide')">Size Guide</button>
+                                </div>
+                                
+                                <div id="description-tab" class="detail-tab active">
+                                    <div class="form-group">
+                                        <label>Product Description *</label>
+                                        <textarea id="productDescription" rows="4" required placeholder="This elegant gold necklace is crafted with precision and care..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Key Features (Bullet Points)</label>
+                                        <textarea id="keyFeatures" rows="3" placeholder="• Premium gold plating with anti-tarnish coating\n• Hypoallergenic materials suitable for sensitive skin\n• Adjustable chain length for perfect fit"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div id="specifications-tab" class="detail-tab">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Material</label>
+                                            <input type="text" id="material" placeholder="Gold Plated Brass">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Weight (grams)</label>
+                                            <input type="number" id="weight" step="0.1" placeholder="12">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Dimensions</label>
+                                            <input type="text" id="dimensions" placeholder="16-18 inches (adjustable)">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Clasp Type</label>
+                                            <input type="text" id="claspType" placeholder="Lobster Clasp">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Warranty</label>
+                                        <input type="text" id="warranty" placeholder="6 months manufacturing warranty">
+                                    </div>
+                                </div>
+                                
+                                <div id="supplier-tab" class="detail-tab">
+                                    <div class="form-group">
+                                        <label>Supplier Name</label>
+                                        <input type="text" id="supplierName" placeholder="Your Business Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Business Address</label>
+                                        <textarea id="supplierAddress" rows="2" placeholder="Your registered business address"></textarea>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>GSTIN (if applicable)</label>
+                                            <input type="text" id="gstin" placeholder="Your GSTIN number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact Number</label>
+                                            <input type="text" id="contactNumber" placeholder="Your contact number">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="care-tab" class="detail-tab">
+                                    <div class="form-group">
+                                        <label>Care Instructions</label>
+                                        <textarea id="careInstructions" rows="6" placeholder="• Store in a dry place, preferably in the provided jewelry box\n• Avoid contact with perfumes, lotions, and chemicals\n• Clean gently with a soft, dry cloth\n• Remove before swimming, bathing, or exercising\n• Keep away from direct sunlight and moisture"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div id="sizeguide-tab" class="detail-tab">
+                                    <div class="form-group">
+                                        <label>Size Guide Image</label>
+                                        <input type="file" id="sizeGuideImage" accept="image/*">
+                                        <small>Upload size guide chart for this product</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Size Guide Text</label>
+                                        <textarea id="sizeGuideText" rows="4" placeholder="Our jewelry is designed to fit comfortably and elegantly. Here's our sizing information..."></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="add-btn">Submit for Approval</button>
+
+                        <!-- 8. Category Selection -->
+                        <div class="form-section">
+                            <h3 class="section-title">Category & Visibility</h3>
+                            <div class="category-section">
+                                <h4>Product Categories</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="all" onchange="toggleAllCategories(this)">
+                                        <span>All Categories</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="rings">
+                                        <span>Rings</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="earrings">
+                                        <span>Earrings</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="bracelets">
+                                        <span>Bracelets</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="neckpieces">
+                                        <span>Neckpieces</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="pendants">
+                                        <span>Pendants</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="category-section">
+                                <h4>Special Collections</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="specialCollections" value="limitedEdition">
+                                        <span>Limited Edition</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="specialCollections" value="newArrivals">
+                                        <span>New Arrivals</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="specialCollections" value="bestSellers">
+                                        <span>Best Sellers</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="category-section">
+                                <h4>Gifting Occasions</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="birthday">
+                                        <span>Birthday Gifts</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="anniversary">
+                                        <span>Anniversary Gifts</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="valentines">
+                                        <span>Valentine's Day</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="mothers">
+                                        <span>Mother's Day</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="wedding">
+                                        <span>Wedding Gifts</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-preview" onclick="previewProduct()">Preview Product</button>
+                            <button type="submit" class="btn-submit">Submit for Approval</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -434,6 +1113,7 @@
 
         let sellerProducts = JSON.parse(localStorage.getItem('sellerProducts')) || [];
         const sellerEmail = sessionStorage.getItem('sellerEmail');
+        let uploadedMedia = [];
 
         function showSection(sectionName) {
             document.querySelectorAll('.content-section').forEach(section => {
@@ -445,13 +1125,290 @@
             });
             
             document.getElementById(sectionName + '-section').style.display = 'block';
-            event.target.classList.add('active');
+            
+            const clickedLink = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+            if (clickedLink) {
+                clickedLink.classList.add('active');
+            }
             
             if (sectionName === 'dashboard') {
                 loadDashboardStats();
             } else if (sectionName === 'my-products') {
                 loadSellerProducts();
             }
+        }
+        
+        // Media Upload Functions
+        function handleMediaUpload(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaItem = {
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        src: e.target.result,
+                        name: file.name
+                    };
+                    uploadedMedia.push(mediaItem);
+                    displayMediaPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function displayMediaPreview() {
+            const preview = document.getElementById('mediaPreview');
+            preview.innerHTML = uploadedMedia.map((media, index) => `
+                <div class="media-preview-item">
+                    ${media.type === 'image' ? 
+                        `<img src="${media.src}" alt="${media.name}">` :
+                        `<video src="${media.src}" muted></video>`
+                    }
+                    <button type="button" class="media-remove" onclick="removeMedia(${index})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        function removeMedia(index) {
+            uploadedMedia.splice(index, 1);
+            displayMediaPreview();
+        }
+        
+        // Price Calculation Functions
+        function calculateDiscount() {
+            const actualPrice = parseFloat(document.getElementById('actualPrice').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+            
+            const discountAmount = (actualPrice * discountPercent) / 100;
+            const finalPrice = actualPrice - discountAmount;
+            
+            document.getElementById('previewCurrentPrice').textContent = `₹${finalPrice.toLocaleString()}`;
+            document.getElementById('previewOriginalPrice').textContent = actualPrice > 0 ? `₹${actualPrice.toLocaleString()}` : '₹0';
+            document.getElementById('previewDiscount').textContent = `${discountPercent}% OFF`;
+        }
+        
+        // Stock Status Functions
+        function updateStockStatus() {
+            const quantity = parseInt(document.getElementById('stockQuantity').value) || 0;
+            const statusDiv = document.getElementById('stockStatus');
+            
+            if (quantity === 0) {
+                statusDiv.textContent = 'Out of Stock';
+                statusDiv.className = 'stock-status out-of-stock';
+            } else if (quantity < 10) {
+                statusDiv.textContent = 'Low Stock';
+                statusDiv.className = 'stock-status low-stock';
+            } else {
+                statusDiv.textContent = 'In Stock';
+                statusDiv.className = 'stock-status in-stock';
+            }
+        }
+        
+        // Size Options Functions
+        function toggleSizeOptions() {
+            const sizeType = document.querySelector('input[name="sizeType"]:checked').value;
+            const selectSizeOptions = document.getElementById('selectSizeOptions');
+            
+            if (sizeType === 'selectSize') {
+                selectSizeOptions.style.display = 'block';
+            } else {
+                selectSizeOptions.style.display = 'none';
+            }
+        }
+        
+        function updateSizeGuideOptions() {
+            const sizeCategory = document.getElementById('sizeCategory').value;
+            const sizeGuideDisplay = document.getElementById('sizeGuideDisplay');
+            const availableSizesContainer = document.getElementById('availableSizesContainer');
+            
+            if (!sizeCategory) {
+                sizeGuideDisplay.innerHTML = '';
+                availableSizesContainer.innerHTML = '';
+                return;
+            }
+            
+            let sizeGuideImage = '';
+            let availableSizes = [];
+            
+            switch(sizeCategory) {
+                case 'rings':
+                    sizeGuideImage = 'sizeguide1.jpeg';
+                    availableSizes = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
+                    break;
+                case 'bracelets':
+                    sizeGuideImage = 'sizeguide2.jpeg';
+                    availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
+                    break;
+                case 'neckpieces':
+                    sizeGuideImage = 'sizeguide2.jpeg';
+                    availableSizes = ['14"', '16"', '18"', '20"', '22"', '24"'];
+                    break;
+            }
+            
+            sizeGuideDisplay.innerHTML = `
+                <img src="${sizeGuideImage}" alt="Size Guide" class="size-guide-image">
+            `;
+            
+            availableSizesContainer.innerHTML = availableSizes.map(size => `
+                <label class="size-option-checkbox">
+                    <input type="checkbox" name="availableSizes" value="${size}">
+                    <span>${size}</span>
+                </label>
+            `).join('');
+        }
+        
+        // Detail Tabs Functions
+        function showDetailTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.detail-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            const clickedBtn = document.querySelector(`[onclick="showDetailTab('${tabName}')"]`);
+            if (clickedBtn) {
+                clickedBtn.classList.add('active');
+            }
+        }
+        
+        // Category Functions
+        function toggleAllCategories(checkbox) {
+            const categoryCheckboxes = document.querySelectorAll('input[name="categories"]:not([value="all"])');
+            categoryCheckboxes.forEach(cb => {
+                cb.checked = checkbox.checked;
+            });
+        }
+        
+        // Product Preview Function
+        function previewProduct() {
+            const formData = collectFormData();
+            
+            if (!formData.name || !formData.shortDescription || !formData.actualPrice || uploadedMedia.length === 0) {
+                alert('Please fill in the required fields: Product Name, Short Description, Price, and upload at least one image.');
+                return;
+            }
+            
+            // Create preview window
+            const previewWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=yes');
+            previewWindow.document.write(generatePreviewHTML(formData));
+        }
+        
+        function generatePreviewHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Product Preview - ${data.name}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 0; padding: 2rem; background: #f5f5f5; }
+                        .preview-container { max-width: 1200px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; }
+                        .product-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+                        .main-image { width: 100%; height: 400px; object-fit: cover; border-radius: 10px; }
+                        .product-name { font-size: 1.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+                        .short-description { font-size: 1.2rem; font-style: italic; color: #666; margin-bottom: 1rem; }
+                        .price-display { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+                        .current-price { font-size: 2rem; font-weight: 700; color: #d4a574; }
+                        .original-price { font-size: 1.5rem; color: #999; text-decoration: line-through; }
+                        .discount { background: #dc3545; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; }
+                        .features { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+                        .feature-badge { background: rgba(212,165,116,0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(212,165,116,0.3); }
+                    </style>
+                </head>
+                <body>
+                    <div class="preview-container">
+                        <h1 style="text-align: center; color: #8B4513; margin-bottom: 2rem;">Product Preview</h1>
+                        <div class="product-detail">
+                            <div>
+                                <img src="${uploadedMedia[0]?.src || ''}" alt="${data.name}" class="main-image">
+                            </div>
+                            <div>
+                                <h1 class="product-name">${data.name}</h1>
+                                <p class="short-description">${data.shortDescription}</p>
+                                <div class="price-display">
+                                    <span class="current-price">₹${data.finalPrice.toLocaleString()}</span>
+                                    <span class="original-price">₹${data.actualPrice.toLocaleString()}</span>
+                                    <span class="discount">${data.discountPercent}% OFF</span>
+                                </div>
+                                <div class="features">
+                                    ${data.features.map(feature => `<div class="feature-badge">${feature}</div>`).join('')}
+                                </div>
+                                <p><strong>Stock:</strong> ${data.stockStatus}</p>
+                                <p><strong>Categories:</strong> ${data.categories.join(', ')}</p>
+                                ${data.specialCollections.length > 0 ? `<p><strong>Special Collections:</strong> ${data.specialCollections.join(', ')}</p>` : ''}
+                                ${data.giftingOccasions.length > 0 ? `<p><strong>Gifting Occasions:</strong> ${data.giftingOccasions.join(', ')}</p>` : ''}
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #eee;">
+                            <h3>Product Description</h3>
+                            <p>${data.description}</p>
+                            ${data.keyFeatures ? `<h4>Key Features</h4><pre>${data.keyFeatures}</pre>` : ''}
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+        
+        // Collect Form Data Function
+        function collectFormData() {
+            const actualPrice = parseFloat(document.getElementById('actualPrice').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+            const finalPrice = actualPrice - (actualPrice * discountPercent / 100);
+            const stockQuantity = parseInt(document.getElementById('stockQuantity').value) || 0;
+            
+            let stockStatus = 'Out of Stock';
+            if (stockQuantity > 0 && stockQuantity < 10) stockStatus = 'Low Stock';
+            else if (stockQuantity >= 10) stockStatus = 'In Stock';
+            
+            const features = Array.from(document.querySelectorAll('input[name="features"]:checked')).map(cb => cb.value);
+            const categories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value);
+            const specialCollections = Array.from(document.querySelectorAll('input[name="specialCollections"]:checked')).map(cb => cb.value);
+            const giftingOccasions = Array.from(document.querySelectorAll('input[name="giftingOccasions"]:checked')).map(cb => cb.value);
+            
+            const sizeType = document.querySelector('input[name="sizeType"]:checked').value;
+            let availableSizes = ['One Size'];
+            let sizeGuideImage = '';
+            
+            if (sizeType === 'selectSize') {
+                availableSizes = Array.from(document.querySelectorAll('input[name="availableSizes"]:checked')).map(cb => cb.value);
+                const sizeCategory = document.getElementById('sizeCategory').value;
+                if (sizeCategory === 'rings') sizeGuideImage = 'sizeguide1.jpeg';
+                else if (sizeCategory === 'bracelets' || sizeCategory === 'neckpieces') sizeGuideImage = 'sizeguide2.jpeg';
+            }
+            
+            return {
+                name: document.getElementById('productName').value,
+                shortDescription: document.getElementById('shortDescription').value,
+                actualPrice: actualPrice,
+                discountPercent: discountPercent,
+                finalPrice: finalPrice,
+                stockQuantity: stockQuantity,
+                stockStatus: stockStatus,
+                features: features,
+                categories: categories,
+                specialCollections: specialCollections,
+                giftingOccasions: giftingOccasions,
+                availableSizes: availableSizes,
+                description: document.getElementById('productDescription').value,
+                keyFeatures: document.getElementById('keyFeatures').value,
+                material: document.getElementById('material').value,
+                weight: document.getElementById('weight').value,
+                dimensions: document.getElementById('dimensions').value,
+                claspType: document.getElementById('claspType').value,
+                warranty: document.getElementById('warranty').value,
+                careInstructions: document.getElementById('careInstructions').value,
+                sizeGuideText: document.getElementById('sizeGuideText').value,
+                media: uploadedMedia
+            };
         }
 
         function previewImage(input) {
@@ -465,48 +1422,7 @@
             }
         }
 
-        document.getElementById('sellerProductForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const imageFile = document.getElementById('imageInput').files[0];
-            
-            if (!imageFile) {
-                alert('Please select an image');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const product = {
-                    id: Date.now(),
-                    sellerId: sellerEmail,
-                    name: formData.get('productName'),
-                    category: formData.get('category'),
-                    price: parseFloat(formData.get('price')),
-                    stock: parseInt(formData.get('stock')),
-                    description: formData.get('description'),
-                    image: e.target.result,
-                    status: 'pending',
-                    dateAdded: new Date().toISOString()
-                };
-                
-                sellerProducts.push(product);
-                localStorage.setItem('sellerProducts', JSON.stringify(sellerProducts));
-                
-                alert('Product submitted for approval! Our team will review it within 24-48 hours.');
-                document.getElementById('sellerProductForm').reset();
-                document.getElementById('uploadArea').innerHTML = `
-                    <svg width="48" height="48" fill="#d4a574" viewBox="0 0 24 24">
-                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                    </svg>
-                    <div>Click to upload product image</div>
-                `;
-                
-                loadDashboardStats();
-            };
-            reader.readAsDataURL(imageFile);
-        });
+
 
         function loadDashboardStats() {
             const myProducts = sellerProducts.filter(p => p.sellerId === sellerEmail);
@@ -568,7 +1484,85 @@
         }
 
         // Initialize
-        loadDashboardStats();
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardStats();
+            
+            // Media upload handler
+            const mediaInput = document.getElementById('mediaInput');
+            if (mediaInput) {
+                mediaInput.addEventListener('change', handleMediaUpload);
+            }
+            
+            // Add product form handler
+            const sellerProductForm = document.getElementById('sellerProductForm');
+            if (sellerProductForm) {
+                sellerProductForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = collectFormData();
+                    
+                    if (!formData.name || !formData.shortDescription || !formData.actualPrice || uploadedMedia.length === 0) {
+                        alert('Please fill in all required fields and upload at least one image.');
+                        return;
+                    }
+                    
+                    if (formData.categories.length === 0) {
+                        alert('Please select at least one category.');
+                        return;
+                    }
+                    
+                    const product = {
+                        id: 'seller_' + Date.now(),
+                        sellerId: sellerEmail,
+                        name: formData.name,
+                        shortDescription: formData.shortDescription,
+                        price: formData.finalPrice,
+                        originalPrice: formData.actualPrice,
+                        discount: formData.discountPercent,
+                        stock: formData.stockQuantity,
+                        category: formData.categories[0], // Primary category for shop display
+                        categories: formData.categories,
+                        description: formData.description,
+                        keyFeatures: formData.keyFeatures,
+                        image: uploadedMedia[0]?.src || '',
+                        media: uploadedMedia,
+                        features: formData.features,
+                        specialCollections: formData.specialCollections,
+                        giftingOccasions: formData.giftingOccasions,
+                        availableSizes: formData.availableSizes,
+                        sizeGuideImage: formData.sizeGuideImage,
+                        specifications: {
+                            material: formData.material,
+                            weight: formData.weight,
+                            dimensions: formData.dimensions,
+                            claspType: formData.claspType,
+                            warranty: formData.warranty
+                        },
+                        careInstructions: formData.careInstructions,
+                        sizeGuideText: formData.sizeGuideText,
+                        rating: 0,
+                        reviews: 0,
+                        status: 'pending',
+                        dateAdded: new Date().toISOString(),
+                        limitedEdition: formData.specialCollections.includes('limitedEdition')
+                    };
+                    
+                    sellerProducts.push(product);
+                    localStorage.setItem('sellerProducts', JSON.stringify(sellerProducts));
+                    
+                    alert('Product submitted for approval! Our team will review it within 24-48 hours.');
+                    
+                    // Reset form
+                    sellerProductForm.reset();
+                    uploadedMedia = [];
+                    displayMediaPreview();
+                    calculateDiscount();
+                    updateStockStatus();
+                    
+                    loadDashboardStats();
+                });
+            }
+        });
     </script>
 </body>
 </html>

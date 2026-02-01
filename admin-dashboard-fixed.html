@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+        
+        .header {
+            background: white;
+            color: #333;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(212,165,116,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: 1px solid #d4a574;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover { background: #8B4513; border-color: #8B4513; }
+        
+        .dashboard { display: flex; min-height: calc(100vh - 80px); }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .main-content { flex: 1; padding: 2rem; }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #8B4513;
+            margin-bottom: 2rem;
+        }
+        
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #d4a574;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label { color: #666; font-size: 0.9rem; }
+        
+        .product-form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fefdf8 0%, #f8f4ef 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(212,165,116,0.15);
+        }
+        
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid #d4a574;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group { margin-bottom: 1rem; }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 8px rgba(212,165,116,0.2);
+        }
+        
+        .upload-zone {
+            border: 2px solid #d4a574;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .upload-zone:hover {
+            border-color: #8B4513;
+            background: #fafafa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .media-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .media-preview-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+        
+        .media-preview-item img,
+        .media-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220,53,69,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .price-preview {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            margin-top: 1rem;
+        }
+        
+        .price-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .current-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4a574;
+        }
+        
+        .original-price {
+            font-size: 1.5rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .feature-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: white;
+            border: 2px solid rgba(212,165,116,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .feature-checkbox:hover {
+            border-color: #d4a574;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        
+        .category-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            border: 2px solid rgba(212,165,116,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .category-checkbox:hover {
+            border-color: #d4a574;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .btn-submit {
+            background: #d4a574;
+            color: white;
+            border: 2px solid #d4a574;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            background: #8B4513;
+            border-color: #8B4513;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span>Welcome, Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a class="active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a onclick="showSection('add-product')">Add Product</a></li>
+                <li><a onclick="showSection('manage-products')">Manage Products</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <h1 class="page-title">Admin Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="liveProducts">0</div>
+                        <div class="stat-label">Live Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">6</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalValue">₹0</div>
+                        <div class="stat-label">Total Inventory Value</div>
+                    </div>
+                </div>
+                
+                <div class="data-table">
+                    <h3 style="margin-bottom: 1rem; color: #8B4513;">Quick Actions</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button onclick="exportData()" class="btn-submit">Export Products</button>
+                        <button onclick="importData()" class="btn-submit">Import Products</button>
+                        <button onclick="viewShop()" class="btn-submit">View Shop</button>
+                    </div>
+                    <div id="dataInfo" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;"></div>
+                </div>
+            </div>
+
+            <!-- Add Product Section -->
+            <div id="add-product-section" class="content-section">
+                <h1 class="page-title">Add New Product</h1>
+                <div class="product-form-container">
+                    <form id="productForm">
+                        <!-- Product Images -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Images & Videos</h3>
+                            <input type="file" id="mediaInput" multiple accept="image/*,video/*" style="display: none;">
+                            <div class="upload-zone" onclick="document.getElementById('mediaInput').click()">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+                                <p>Click to upload images and videos</p>
+                                <small>Supports: JPG, PNG, WebP, MP4, WebM</small>
+                            </div>
+                            <div id="mediaPreview" class="media-preview-grid"></div>
+                        </div>
+
+                        <!-- Product Information -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Information</h3>
+                            <div class="form-group">
+                                <label>Product Name *</label>
+                                <input type="text" id="productName" required placeholder="Enter product name">
+                            </div>
+                            <div class="form-group">
+                                <label>Short Description *</label>
+                                <input type="text" id="shortDescription" required placeholder="Premium anti-tarnish jewelry for everyday elegance" maxlength="100">
+                            </div>
+                        </div>
+
+                        <!-- Pricing -->
+                        <div class="form-section">
+                            <h3 class="section-title">Pricing</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Original Price (₹) *</label>
+                                    <input type="number" id="originalPrice" min="0" step="0.01" required placeholder="3999" oninput="updatePricePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Discount (%) *</label>
+                                    <input type="number" id="discountPercent" min="0" max="90" step="0.01" required placeholder="25" oninput="updatePricePreview()">
+                                </div>
+                            </div>
+                            <div class="price-preview">
+                                <div class="price-display">
+                                    <span class="current-price" id="finalPrice">₹0</span>
+                                    <span class="original-price" id="originalPriceDisplay">₹0</span>
+                                    <span class="discount-badge" id="discountDisplay">0% OFF</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stock Management -->
+                        <div class="form-section">
+                            <h3 class="section-title">Stock Management</h3>
+                            <div class="form-group">
+                                <label>Stock Quantity *</label>
+                                <input type="number" id="stockQuantity" min="0" required placeholder="50">
+                            </div>
+                        </div>
+
+                        <!-- Size Options -->
+                        <div class="form-section">
+                            <h3 class="section-title">Size Options</h3>
+                            <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="radio" name="sizeType" value="oneSize" checked onchange="toggleSizeOptions()">
+                                    <span>One Size</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="radio" name="sizeType" value="selectSize" onchange="toggleSizeOptions()">
+                                    <span>Select Size</span>
+                                </label>
+                            </div>
+                            <div id="selectSizeOptions" style="display: none; background: white; padding: 1.5rem; border-radius: 10px; border: 2px solid rgba(212,165,116,0.2);">
+                                <div class="form-group">
+                                    <label>Product Category for Sizing</label>
+                                    <select id="sizeCategory" onchange="updateSizeGuideOptions()">
+                                        <option value="">Select Category</option>
+                                        <option value="rings">Rings</option>
+                                        <option value="bracelets">Bracelets</option>
+                                        <option value="neckpieces">Neckpieces & Pendants</option>
+                                    </select>
+                                </div>
+                                <div id="sizeGuideDisplay" style="margin: 1.5rem 0; text-align: center;"></div>
+                                <div id="availableSizesContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; margin-top: 1rem;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Product Features -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Features</h3>
+                            <div class="form-group">
+                                <label>Features (comma separated) *</label>
+                                <input type="text" id="productFeatures" required placeholder="Anti-Tarnish, Skin Safe, Waterproof, Hypoallergenic">
+                                <small>Enter features separated by commas (e.g., Anti-Tarnish, Skin Safe, Waterproof)</small>
+                            </div>
+                        </div>
+
+                        <!-- Product Description -->
+                        <div class="form-section">
+                            <h3 class="section-title">Product Description</h3>
+                            <div class="form-group">
+                                <textarea id="fullDescription" rows="6" placeholder="Enter complete product description here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Specifications -->
+                        <div class="form-section">
+                            <h3 class="section-title">Specifications</h3>
+                            <div class="form-group">
+                                <textarea id="specifications" rows="6" placeholder="Enter product specifications here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Supplier Information -->
+                        <div class="form-section">
+                            <h3 class="section-title">Supplier Information</h3>
+                            <div class="form-group">
+                                <textarea id="supplierInfo" rows="6" placeholder="Enter supplier information here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Care Instructions -->
+                        <div class="form-section">
+                            <h3 class="section-title">Care Instructions</h3>
+                            <div class="form-group">
+                                <textarea id="careInstructions" rows="6" placeholder="Enter care instructions here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="form-section">
+                            <h3 class="section-title">Categories</h3>
+                            
+                            <!-- Shop by Category -->
+                            <div style="margin-bottom: 2rem;">
+                                <h4 style="color: #8B4513; margin-bottom: 1rem; font-size: 1.1rem;">Shop by Category</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="all">
+                                        <span>All Categories</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="rings">
+                                        <span>Rings</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="earrings">
+                                        <span>Earrings</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="bracelets">
+                                        <span>Bracelets</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="neckpieces">
+                                        <span>Neckpieces</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="pendants">
+                                        <span>Pendants</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Limited Edition -->
+                            <div style="margin-bottom: 2rem;">
+                                <h4 style="color: #8B4513; margin-bottom: 1rem; font-size: 1.1rem;">Limited Edition</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="limitedEdition" value="limitedEdition">
+                                        <span>Limited Edition</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Gifting Occasions -->
+                            <div>
+                                <h4 style="color: #8B4513; margin-bottom: 1rem; font-size: 1.1rem;">Gifting Occasions</h4>
+                                <div class="category-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="birthday">
+                                        <span>Birthday</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="anniversary">
+                                        <span>Anniversary</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="valentines">
+                                        <span>Valentine's Day</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="giftingOccasions" value="mothers">
+                                        <span>Mother's Day</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">Add Product to Website</button>
+                        </div>
+                    </form>
+                    <div id="successMessage" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Manage Products Section -->
+            <div id="manage-products-section" class="content-section">
+                <h1 class="page-title">Manage Products</h1>
+                <div class="data-table">
+                    <div id="productsTable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let uploadedMedia = [];
+        let allProducts = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Media upload
+            document.getElementById('mediaInput').addEventListener('change', handleMediaUpload);
+            
+            // Form submission
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitProduct();
+            });
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from menu
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Add active to clicked menu
+            event.target.classList.add('active');
+            
+            // Load section data
+            if (sectionName === 'dashboard') {
+                loadDashboard();
+            } else if (sectionName === 'manage-products') {
+                loadProductsTable();
+            }
+        }
+
+        // Dashboard functions
+        function loadDashboard() {
+            allProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            
+            document.getElementById('totalProducts').textContent = allProducts.length;
+            document.getElementById('liveProducts').textContent = allProducts.length;
+            
+            const totalValue = allProducts.reduce((sum, product) => sum + (product.price * product.stock), 0);
+            document.getElementById('totalValue').textContent = '₹' + totalValue.toLocaleString();
+            
+            updateDataInfo();
+        }
+
+        function updateDataInfo() {
+            const infoDiv = document.getElementById('dataInfo');
+            infoDiv.innerHTML = `
+                <strong>System Status:</strong><br>
+                📦 Products in database: ${allProducts.length}<br>
+                💾 Last updated: ${new Date().toLocaleString()}<br>
+                🌐 Products visible on shop page: ${allProducts.length}
+            `;
+        }
+
+        // Media upload functions
+        function handleMediaUpload(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaItem = {
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        src: e.target.result,
+                        name: file.name
+                    };
+                    uploadedMedia.push(mediaItem);
+                    displayMediaPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayMediaPreview() {
+            const preview = document.getElementById('mediaPreview');
+            preview.innerHTML = uploadedMedia.map((media, index) => `
+                <div class="media-preview-item">
+                    ${media.type === 'image' ? 
+                        `<img src="${media.src}" alt="${media.name}">` :
+                        `<video src="${media.src}" muted></video>`
+                    }
+                    <button type="button" class="media-remove" onclick="removeMedia(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeMedia(index) {
+            uploadedMedia.splice(index, 1);
+            displayMediaPreview();
+        }
+
+        // Price calculation
+        function updatePricePreview() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+            
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const finalPrice = originalPrice - discountAmount;
+            
+            document.getElementById('finalPrice').textContent = '₹' + finalPrice.toLocaleString();
+            document.getElementById('originalPriceDisplay').textContent = originalPrice > 0 ? '₹' + originalPrice.toLocaleString() : '₹0';
+            document.getElementById('discountDisplay').textContent = discountPercent + '% OFF';
+        }
+
+        // Form submission
+        function submitProduct() {
+            // Validate required fields
+            const name = document.getElementById('productName').value.trim();
+            const shortDesc = document.getElementById('shortDescription').value.trim();
+            const originalPrice = parseFloat(document.getElementById('originalPrice').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value);
+            const stock = parseInt(document.getElementById('stockQuantity').value);
+
+            if (!name || !shortDesc || !originalPrice || uploadedMedia.length === 0) {
+                alert('Please fill in all required fields and upload at least one image.');
+                return;
+            }
+
+            // Get selected categories
+            const categories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value);
+            const limitedEdition = Array.from(document.querySelectorAll('input[name="limitedEdition"]:checked')).map(cb => cb.value);
+            const giftingOccasions = Array.from(document.querySelectorAll('input[name="giftingOccasions"]:checked')).map(cb => cb.value);
+            if (categories.length === 0) {
+                alert('Please select at least one category.');
+                return;
+            }
+
+            // Get size information
+            const sizeType = document.querySelector('input[name="sizeType"]:checked').value;
+            let availableSizes = ['One Size'];
+            let sizeGuideImage = '';
+            
+            if (sizeType === 'selectSize') {
+                const selectedSizes = Array.from(document.querySelectorAll('input[name="availableSizes"]:checked')).map(cb => cb.value);
+                if (selectedSizes.length > 0) {
+                    availableSizes = selectedSizes;
+                }
+                const sizeCategory = document.getElementById('sizeCategory').value;
+                if (sizeCategory === 'rings') sizeGuideImage = 'sizeguide2.jpeg';
+                else if (sizeCategory === 'bracelets' || sizeCategory === 'neckpieces') sizeGuideImage = 'sizeguide1.jpeg';
+            }
+
+            // Get features from text input
+            const featuresText = document.getElementById('productFeatures').value.trim();
+            const features = featuresText ? featuresText.split(',').map(f => f.trim()).filter(f => f) : [];
+
+            // Get additional product details
+            const fullDescription = document.getElementById('fullDescription').value.trim();
+            const specifications = document.getElementById('specifications').value.trim();
+            const supplierInfo = document.getElementById('supplierInfo').value.trim();
+            const careInstructions = document.getElementById('careInstructions').value.trim();
+
+            // Calculate final price
+            const finalPrice = originalPrice - (originalPrice * discountPercent / 100);
+
+            // Create product object
+            const product = {
+                id: 'prod_' + Date.now(),
+                name: name,
+                shortDescription: shortDesc,
+                description: fullDescription,
+                specifications: specifications,
+                supplierInfo: supplierInfo,
+                careInstructions: careInstructions,
+                price: finalPrice,
+                originalPrice: originalPrice,
+                discount: discountPercent,
+                stock: stock,
+                category: categories[0], // Primary category
+                categories: categories,
+                limitedEdition: limitedEdition,
+                giftingOccasions: giftingOccasions,
+                image: uploadedMedia[0]?.src || '',
+                media: uploadedMedia,
+                features: features,
+                availableSizes: availableSizes,
+                sizeGuideImage: sizeGuideImage,
+                rating: 4.8,
+                reviews: 0,
+                dateAdded: new Date().toISOString(),
+                status: 'approved',
+                addedBy: 'admin'
+            };
+
+            // Save to localStorage
+            const shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            shopProducts.push(product);
+            localStorage.setItem('shopProducts', JSON.stringify(shopProducts));
+
+            // Show success message
+            showSuccessMessage(product.name);
+
+            // Reset form
+            resetForm();
+
+            // Update dashboard
+            loadDashboard();
+        }
+
+        function showSuccessMessage(productName) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.innerHTML = `
+                <div class="success-message">
+                    <strong>✅ Product "${productName}" added successfully!</strong><br>
+                    The product is now live on your website and visible to customers.
+                    <div style="margin-top: 1rem;">
+                        <button onclick="viewShop()" class="btn-submit" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View on Shop Page</button>
+                        <button onclick="addAnother()" class="btn-submit" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-left: 0.5rem;">Add Another Product</button>
+                    </div>
+                </div>
+            `;
+            successDiv.style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            uploadedMedia = [];
+            displayMediaPreview();
+            updatePricePreview();
+            toggleSizeOptions(); // Reset size options
+        }
+
+        function addAnother() {
+            document.getElementById('successMessage').style.display = 'none';
+            resetForm();
+        }
+
+        // Products table
+        function loadProductsTable() {
+            allProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            const tableDiv = document.getElementById('productsTable');
+            
+            if (allProducts.length === 0) {
+                tableDiv.innerHTML = '<p>No products found. <a href="#" onclick="showSection(\'add-product\')">Add your first product</a></p>';
+                return;
+            }
+
+            tableDiv.innerHTML = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Image</th>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Name</th>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Category</th>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Price</th>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Stock</th>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #ddd;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${allProducts.map(product => `
+                            <tr>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <img src="${product.image}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                </td>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">${product.name}</td>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">${product.category}</td>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">₹${product.price.toLocaleString()}</td>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">${product.stock}</td>
+                                <td style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <button onclick="deleteProduct('${product.id}')" style="background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                allProducts = allProducts.filter(p => p.id !== productId);
+                localStorage.setItem('shopProducts', JSON.stringify(allProducts));
+                loadProductsTable();
+                loadDashboard();
+                alert('Product deleted successfully!');
+            }
+        }
+
+        // Size Options Functions
+        function toggleSizeOptions() {
+            const sizeType = document.querySelector('input[name="sizeType"]:checked').value;
+            const selectSizeOptions = document.getElementById('selectSizeOptions');
+            
+            if (sizeType === 'selectSize') {
+                selectSizeOptions.style.display = 'block';
+            } else {
+                selectSizeOptions.style.display = 'none';
+            }
+        }
+        
+        function updateSizeGuideOptions() {
+            const sizeCategory = document.getElementById('sizeCategory').value;
+            const sizeGuideDisplay = document.getElementById('sizeGuideDisplay');
+            const availableSizesContainer = document.getElementById('availableSizesContainer');
+            
+            if (!sizeCategory) {
+                sizeGuideDisplay.innerHTML = '';
+                availableSizesContainer.innerHTML = '';
+                return;
+            }
+            
+            let sizeGuideImage = '';
+            let availableSizes = [];
+            
+            switch(sizeCategory) {
+                case 'rings':
+                    sizeGuideImage = 'sizeguide2.jpeg';
+                    availableSizes = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
+                    break;
+                case 'bracelets':
+                    sizeGuideImage = 'sizeguide1.jpeg';
+                    availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
+                    break;
+                case 'neckpieces':
+                    sizeGuideImage = 'sizeguide1.jpeg';
+                    availableSizes = ['14"', '16"', '18"', '20"', '22"', '24"'];
+                    break;
+            }
+            
+            sizeGuideDisplay.innerHTML = `
+                <img src="${sizeGuideImage}" alt="Size Guide" style="max-width: 100%; height: auto; border-radius: 10px; border: 2px solid rgba(212,165,116,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            `;
+            
+            availableSizesContainer.innerHTML = availableSizes.map(size => `
+                <label style="display: flex; align-items: center; gap: 0.3rem; padding: 0.5rem; background: rgba(212,165,116,0.1); border-radius: 8px; cursor: pointer; font-size: 0.9rem; text-align: center; justify-content: center;">
+                    <input type="checkbox" name="availableSizes" value="${size}" style="width: auto; margin: 0;">
+                    <span>${size}</span>
+                </label>
+            `).join('');
+        }
+        function exportData() {
+            const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            const dataStr = JSON.stringify(products, null, 2);
+            
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'heraura-products.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Products exported successfully!');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedProducts = JSON.parse(e.target.result);
+                            localStorage.setItem('shopProducts', JSON.stringify(importedProducts));
+                            alert(`Successfully imported ${importedProducts.length} products!`);
+                            loadDashboard();
+                        } catch (error) {
+                            alert('Error importing data. Please check the file format.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        function viewShop() {
+            window.open('shop.html', '_blank');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                window.location.href = 'admin-access.html';
+            }
+        }
+
+        // Check authentication
+        if (!localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-access.html';
+        }
+    </script>
+</body>
+</html>

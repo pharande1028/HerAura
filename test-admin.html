@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Admin Portal</title>
+</head>
+<body>
+    <h1>Admin Portal Test</h1>
+    <button onclick="testAdmin()">Test Admin Login & Add Product</button>
+    <button onclick="checkProducts()">Check Shop Products</button>
+    <div id="result"></div>
+
+    <script>
+        function testAdmin() {
+            // Set admin login
+            localStorage.setItem('adminLoggedIn', 'true');
+            
+            // Open admin dashboard
+            window.open('admin-dashboard.html', '_blank');
+            
+            document.getElementById('result').innerHTML = 'Admin portal opened. Try adding a product!';
+        }
+        
+        function checkProducts() {
+            const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            document.getElementById('result').innerHTML = `
+                <h3>Products in Shop:</h3>
+                <p>Total: ${products.length}</p>
+                <pre>${JSON.stringify(products, null, 2)}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>

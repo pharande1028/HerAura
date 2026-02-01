@@ -772,6 +772,7 @@
         .size-options {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
         }
         
         .size-option {
@@ -788,6 +789,61 @@
             border-color: #d4a574;
             background: #d4a574;
             color: white;
+        }
+        
+        .size-guide-section {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .size-guide-display-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .size-guide-display-image:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Size Guide Tab Styles */
+        .size-guide-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .size-guide-item {
+            text-align: center;
+        }
+        
+        .size-guide-chart {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .size-guide-chart:hover {
+            transform: scale(1.02);
+            border-color: #d4a574;
+            box-shadow: 0 6px 20px rgba(212,165,116,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .size-guide-images {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
         }
         
         .product-buttons {
@@ -1613,9 +1669,12 @@
                         <span class="stock-status" id="stockStatus" style="color: #28a745; font-size: 1rem; font-weight: 600; margin-left: 1rem;">Ready to Ship - In Stock</span>
                     </div>
                     <div class="size-selection">
-                        <h3>Select Size</h3>
-                        <div class="size-options">
+                        <h3 id="sizeSelectionTitle">Select Size</h3>
+                        <div class="size-options" id="sizeOptions">
                             <button class="size-option active" onclick="selectSize(this)" style="background: #ff6b6b; color: white; border-color: #ff6b6b;">One Size</button>
+                        </div>
+                        <div id="sizeGuideSection" class="size-guide-section" style="display: none;">
+                            <img id="sizeGuideImage" src="" alt="Size Guide" class="size-guide-display-image">
                         </div>
                     </div>
 
@@ -1726,25 +1785,29 @@
                     <h3>Size Guide</h3>
                     <p>Our jewelry is designed to fit comfortably and elegantly. Here's our sizing information:</p>
                     
-                    <h4 style="margin-top: 2rem;">Necklaces & Chains</h4>
+                    <div class="size-guide-images">
+                        <div class="size-guide-item">
+                            <h4 style="margin-top: 2rem; color: #8B4513;">Ring Sizing Guide</h4>
+                            <img src="sizeguide1.jpeg" alt="Ring Size Guide" class="size-guide-chart" onclick="openSizeGuideModal('sizeguide1.jpeg')">
+                            <p style="margin-top: 1rem; color: #666; font-style: italic;">Click image to view full size</p>
+                        </div>
+                        
+                        <div class="size-guide-item">
+                            <h4 style="margin-top: 2rem; color: #8B4513;">Bracelet & Necklace Sizing Guide</h4>
+                            <img src="sizeguide2.jpeg" alt="Bracelet & Necklace Size Guide" class="size-guide-chart" onclick="openSizeGuideModal('sizeguide2.jpeg')">
+                            <p style="margin-top: 1rem; color: #666; font-style: italic;">Click image to view full size</p>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin-top: 2rem;">General Sizing Information</h4>
                     <ul style="margin: 1rem 0; padding-left: 2rem;">
-                        <li><strong>Choker:</strong> 14-16 inches</li>
-                        <li><strong>Princess:</strong> 17-19 inches</li>
-                        <li><strong>Matinee:</strong> 20-24 inches</li>
-                        <li><strong>Opera:</strong> 28-34 inches</li>
+                        <li><strong>Rings:</strong> Measure your finger at the end of the day when it's largest</li>
+                        <li><strong>Bracelets:</strong> Measure your wrist and add 0.5-1 inch for comfort</li>
+                        <li><strong>Necklaces:</strong> Consider your neckline and personal preference</li>
+                        <li><strong>One Size:</strong> Designed to fit most people comfortably</li>
                     </ul>
                     
-                    <h4 style="margin-top: 2rem;">Rings</h4>
-                    <p>Use our ring size chart or visit a local jeweler for accurate measurement.</p>
-                    
-                    <h4 style="margin-top: 2rem;">Bracelets</h4>
-                    <ul style="margin: 1rem 0; padding-left: 2rem;">
-                        <li><strong>Small:</strong> 6.5-7 inches</li>
-                        <li><strong>Medium:</strong> 7-7.5 inches</li>
-                        <li><strong>Large:</strong> 7.5-8 inches</li>
-                    </ul>
-                    
-                    <p style="margin-top: 2rem; font-style: italic; color: #666;">For custom sizing or questions, contact our customer service team.</p>
+                    <p style="margin-top: 2rem; font-style: italic; color: #666;">For custom sizing or questions, contact our customer service team at +91 9356948452</p>
                 </div>
             </div>
 
@@ -2247,8 +2310,56 @@
                 document.getElementById('discountPercent').textContent = `${discount}% OFF`;
             }
             
+            // Update size options
+            updateSizeOptions(product);
+            
             // Update page title
             document.title = `${product.name} - HerAura`;
+        }
+        
+        function updateSizeOptions(product) {
+            const sizeOptions = document.getElementById('sizeOptions');
+            const sizeSelectionTitle = document.getElementById('sizeSelectionTitle');
+            const sizeGuideSection = document.getElementById('sizeGuideSection');
+            const sizeGuideImage = document.getElementById('sizeGuideImage');
+            
+            if (product.availableSizes && product.availableSizes.length > 0 && product.availableSizes[0] !== 'One Size') {
+                // Multiple sizes available
+                sizeSelectionTitle.textContent = 'Select Size';
+                sizeOptions.innerHTML = product.availableSizes.map((size, index) => 
+                    `<button class="size-option ${index === 0 ? 'active' : ''}" onclick="selectSize(this)">${size}</button>`
+                ).join('');
+                
+                // Show size guide if available
+                if (product.sizeGuideImage) {
+                    sizeGuideSection.style.display = 'block';
+                    sizeGuideImage.src = product.sizeGuideImage;
+                    sizeGuideImage.onclick = () => openSizeGuideModal(product.sizeGuideImage);
+                } else {
+                    sizeGuideSection.style.display = 'none';
+                }
+            } else {
+                // One size only
+                sizeSelectionTitle.textContent = 'Size';
+                sizeOptions.innerHTML = '<button class="size-option active" onclick="selectSize(this)" style="background: #ff6b6b; color: white; border-color: #ff6b6b;">One Size</button>';
+                sizeGuideSection.style.display = 'none';
+            }
+        }
+        
+        function openSizeGuideModal(imageSrc) {
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+            
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.style.cssText = 'max-width: 90%; max-height: 90%; border-radius: 10px;';
+            
+            modal.appendChild(img);
+            document.body.appendChild(modal);
+            
+            modal.onclick = () => {
+                document.body.removeChild(modal);
+            };
         }
 
         function changeMainImage(thumbnail) {
