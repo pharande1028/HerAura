@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #8B4513;
+        }
+        
+        .dashboard { 
+            display: flex; 
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-left: 250px;
+            overflow-x: auto;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .filter-select {
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1400px;
+        }
+        
+        .products-table thead {
+            background: #f8f4ef;
+        }
+        
+        .products-table th {
+            padding: 1rem 0.8rem;
+            text-align: left;
+            font-weight: 600;
+            color: #8B4513;
+            border-bottom: 2px solid #d4a574;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .products-table td {
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .products-table tbody tr:hover {
+            background: #fefdf8;
+        }
+        
+        .stock-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .stock-in-stock {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .stock-low-stock {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .stock-out-of-stock {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: #138496;
+        }
+        
+        .btn-edit {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .pagination-btn {
+            padding: 0.6rem 1.2rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            background: #8B4513;
+        }
+        
+        .pagination-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .form-subsection {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #fefdf8;
+            border-radius: 10px;
+            border: 1px solid rgba(212,165,116,0.15);
+        }
+        
+        .subsection-title {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .upload-zone {
+            border: 3px dashed #d4a574;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .upload-zone:hover {
+            border-color: #8B4513;
+            background: rgba(212,165,116,0.1);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .media-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .media-preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+        
+        .media-preview-item img,
+        .media-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: rgba(220,53,69,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .form-row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-field {
+            margin-bottom: 1rem;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        
+        .form-field input,
+        .form-field textarea,
+        .form-field select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-field input:focus,
+        .form-field textarea:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .price-preview-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid rgba(212,165,116,0.2);
+            margin-top: 1rem;
+        }
+        
+        .preview-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #d4a574;
+        }
+        
+        .preview-original {
+            font-size: 1.2rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .preview-discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .stock-indicator {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .stock-indicator.in-stock {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .stock-indicator.low-stock {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .stock-indicator.out-of-stock {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .features-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.8rem;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem;
+            background: white;
+            border: 2px solid rgba(212,165,116,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-label:hover {
+            border-color: #d4a574;
+            background: rgba(212,165,116,0.05);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .form-actions-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(212,165,116,0.2);
+        }
+        
+        .btn-reset {
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-reset:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+        
+        .btn-add-product {
+            background: #d4a574;
+            color: white;
+            border: 2px solid #d4a574;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add-product:hover {
+            background: #8B4513;
+            border-color: #8B4513;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a class="active">Product Management</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Product Management</h1>
+            
+            <!-- Section 1: View All Products -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>View All Products</h3>
+                    <div class="section-actions">
+                        <input type="text" id="searchProducts" placeholder="Search products..." class="search-input">
+                        <select id="filterCategory" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="rings">Rings</option>
+                            <option value="necklaces">Necklaces</option>
+                            <option value="earrings">Earrings</option>
+                            <option value="bracelets">Bracelets</option>
+                            <option value="anklets">Anklets</option>
+                        </select>
+                        <select id="filterStock" class="filter-select">
+                            <option value="all">All Stock Status</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Material</th>
+                                <th>Price (₹)</th>
+                                <th>Discount Price (₹)</th>
+                                <th>Stock Qty</th>
+                                <th>Stock Status</th>
+                                <th>Anti-Tarnish</th>
+                                <th>SKU</th>
+                                <th>Added Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="pagination-btn" onclick="changePage('prev')">← Previous</button>
+                    <span class="pagination-info">Page <span id="currentPage">1</span> of <span id="totalPages">5</span></span>
+                    <button class="pagination-btn" onclick="changePage('next')">Next →</button>
+                </div>
+            </div>
+            
+            <!-- Section 2: Add Product -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Add Product</h3>
+                </div>
+                
+                <form id="addProductForm">
+                    <!-- Product Images -->
+                    <div class="form-subsection">
+                        <h4 class="subsection-title">Product Images & Videos</h4>
+                        <input type="file" id="productMedia" multiple accept="image/*,video/*" style="display: none;">
+                        <div class="upload-zone" onclick="document.getElementById('productMedia').click()">
+                            <div class="upload-icon">📁</div>
+                            <p>Click to upload images and videos</p>
+                            <small>Supports: JPG, PNG, WebP, MP4</small>
+                        </div>
+                        <div id="mediaPreviewGrid" class="media-preview-grid"></div>
+                    </div>
+                    
+                    <!-- Product Information -->
+                    <div class="form-subsection">
+                        <h4 class="subsection-title">Product Information</h4>
+                        <div class="form-row-2col">
+                            <div class="form-field">
+                                <label>Product Name *</label>
+                                <input type="text" id="prodName" required placeholder="Rose Gold Infinity Ring">
+                            </div>
+                            <div class="form-field">
+                                <label>SKU *</label>
+                                <input type="text" id="prodSKU" required placeholder="RG-INF-001">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label>Short Description *</label>
+                            <input type="text" id="prodShortDesc" required placeholder="Premium anti-tarnish jewelry" maxlength="100">
+                        </div>
+                        <div class="form-field">
+                            <label>Full Description *</label>
+                            <textarea id="prodDescription" rows="4" required placeholder="Detailed product description..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <div class="form-subsection">
+                        <h4 class="subsection-title">Pricing</h4>
+                        <div class="form-row-2col">
+                            <div class="form-field">
+                                <label>Price (₹) *</label>
+                                <input type="number" id="prodPrice" required min="0" step="0.01" placeholder="2499" oninput="calcDiscount()">
+                            </div>
+                            <div class="form-field">
+                                <label>Discount Price (₹) *</label>
+                                <input type="number" id="prodDiscountPrice" required min="0" step="0.01" placeholder="1999" oninput="calcDiscount()">
+                            </div>
+                        </div>
+                        <div class="price-preview-box">
+                            <span class="preview-price" id="previewPrice">₹0</span>
+                            <span class="preview-original" id="previewOriginal">₹0</span>
+                            <span class="preview-discount-badge" id="previewDiscountBadge">0% OFF</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock & Category -->
+                    <div class="form-subsection">
+                        <h4 class="subsection-title">Stock & Category</h4>
+                        <div class="form-row-2col">
+                            <div class="form-field">
+                                <label>Stock Quantity *</label>
+                                <input type="number" id="prodStock" required min="0" placeholder="50" oninput="updateStock()">
+                                <div class="stock-indicator" id="stockIndicator">Enter quantity</div>
+                            </div>
+                            <div class="form-field">
+                                <label>Category *</label>
+                                <select id="prodCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Rings">Rings</option>
+                                    <option value="Necklaces">Necklaces</option>
+                                    <option value="Earrings">Earrings</option>
+                                    <option value="Bracelets">Bracelets</option>
+                                    <option value="Anklets">Anklets</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label>Material *</label>
+                            <input type="text" id="prodMaterial" required placeholder="Rose Gold Plated">
+                        </div>
+                    </div>
+                    
+                    <!-- Features -->
+                    <div class="form-subsection">
+                        <h4 class="subsection-title">Product Features</h4>
+                        <div class="features-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="prodFeatures" value="Anti-Tarnish" checked>
+                                <span>Anti-Tarnish</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="prodFeatures" value="Skin Safe" checked>
+                                <span>Skin Safe</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="prodFeatures" value="Waterproof" checked>
+                                <span>Waterproof</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="prodFeatures" value="Hypoallergenic">
+                                <span>Hypoallergenic</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="prodFeatures" value="Nickel Free">
+                                <span>Nickel Free</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions-row">
+                        <button type="button" class="btn-reset" onclick="resetForm()">Reset Form</button>
+                        <button type="submit" class="btn-add-product">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+        
+        // Demo Products Data (sorted by date - newest first)
+        const demoProducts = [
+            { id: 'PRD-1015', name: 'Rose Gold Infinity Ring', category: 'Rings', material: 'Rose Gold Plated', price: 2499, discountPrice: 1999, stock: 45, sku: 'RG-INF-001', date: '2024-01-15', antiTarnish: true },
+            { id: 'PRD-1014', name: 'Pearl Drop Earrings', category: 'Earrings', material: 'Sterling Silver', price: 1899, discountPrice: 1499, stock: 3, sku: 'SS-PRL-002', date: '2024-01-14', antiTarnish: true },
+            { id: 'PRD-1013', name: 'Diamond Cut Bracelet', category: 'Bracelets', material: 'White Gold Plated', price: 3299, discountPrice: 2799, stock: 28, sku: 'WG-DMD-003', date: '2024-01-13', antiTarnish: true },
+            { id: 'PRD-1012', name: 'Emerald Pendant Necklace', category: 'Necklaces', material: 'Gold Plated', price: 4599, discountPrice: 3999, stock: 0, sku: 'GP-EMR-004', date: '2024-01-12', antiTarnish: true },
+            { id: 'PRD-1011', name: 'Butterfly Anklet', category: 'Anklets', material: 'Sterling Silver', price: 1599, discountPrice: 1299, stock: 52, sku: 'SS-BTF-005', date: '2024-01-11', antiTarnish: true },
+            { id: 'PRD-1010', name: 'Solitaire Engagement Ring', category: 'Rings', material: 'Platinum Plated', price: 5999, discountPrice: 4999, stock: 15, sku: 'PT-SOL-006', date: '2024-01-10', antiTarnish: true },
+            { id: 'PRD-1009', name: 'Hoop Earrings Set', category: 'Earrings', material: 'Gold Plated', price: 1299, discountPrice: 999, stock: 8, sku: 'GP-HOP-007', date: '2024-01-09', antiTarnish: true },
+            { id: 'PRD-1008', name: 'Charm Bracelet', category: 'Bracelets', material: 'Rose Gold Plated', price: 2199, discountPrice: 1799, stock: 0, sku: 'RG-CHM-008', date: '2024-01-08', antiTarnish: true },
+            { id: 'PRD-1007', name: 'Layered Chain Necklace', category: 'Necklaces', material: 'Sterling Silver', price: 2899, discountPrice: 2399, stock: 35, sku: 'SS-LAY-009', date: '2024-01-07', antiTarnish: true },
+            { id: 'PRD-1006', name: 'Beaded Anklet', category: 'Anklets', material: 'Gold Plated', price: 1399, discountPrice: 1099, stock: 4, sku: 'GP-BED-010', date: '2024-01-06', antiTarnish: true },
+            { id: 'PRD-1005', name: 'Vintage Ring', category: 'Rings', material: 'Antique Gold', price: 3499, discountPrice: 2999, stock: 22, sku: 'AG-VIN-011', date: '2024-01-05', antiTarnish: true },
+            { id: 'PRD-1004', name: 'Crystal Stud Earrings', category: 'Earrings', material: 'White Gold Plated', price: 1699, discountPrice: 1399, stock: 60, sku: 'WG-CRY-012', date: '2024-01-04', antiTarnish: true },
+            { id: 'PRD-1003', name: 'Tennis Bracelet', category: 'Bracelets', material: 'Platinum Plated', price: 4299, discountPrice: 3699, stock: 18, sku: 'PT-TEN-013', date: '2024-01-03', antiTarnish: true },
+            { id: 'PRD-1002', name: 'Heart Pendant Necklace', category: 'Necklaces', material: 'Rose Gold Plated', price: 2299, discountPrice: 1899, stock: 2, sku: 'RG-HRT-014', date: '2024-01-02', antiTarnish: true },
+            { id: 'PRD-1001', name: 'Delicate Chain Anklet', category: 'Anklets', material: 'Sterling Silver', price: 1199, discountPrice: 899, stock: 40, sku: 'SS-DEL-015', date: '2024-01-01', antiTarnish: true }
+        ];
+        
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredProducts = [...demoProducts];
+        
+        function getStockStatus(stock) {
+            if (stock === 0) return { status: 'Out of Stock', class: 'stock-out-of-stock' };
+            if (stock <= 5) return { status: 'Low Stock', class: 'stock-low-stock' };
+            return { status: 'In Stock', class: 'stock-in-stock' };
+        }
+        
+        function renderProducts() {
+            const tbody = document.getElementById('productsTableBody');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageProducts = filteredProducts.slice(start, end);
+            
+            tbody.innerHTML = pageProducts.map((product, index) => {
+                const stockInfo = getStockStatus(product.stock);
+                const srNo = start + index + 1;
+                
+                return `
+                    <tr>
+                        <td>${srNo}</td>
+                        <td><strong>${product.id}</strong></td>
+                        <td>${product.name}</td>
+                        <td>${product.category}</td>
+                        <td>${product.material}</td>
+                        <td>₹${product.price.toLocaleString()}</td>
+                        <td>₹${product.discountPrice.toLocaleString()}</td>
+                        <td><strong>${product.stock}</strong></td>
+                        <td><span class="stock-badge ${stockInfo.class}">${stockInfo.status}</span></td>
+                        <td>${product.antiTarnish ? '✓ Yes' : '✗ No'}</td>
+                        <td>${product.sku}</td>
+                        <td>${product.date}</td>
+                        <td>
+                            <button class="action-btn btn-view" onclick="viewProduct('${product.id}')">View</button>
+                            <button class="action-btn btn-edit" onclick="editProduct('${product.id}')">Edit</button>
+                            <button class="action-btn btn-delete" onclick="deleteProduct('${product.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updatePagination();
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+        
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            renderProducts();
+        }
+        
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchProducts').value.toLowerCase();
+            const categoryFilter = document.getElementById('filterCategory').value;
+            const stockFilter = document.getElementById('filterStock').value;
+            
+            filteredProducts = demoProducts.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.id.toLowerCase().includes(searchTerm) ||
+                                     product.sku.toLowerCase().includes(searchTerm);
+                const matchesCategory = categoryFilter === 'all' || product.category.toLowerCase() === categoryFilter;
+                
+                let matchesStock = true;
+                if (stockFilter === 'in-stock') matchesStock = product.stock > 5;
+                else if (stockFilter === 'low-stock') matchesStock = product.stock > 0 && product.stock <= 5;
+                else if (stockFilter === 'out-of-stock') matchesStock = product.stock === 0;
+                
+                return matchesSearch && matchesCategory && matchesStock;
+            });
+            
+            currentPage = 1;
+            renderProducts();
+        }
+        
+        document.getElementById('searchProducts').addEventListener('input', filterProducts);
+        document.getElementById('filterCategory').addEventListener('change', filterProducts);
+        document.getElementById('filterStock').addEventListener('change', filterProducts);
+        
+        function viewProduct(productId) {
+            alert(`Viewing details for product: ${productId}\n\nThis will open a detailed product view modal.`);
+            // TODO: Implement product detail view
+        }
+        
+        function editProduct(productId) {
+            alert(`Editing product: ${productId}\n\nThis will open the product edit form.`);
+            // TODO: Implement product edit functionality
+        }
+        
+        function deleteProduct(productId) {
+            if (confirm(`Are you sure you want to delete product ${productId}?\n\nThis action cannot be undone.`)) {
+                alert(`Product ${productId} deleted successfully!`);
+                const index = demoProducts.findIndex(p => p.id === productId);
+                if (index > -1) {
+                    demoProducts.splice(index, 1);
+                    filterProducts();
+                }
+            }
+        }
+        
+        renderProducts();
+        
+        // Add Product Form Functions
+        let productMedia = [];
+        
+        document.getElementById('productMedia').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    productMedia.push({
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        src: e.target.result,
+                        name: file.name
+                    });
+                    displayMediaPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+        
+        function displayMediaPreview() {
+            const grid = document.getElementById('mediaPreviewGrid');
+            grid.innerHTML = productMedia.map((media, index) => `
+                <div class="media-preview-item">
+                    ${media.type === 'image' ? 
+                        `<img src="${media.src}" alt="${media.name}">` :
+                        `<video src="${media.src}" muted></video>`
+                    }
+                    <button type="button" class="media-remove-btn" onclick="removeMedia(${index})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        window.removeMedia = function(index) {
+            productMedia.splice(index, 1);
+            displayMediaPreview();
+        };
+        
+        window.calcDiscount = function() {
+            const price = parseFloat(document.getElementById('prodPrice').value) || 0;
+            const discountPrice = parseFloat(document.getElementById('prodDiscountPrice').value) || 0;
+            const discountPercent = price > 0 ? ((price - discountPrice) / price * 100).toFixed(0) : 0;
+            
+            document.getElementById('previewPrice').textContent = `₹${discountPrice.toLocaleString()}`;
+            document.getElementById('previewOriginal').textContent = price > 0 ? `₹${price.toLocaleString()}` : '₹0';
+            document.getElementById('previewDiscountBadge').textContent = `${discountPercent}% OFF`;
+        };
+        
+        window.updateStock = function() {
+            const stock = parseInt(document.getElementById('prodStock').value) || 0;
+            const indicator = document.getElementById('stockIndicator');
+            
+            if (stock === 0) {
+                indicator.textContent = 'Out of Stock';
+                indicator.className = 'stock-indicator out-of-stock';
+            } else if (stock <= 5) {
+                indicator.textContent = 'Low Stock';
+                indicator.className = 'stock-indicator low-stock';
+            } else {
+                indicator.textContent = 'In Stock';
+                indicator.className = 'stock-indicator in-stock';
+            }
+        };
+        
+        window.resetForm = function() {
+            if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+                document.getElementById('addProductForm').reset();
+                productMedia = [];
+                displayMediaPreview();
+                calcDiscount();
+                updateStock();
+            }
+        };
+        
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (productMedia.length === 0) {
+                alert('Please upload at least one product image.');
+                return;
+            }
+            
+            const features = Array.from(document.querySelectorAll('input[name="prodFeatures"]:checked')).map(cb => cb.value);
+            
+            const newProduct = {
+                id: 'PRD-' + (1016 + demoProducts.length),
+                name: document.getElementById('prodName').value,
+                category: document.getElementById('prodCategory').value,
+                material: document.getElementById('prodMaterial').value,
+                price: parseFloat(document.getElementById('prodPrice').value),
+                discountPrice: parseFloat(document.getElementById('prodDiscountPrice').value),
+                stock: parseInt(document.getElementById('prodStock').value),
+                sku: document.getElementById('prodSKU').value,
+                date: new Date().toISOString().split('T')[0],
+                antiTarnish: features.includes('Anti-Tarnish'),
+                shortDescription: document.getElementById('prodShortDesc').value,
+                description: document.getElementById('prodDescription').value,
+                features: features,
+                media: productMedia
+            };
+            
+            demoProducts.unshift(newProduct);
+            filteredProducts = [...demoProducts];
+            currentPage = 1;
+            renderProducts();
+            
+            alert(`Product "${newProduct.name}" added successfully!\n\nProduct ID: ${newProduct.id}\nSKU: ${newProduct.sku}`);
+            
+            document.getElementById('addProductForm').reset();
+            productMedia = [];
+            displayMediaPreview();
+            calcDiscount();
+            updateStock();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

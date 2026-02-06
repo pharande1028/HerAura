@@ -3,148 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HerAura Admin Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Admin Login - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #f8f6f0 0%, #f0e8dd 100%);
+            background: linear-gradient(135deg, #fefdf8 0%, #f8f4ef 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        .admin-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+        .login-container {
+            background: white;
             border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(212,165,116,0.2);
+            overflow: hidden;
+            max-width: 900px;
+            width: 90%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .login-left {
+            background: linear-gradient(135deg, #d4a574 0%, #8B4513 100%);
             padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
         }
         
-        .admin-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+        .brand-logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
             font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .brand-tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .login-illustration {
+            font-size: 8rem;
+            margin: 2rem 0;
+        }
+        
+        .login-right {
+            padding: 3rem;
+        }
+        
+        .login-header {
+            margin-bottom: 2rem;
+        }
+        
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
         
-        .admin-subtitle {
+        .login-subtitle {
             color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .login-tabs {
+            display: flex;
+            gap: 1rem;
             margin-bottom: 2rem;
-            font-size: 1.1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: none;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #d4a574;
+            border-bottom-color: #d4a574;
+        }
+        
+        .login-form {
+            display: none;
+        }
+        
+        .login-form.active {
+            display: block;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .form-group {
             margin-bottom: 1.5rem;
-            text-align: left;
         }
         
-        .form-group label {
+        .form-label {
             display: block;
             margin-bottom: 0.5rem;
+            font-weight: 600;
             color: #333;
-            font-weight: 500;
+            font-size: 0.9rem;
         }
         
-        .form-group input {
+        .form-input {
             width: 100%;
             padding: 0.8rem;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s ease;
         }
         
-        .form-group input:focus {
+        .form-input:focus {
             outline: none;
             border-color: #d4a574;
-            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+            box-shadow: 0 0 8px rgba(212,165,116,0.2);
         }
         
-        .login-btn {
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forgot-password a {
+            color: #d4a574;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-login {
             width: 100%;
             padding: 1rem;
             background: #d4a574;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 1rem;
         }
         
-        .login-btn:hover {
-            transform: translateY(-2px);
+        .btn-login:hover {
             background: #8B4513;
-            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212,165,116,0.3);
         }
         
-        .security-note {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: rgba(212, 165, 116, 0.1);
-            border-radius: 10px;
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
             font-size: 0.9rem;
-            color: #8B4513;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-left {
+                padding: 2rem;
+            }
+            
+            .login-illustration {
+                font-size: 5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <h1 class="admin-logo">HerAura</h1>
-        <p class="admin-subtitle">Admin Portal</p>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="brand-logo">HerAura</div>
+            <div class="brand-tagline">Admin Portal</div>
+            <div class="login-illustration">💎</div>
+            <p style="opacity: 0.9;">Manage your jewelry empire with elegance</p>
+        </div>
         
-        <form id="adminLoginForm">
-            <div class="form-group">
-                <label for="adminEmail">Admin Email</label>
-                <input type="email" id="adminEmail" required>
+        <div class="login-right">
+            <div class="login-header">
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to access your admin dashboard</p>
             </div>
             
-            <div class="form-group">
-                <label for="adminPassword">Admin Password</label>
-                <input type="password" id="adminPassword" required>
+            <div class="login-tabs">
+                <button class="tab-btn active" onclick="switchTab('email')">Email Login</button>
+                <button class="tab-btn" onclick="switchTab('mobile')">Mobile Login</button>
             </div>
             
-            <button type="submit" class="login-btn">Access Admin Dashboard</button>
-        </form>
-        
-        <div class="security-note">
-            🔒 This is a secure admin portal. Only authorized personnel can access this system.
+            <div id="error-message" class="error-message"></div>
+            
+            <!-- Email Login Form -->
+            <form id="email-form" class="login-form active" onsubmit="handleLogin(event, 'email')">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" id="email-firstname" placeholder="John" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" id="email-lastname" placeholder="Doe" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="email-address" placeholder="admin@heraura.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="email-password" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="alert('Password reset feature coming soon!'); return false;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-login">Sign In</button>
+            </form>
+            
+            <!-- Mobile Login Form -->
+            <form id="mobile-form" class="login-form" onsubmit="handleLogin(event, 'mobile')">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" id="mobile-firstname" placeholder="John" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" id="mobile-lastname" placeholder="Doe" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Mobile Number</label>
+                    <input type="tel" class="form-input" id="mobile-number" placeholder="+91 9876543210" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="mobile-password" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="alert('Password reset feature coming soon!'); return false;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-login">Sign In</button>
+            </form>
         </div>
     </div>
 
     <script>
-        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
+            document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(tab + '-form').classList.add('active');
             
-            // Replace with your actual admin credentials
-            if (email === 'admin@heraura.com' && password === 'HerAura@Admin2025') {
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        function handleLogin(event, type) {
+            event.preventDefault();
+            
+            let firstName, lastName, identifier, password;
+            
+            if (type === 'email') {
+                firstName = document.getElementById('email-firstname').value;
+                lastName = document.getElementById('email-lastname').value;
+                identifier = document.getElementById('email-address').value;
+                password = document.getElementById('email-password').value;
+            } else {
+                firstName = document.getElementById('mobile-firstname').value;
+                lastName = document.getElementById('mobile-lastname').value;
+                identifier = document.getElementById('mobile-number').value;
+                password = document.getElementById('mobile-password').value;
+            }
+            
+            // Demo credentials
+            const validCredentials = {
+                email: {
+                    firstName: 'Admin',
+                    lastName: 'HerAura',
+                    identifier: 'admin@heraura.com',
+                    password: 'admin123'
+                },
+                mobile: {
+                    firstName: 'Admin',
+                    lastName: 'HerAura',
+                    identifier: '+91 9876543210',
+                    password: 'admin123'
+                }
+            };
+            
+            const valid = validCredentials[type];
+            
+            if (firstName === valid.firstName && 
+                lastName === valid.lastName && 
+                identifier === valid.identifier && 
+                password === valid.password) {
+                
                 localStorage.setItem('adminLoggedIn', 'true');
                 localStorage.setItem('adminData', JSON.stringify({
-                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    identifier: identifier,
+                    loginType: type,
                     loginTime: new Date().toISOString()
                 }));
-                window.location.href = 'admin-dashboard.html';
+                
+                window.location.href = 'admin-home.html';
             } else {
-                alert('Invalid admin credentials!');
+                showError('Invalid credentials. Please try again.');
             }
-        });
+        }
         
-        // Check if already logged in
-        if (localStorage.getItem('adminLoggedIn')) {
-            window.location.href = 'admin-dashboard.html';
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin-home.html';
         }
     </script>
 </body>

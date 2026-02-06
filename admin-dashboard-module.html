@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #8B4513;
+        }
+        
+        .dashboard { display: flex; min-height: calc(100vh - 80px); }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .time-filter {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.3rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .filter-btn.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a class="active">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <!-- Section 1: Graphs and Analytics -->
+            <div class="section-header">
+                <h2 class="section-title">Graphs & Analytics</h2>
+                <div class="time-filter">
+                    <button class="filter-btn" onclick="changeTimePeriod('week')">Week</button>
+                    <button class="filter-btn active" onclick="changeTimePeriod('month')">Month</button>
+                    <button class="filter-btn" onclick="changeTimePeriod('quarter')">Quarter</button>
+                    <button class="filter-btn" onclick="changeTimePeriod('year')">Year</button>
+                    <button class="filter-btn" onclick="changeTimePeriod('years')">All Years</button>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <!-- Sales Growth Chart -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Sales Growth</h3>
+                    <div class="chart-container">
+                        <canvas id="salesGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Selling Products Chart -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Top 5 Selling Products</h3>
+                    <div class="chart-container">
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Selling Categories Chart -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Top Selling Categories</h3>
+                    <div class="chart-container">
+                        <canvas id="topCategoriesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Cost vs Revenue Chart -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Cost vs Revenue Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="costRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        let currentPeriod = 'month';
+        let charts = {};
+
+        // Demo data for different time periods
+        const demoData = {
+            week: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                salesGrowth: [12000, 15000, 13000, 18000, 16000, 22000, 25000],
+                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [45, 38, 32, 28, 25] },
+                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [120, 95, 85, 70, 55] },
+                costRevenue: { cost: [8000, 10000, 9000, 12000, 11000, 15000, 17000], revenue: [12000, 15000, 13000, 18000, 16000, 22000, 25000] }
+            },
+            month: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                salesGrowth: [85000, 92000, 88000, 105000],
+                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [180, 152, 128, 112, 98] },
+                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [480, 380, 340, 280, 220] },
+                costRevenue: { cost: [55000, 60000, 58000, 68000], revenue: [85000, 92000, 88000, 105000] }
+            },
+            quarter: {
+                labels: ['Month 1', 'Month 2', 'Month 3'],
+                salesGrowth: [320000, 350000, 380000],
+                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [540, 456, 384, 336, 294] },
+                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [1440, 1140, 1020, 840, 660] },
+                costRevenue: { cost: [210000, 230000, 250000], revenue: [320000, 350000, 380000] }
+            },
+            year: {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                salesGrowth: [1050000, 1150000, 1250000, 1350000],
+                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [2160, 1824, 1536, 1344, 1176] },
+                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [5760, 4560, 4080, 3360, 2640] },
+                costRevenue: { cost: [690000, 750000, 820000, 880000], revenue: [1050000, 1150000, 1250000, 1350000] }
+            },
+            years: {
+                labels: ['2020', '2021', '2022', '2023', '2024'],
+                salesGrowth: [3200000, 3800000, 4500000, 5200000, 4800000],
+                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [8640, 7296, 6144, 5376, 4704] },
+                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [23040, 18240, 16320, 13440, 10560] },
+                costRevenue: { cost: [2100000, 2500000, 2950000, 3400000, 3150000], revenue: [3200000, 3800000, 4500000, 5200000, 4800000] }
+            }
+        };
+
+        function initCharts() {
+            const data = demoData[currentPeriod];
+
+            // Sales Growth Chart (Line)
+            if (charts.salesGrowth) charts.salesGrowth.destroy();
+            charts.salesGrowth = new Chart(document.getElementById('salesGrowthChart'), {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Sales (₹)',
+                        data: data.salesGrowth,
+                        borderColor: '#d4a574',
+                        backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: value => '₹' + value.toLocaleString() } }
+                    }
+                }
+            });
+
+            // Top Products Chart (Bar)
+            if (charts.topProducts) charts.topProducts.destroy();
+            charts.topProducts = new Chart(document.getElementById('topProductsChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.topProducts.labels,
+                    datasets: [{
+                        label: 'Units Sold',
+                        data: data.topProducts.data,
+                        backgroundColor: '#d4a574'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Top Categories Chart (Bar)
+            if (charts.topCategories) charts.topCategories.destroy();
+            charts.topCategories = new Chart(document.getElementById('topCategoriesChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.topCategories.labels,
+                    datasets: [{
+                        label: 'Units Sold',
+                        data: data.topCategories.data,
+                        backgroundColor: '#8B4513'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Cost vs Revenue Chart (Bar)
+            if (charts.costRevenue) charts.costRevenue.destroy();
+            charts.costRevenue = new Chart(document.getElementById('costRevenueChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Cost (₹)',
+                            data: data.costRevenue.cost,
+                            backgroundColor: '#ef4444'
+                        },
+                        {
+                            label: 'Revenue (₹)',
+                            data: data.costRevenue.revenue,
+                            backgroundColor: '#10b981'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: value => '₹' + value.toLocaleString() } }
+                    }
+                }
+            });
+        }
+
+        function changeTimePeriod(period) {
+            currentPeriod = period;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            initCharts();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        initCharts();
+    </script>
+</body>
+</html>

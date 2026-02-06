@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerts & Notifications - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #8B4513;
+        }
+        
+        .dashboard { display: flex; min-height: calc(100vh - 80px); }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            font-weight: 600;
+        }
+        
+        .subsection-title {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .alert-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .alert-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: #f9fafb;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .alert-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+        
+        .alert-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-new { background: #dbeafe; color: #1e40af; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-processing { background: #e0e7ff; color: #3730a3; }
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-low { background: #fee2e2; color: #991b1b; }
+        .status-critical { background: #fecaca; color: #7f1d1d; }
+        .status-down { background: #fee2e2; color: #991b1b; }
+        .status-active { background: #d1fae5; color: #065f46; }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .btn-accept { background: #d1fae5; color: #065f46; }
+        .btn-accept:hover { background: #a7f3d0; }
+        
+        .btn-reject { background: #fee2e2; color: #991b1b; }
+        .btn-reject:hover { background: #fecaca; }
+        
+        .btn-complete { background: #dbeafe; color: #1e40af; }
+        .btn-complete:hover { background: #bfdbfe; }
+        
+        .btn-reply { background: #e0e7ff; color: #3730a3; }
+        .btn-reply:hover { background: #c7d2fe; }
+        
+        .btn-restock { background: #fef3c7; color: #92400e; }
+        .btn-restock:hover { background: #fde68a; }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d4a574;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: -1.45rem;
+            top: 1rem;
+            width: 2px;
+            height: 100%;
+            background: #e5e7eb;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        .timeline-date {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .timeline-content {
+            font-size: 0.9rem;
+            color: #333;
+            margin-top: 0.25rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a class="active">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Alerts & Notifications</h1>
+
+            <!-- Section 1: Alerts and Notifications -->
+            <h2 class="section-title">Section 1: Alerts and Notifications</h2>
+
+            <!-- 1. Recent Orders -->
+            <h3 class="subsection-title">1. Recent Orders</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersTable">
+                        <tr>
+                            <td>#ORD-1234</td>
+                            <td>Priya Sharma</td>
+                            <td>Gold Pendant</td>
+                            <td>₹2,499</td>
+                            <td>2 mins ago</td>
+                            <td><span class="status-badge status-new">New Order</span></td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="updateOrderStatus('ORD-1234', 'accepted')">Accept</button>
+                                <button class="action-btn btn-complete" onclick="updateOrderStatus('ORD-1234', 'completed')">Mark Complete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-1235</td>
+                            <td>Rahul Verma</td>
+                            <td>Silver Ring</td>
+                            <td>₹1,299</td>
+                            <td>15 mins ago</td>
+                            <td><span class="status-badge status-processing">Processing</span></td>
+                            <td>
+                                <button class="action-btn btn-complete" onclick="updateOrderStatus('ORD-1235', 'completed')">Mark Complete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. Pending Orders -->
+            <h3 class="subsection-title">2. Pending Orders (Not Packed/Shipped)</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Ordered On</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-1230</td>
+                            <td>Anjali Patel</td>
+                            <td>Diamond Earrings</td>
+                            <td>Jan 15, 2024</td>
+                            <td><span class="status-badge status-pending">Awaiting Packing</span></td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="markPacked('ORD-1230')">Mark as Packed</button>
+                                <button class="action-btn btn-complete" onclick="markShipped('ORD-1230')">Ship Order</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-1228</td>
+                            <td>Vikram Singh</td>
+                            <td>Pearl Necklace</td>
+                            <td>Jan 14, 2024</td>
+                            <td><span class="status-badge status-pending">Awaiting Packing</span></td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="markPacked('ORD-1228')">Mark as Packed</button>
+                                <button class="action-btn btn-complete" onclick="markShipped('ORD-1228')">Ship Order</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 3. Customer Support -->
+            <h3 class="subsection-title">3. Customer Support Requests</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Query</th>
+                            <th>Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#TKT-501</td>
+                            <td>Meera Reddy</td>
+                            <td>meera@email.com</td>
+                            <td>Product size inquiry for ring</td>
+                            <td>1 hour ago</td>
+                            <td>
+                                <button class="action-btn btn-reply" onclick="replyToCustomer('TKT-501')">Reply via Email</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#TKT-502</td>
+                            <td>Arjun Kumar</td>
+                            <td>arjun@email.com</td>
+                            <td>Delivery status update request</td>
+                            <td>3 hours ago</td>
+                            <td>
+                                <button class="action-btn btn-reply" onclick="replyToCustomer('TKT-502')">Reply via Email</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 4. Seller Approval -->
+            <h3 class="subsection-title">4. Seller Approval Requests</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Seller ID</th>
+                            <th>Business Name</th>
+                            <th>Contact</th>
+                            <th>Products</th>
+                            <th>Registered On</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#SEL-101</td>
+                            <td>Jewel Craft Co.</td>
+                            <td>contact@jewelcraft.com</td>
+                            <td>Gold Jewelry</td>
+                            <td>Jan 16, 2024</td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="approveSeller('SEL-101')">Approve</button>
+                                <button class="action-btn btn-reject" onclick="rejectSeller('SEL-101')">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#SEL-102</td>
+                            <td>Silver Elegance</td>
+                            <td>info@silverelegance.com</td>
+                            <td>Silver Accessories</td>
+                            <td>Jan 15, 2024</td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="approveSeller('SEL-102')">Approve</button>
+                                <button class="action-btn btn-reject" onclick="rejectSeller('SEL-102')">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5. Low Stock Products -->
+            <h3 class="subsection-title">5. Low Stock Alert (Less than 5 pieces)</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Stock Left</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#PRD-789</td>
+                            <td>Gold Pendant - Classic</td>
+                            <td>Pendants</td>
+                            <td>2 pieces</td>
+                            <td><span class="status-badge status-critical">Critical</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-789')">Restock Product</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-790</td>
+                            <td>Silver Ring - Elegant</td>
+                            <td>Rings</td>
+                            <td>4 pieces</td>
+                            <td><span class="status-badge status-low">Low Stock</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-790')">Restock Product</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 6. Returns and Refunds -->
+            <h3 class="subsection-title">6. Returns & Refunds Requests</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Reason</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#RET-301</td>
+                            <td>#ORD-1220</td>
+                            <td>Kavya Nair</td>
+                            <td>Size mismatch</td>
+                            <td><span class="status-badge status-pending">Return</span></td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="showReturnTimeline('RET-301')">View Timeline</button>
+                                <button class="action-btn btn-accept" onclick="acceptReturn('RET-301')">Accept</button>
+                                <button class="action-btn btn-reject" onclick="rejectReturn('RET-301')">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#REF-302</td>
+                            <td>#ORD-1215</td>
+                            <td>Rohan Desai</td>
+                            <td>Product damaged</td>
+                            <td><span class="status-badge status-pending">Refund</span></td>
+                            <td>
+                                <button class="action-btn btn-accept" onclick="showReturnTimeline('REF-302')">View Timeline</button>
+                                <button class="action-btn btn-accept" onclick="acceptRefund('REF-302')">Accept</button>
+                                <button class="action-btn btn-reject" onclick="rejectRefund('REF-302')">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Return/Refund Timeline Example -->
+                <div id="returnTimeline" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: 8px;">
+                    <h4 style="margin-bottom: 1rem; font-size: 1rem;">Return/Refund Process Timeline</h4>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Jan 16, 2024 - 10:30 AM</div>
+                            <div class="timeline-content">Request submitted by customer</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Jan 16, 2024 - 11:00 AM</div>
+                            <div class="timeline-content">Request under review</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Pending</div>
+                            <div class="timeline-content">Admin approval required</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Pending</div>
+                            <div class="timeline-content">Product pickup scheduled</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Pending</div>
+                            <div class="timeline-content">Refund processed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Failed Payments -->
+            <h3 class="subsection-title">7. Failed Payment Transactions</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Reason</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#TXN-5001</td>
+                            <td>Sneha Gupta</td>
+                            <td>₹3,499</td>
+                            <td>Insufficient funds</td>
+                            <td>30 mins ago</td>
+                            <td><span class="status-badge status-critical">Failed</span></td>
+                        </tr>
+                        <tr>
+                            <td>#TXN-5002</td>
+                            <td>Karan Mehta</td>
+                            <td>₹1,999</td>
+                            <td>Card declined</td>
+                            <td>1 hour ago</td>
+                            <td><span class="status-badge status-critical">Failed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 8. Payment Gateway Status -->
+            <h3 class="subsection-title">8. Payment Gateway Status</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Gateway</th>
+                            <th>Status</th>
+                            <th>Last Checked</th>
+                            <th>Uptime</th>
+                            <th>Response Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Razorpay</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>Just now</td>
+                            <td>99.9%</td>
+                            <td>120ms</td>
+                        </tr>
+                        <tr>
+                            <td>PayU</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>Just now</td>
+                            <td>99.8%</td>
+                            <td>150ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Section 2: Smart Alerts -->
+            <h2 class="section-title">Section 2: Smart Alerts</h2>
+
+            <!-- 1. Products Likely to Go Out of Stock -->
+            <h3 class="subsection-title">1. Products Likely to Go Out of Stock (≤5 pieces)</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Last Sold</th>
+                            <th>Alert Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#PRD-456</td>
+                            <td>Rose Gold Bracelet</td>
+                            <td>Bracelets</td>
+                            <td>1 piece</td>
+                            <td>2 hours ago</td>
+                            <td><span class="status-badge status-critical">Critical - 1 left</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-456')">Restock Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-789</td>
+                            <td>Gold Pendant - Classic</td>
+                            <td>Pendants</td>
+                            <td>2 pieces</td>
+                            <td>5 hours ago</td>
+                            <td><span class="status-badge status-critical">Critical - 2 left</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-789')">Restock Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-234</td>
+                            <td>Diamond Stud Earrings</td>
+                            <td>Earrings</td>
+                            <td>3 pieces</td>
+                            <td>1 day ago</td>
+                            <td><span class="status-badge status-low">Low - 3 left</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-234')">Restock Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-790</td>
+                            <td>Silver Ring - Elegant</td>
+                            <td>Rings</td>
+                            <td>4 pieces</td>
+                            <td>3 days ago</td>
+                            <td><span class="status-badge status-low">Low - 4 left</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-790')">Restock Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-567</td>
+                            <td>Pearl Necklace Set</td>
+                            <td>Necklaces</td>
+                            <td>5 pieces</td>
+                            <td>4 days ago</td>
+                            <td><span class="status-badge status-low">Low - 5 left</span></td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="restockProduct('PRD-567')">Restock Now</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. Dead Stock Identification -->
+            <h3 class="subsection-title">2. Dead Stock Identification (Unsold for 90+ days)</h3>
+            <div class="alert-card">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Stock Quantity</th>
+                            <th>Days Unsold</th>
+                            <th>Last Sale Date</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#PRD-112</td>
+                            <td>Vintage Gold Chain</td>
+                            <td>Chains</td>
+                            <td>15 pieces</td>
+                            <td>156 days</td>
+                            <td>Aug 12, 2023</td>
+                            <td>₹8,999</td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="applyDiscount('PRD-112')">Apply Discount</button>
+                                <button class="action-btn btn-reject" onclick="markClearance('PRD-112')">Mark for Clearance</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-223</td>
+                            <td>Antique Silver Anklet</td>
+                            <td>Anklets</td>
+                            <td>8 pieces</td>
+                            <td>134 days</td>
+                            <td>Sep 5, 2023</td>
+                            <td>₹3,499</td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="applyDiscount('PRD-223')">Apply Discount</button>
+                                <button class="action-btn btn-reject" onclick="markClearance('PRD-223')">Mark for Clearance</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-334</td>
+                            <td>Traditional Nose Pin</td>
+                            <td>Nose Pins</td>
+                            <td>22 pieces</td>
+                            <td>118 days</td>
+                            <td>Sep 20, 2023</td>
+                            <td>₹1,299</td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="applyDiscount('PRD-334')">Apply Discount</button>
+                                <button class="action-btn btn-reject" onclick="markClearance('PRD-334')">Mark for Clearance</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-445</td>
+                            <td>Designer Toe Ring Set</td>
+                            <td>Toe Rings</td>
+                            <td>12 pieces</td>
+                            <td>102 days</td>
+                            <td>Oct 8, 2023</td>
+                            <td>₹899</td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="applyDiscount('PRD-445')">Apply Discount</button>
+                                <button class="action-btn btn-reject" onclick="markClearance('PRD-445')">Mark for Clearance</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRD-556</td>
+                            <td>Oxidized Bangle Set</td>
+                            <td>Bangles</td>
+                            <td>18 pieces</td>
+                            <td>95 days</td>
+                            <td>Oct 15, 2023</td>
+                            <td>₹2,499</td>
+                            <td>
+                                <button class="action-btn btn-restock" onclick="applyDiscount('PRD-556')">Apply Discount</button>
+                                <button class="action-btn btn-reject" onclick="markClearance('PRD-556')">Mark for Clearance</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        function updateOrderStatus(orderId, status) {
+            alert(`Order ${orderId} status updated to: ${status}`);
+            // TODO: API call to update order status
+        }
+
+        function markPacked(orderId) {
+            alert(`Order ${orderId} marked as packed`);
+            // TODO: API call
+        }
+
+        function markShipped(orderId) {
+            alert(`Order ${orderId} marked as shipped`);
+            // TODO: API call
+        }
+
+        function replyToCustomer(ticketId) {
+            const email = prompt('Enter your reply (will be sent via email):');
+            if (email) {
+                alert(`Reply sent to customer for ticket ${ticketId}`);
+                // TODO: API call to send email
+            }
+        }
+
+        function approveSeller(sellerId) {
+            if (confirm(`Approve seller ${sellerId}?`)) {
+                alert(`Seller ${sellerId} approved successfully`);
+                // TODO: API call
+            }
+        }
+
+        function rejectSeller(sellerId) {
+            if (confirm(`Reject seller ${sellerId}?`)) {
+                alert(`Seller ${sellerId} rejected`);
+                // TODO: API call
+            }
+        }
+
+        function restockProduct(productId) {
+            const quantity = prompt('Enter restock quantity:');
+            if (quantity) {
+                alert(`Product ${productId} restocked with ${quantity} units`);
+                // TODO: API call
+            }
+        }
+
+        function showReturnTimeline(requestId) {
+            const timeline = document.getElementById('returnTimeline');
+            timeline.style.display = timeline.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function acceptReturn(requestId) {
+            if (confirm(`Accept return request ${requestId}?`)) {
+                alert(`Return ${requestId} accepted. Pickup will be scheduled.`);
+                // TODO: API call
+            }
+        }
+
+        function rejectReturn(requestId) {
+            const reason = prompt('Enter rejection reason:');
+            if (reason) {
+                alert(`Return ${requestId} rejected. Reason: ${reason}`);
+                // TODO: API call
+            }
+        }
+
+        function acceptRefund(requestId) {
+            if (confirm(`Accept refund request ${requestId}?`)) {
+                alert(`Refund ${requestId} accepted. Amount will be processed.`);
+                // TODO: API call
+            }
+        }
+
+        function rejectRefund(requestId) {
+            const reason = prompt('Enter rejection reason:');
+            if (reason) {
+                alert(`Refund ${requestId} rejected. Reason: ${reason}`);
+                // TODO: API call
+            }
+        }
+
+        function applyDiscount(productId) {
+            const discount = prompt('Enter discount percentage (e.g., 20 for 20%):');
+            if (discount) {
+                alert(`${discount}% discount applied to product ${productId}`);
+                // TODO: API call to update product price
+            }
+        }
+
+        function markClearance(productId) {
+            if (confirm(`Mark product ${productId} for clearance sale?`)) {
+                alert(`Product ${productId} marked for clearance`);
+                // TODO: API call to move to clearance section
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+    </script>
+</body>
+</html>

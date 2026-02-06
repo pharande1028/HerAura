@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #8B4513;
+        }
+        
+        .dashboard { display: flex; min-height: calc(100vh - 80px); }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-time {
+            color: #d4a574;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #d4a574;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        .stat-change {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #6b7280;
+        }
+        
+        .stat-change.positive {
+            color: #10b981;
+        }
+        
+        .stat-change.negative {
+            color: #ef4444;
+        }
+        
+        .stat-change.neutral {
+            color: #6b7280;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a class="active">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <div class="welcome-section">
+                <div class="welcome-title">Welcome, <span id="adminNameDisplay">Admin</span>!</div>
+                <div class="welcome-subtitle">"Every day is a new beginning to craft timeless elegance"</div>
+                <div class="welcome-time" id="currentDateTime"></div>
+            </div>
+
+            <!-- Section 1: Products & Revenue -->
+            <h2 class="section-title">Products & Revenue</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Products</span>
+                    <div class="stat-value" id="totalProducts">--</div>
+                    <div class="stat-change neutral">
+                        <span>Active in catalog</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Total Products Value</span>
+                    <div class="stat-value" id="totalProductsValue">--</div>
+                    <div class="stat-change neutral">
+                        <span>Inventory worth</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Total Revenue</span>
+                    <div class="stat-value" id="totalRevenue">--</div>
+                    <div class="stat-change positive">
+                        <span>All-time earnings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Orders -->
+            <h2 class="section-title">Orders</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Recent Orders</span>
+                    <div class="stat-value" id="recentOrders">--</div>
+                    <div class="stat-change positive">
+                        <span>Live tracking</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Pending Orders</span>
+                    <div class="stat-value" id="pendingOrders">--</div>
+                    <div class="stat-change neutral">
+                        <span>Awaiting processing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Sales -->
+            <h2 class="section-title">Sales</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Today's Sales</span>
+                    <div class="stat-value" id="todaysSales">--</div>
+                    <div class="stat-change positive">
+                        <span>Since midnight</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Weekly Sales</span>
+                    <div class="stat-value" id="weeklySales">--</div>
+                    <div class="stat-change positive">
+                        <span>Last 7 days</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Monthly Sales</span>
+                    <div class="stat-value" id="monthlySales">--</div>
+                    <div class="stat-change positive">
+                        <span>This month</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Quarterly Sales</span>
+                    <div class="stat-value" id="quarterlySales">--</div>
+                    <div class="stat-change positive">
+                        <span>This quarter</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Yearly Sales</span>
+                    <div class="stat-value" id="yearlySales">--</div>
+                    <div class="stat-change positive">
+                        <span>This year</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Returns & Refunds -->
+            <h2 class="section-title">Returns & Refunds</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Returns</span>
+                    <div class="stat-value" id="returns">--</div>
+                    <div class="stat-change neutral">
+                        <span>Return requests</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Refunds</span>
+                    <div class="stat-value" id="refunds">--</div>
+                    <div class="stat-change neutral">
+                        <span>Refund requests</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Support -->
+            <h2 class="section-title">Support</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Support Requests</span>
+                    <div class="stat-value" id="supportRequests">--</div>
+                    <div class="stat-change neutral">
+                        <span>Active tickets</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Load admin data
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+        document.getElementById('adminNameDisplay').textContent = adminData.firstName;
+
+        // Update date time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Fetch dashboard data
+        async function fetchDashboardData() {
+            try {
+                // TODO: Replace with actual API endpoint
+                const data = {
+                    totalProducts: 156,
+                    totalProductsValue: '₹12,45,000',
+                    recentOrders: 23,
+                    pendingOrders: 8,
+                    totalRevenue: '₹8,24,500',
+                    todaysSales: '₹45,200',
+                    weeklySales: '₹2,85,400',
+                    monthlySales: '₹12,45,000',
+                    quarterlySales: '₹35,20,000',
+                    yearlySales: '₹1,42,50,000',
+                    returns: 5,
+                    refunds: 3,
+                    supportRequests: 12
+                };
+
+                document.getElementById('totalProducts').textContent = data.totalProducts || 'N/A';
+                document.getElementById('totalProductsValue').textContent = data.totalProductsValue || 'N/A';
+                document.getElementById('recentOrders').textContent = data.recentOrders || '0';
+                document.getElementById('pendingOrders').textContent = data.pendingOrders || '0';
+                document.getElementById('totalRevenue').textContent = data.totalRevenue || 'N/A';
+                document.getElementById('todaysSales').textContent = data.todaysSales || '₹0';
+                document.getElementById('weeklySales').textContent = data.weeklySales || '₹0';
+                document.getElementById('monthlySales').textContent = data.monthlySales || '₹0';
+                document.getElementById('quarterlySales').textContent = data.quarterlySales || '₹0';
+                document.getElementById('yearlySales').textContent = data.yearlySales || '₹0';
+                document.getElementById('returns').textContent = data.returns || '0';
+                document.getElementById('refunds').textContent = data.refunds || '0';
+                document.getElementById('supportRequests').textContent = data.supportRequests || '0';
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+                document.querySelectorAll('.stat-value').forEach(el => {
+                    if (el.textContent === '--') el.textContent = 'N/A';
+                });
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+        fetchDashboardData();
+        setInterval(fetchDashboardData, 30000);
+    </script>
+</body>
+</html>
