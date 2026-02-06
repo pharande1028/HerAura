@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Management - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fefdf8; overflow-x: hidden; }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #8B4513;
+            font-weight: 700;
+        }
+        
+        .admin-info { display: flex; align-items: center; gap: 1.5rem; }
+        .admin-name { font-weight: 600; color: #333; }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover { background: #c82333; }
+        
+        .dashboard {
+            display: flex;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .section-header h3 {
+            font-family: 'Inter', sans-serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-toggle-icon.collapsed {
+            transform: rotate(-180deg);
+        }
+        
+        .section-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #8B4513;
+        }
+        
+        .section-content {
+            display: block;
+        }
+        
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .worth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .worth-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .worth-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,165,116,0.2);
+        }
+
+        .worth-card.total {
+            background: white;
+            color: #333;
+            border: 2px solid #d4a574;
+        }
+
+        .worth-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .worth-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .worth-count {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            transform: rotateX(180deg);
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #d4a574;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+            transform: rotateX(180deg);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f4ef;
+            font-weight: 600;
+            color: #8B4513;
+        }
+
+        tr:hover {
+            background: #fefdf8;
+        }
+
+        .aging-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .aging-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .aging-badge.critical {
+            background: #d4a574;
+            color: white;
+        }
+
+        .aging-badge.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .aging-badge.moderate {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-action {
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #218838;
+        }
+
+        .btn-reject {
+            background: #d4a574;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #8B4513;
+        }
+
+        .btn-payout {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-payout:hover {
+            background: #138496;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-processed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #138496;
+        }
+
+        .suggestions-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li {
+            color: #856404;
+            margin: 0.3rem 0;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a href="admin-orders.html">Order Management</a></li>
+                <li><a href="admin-finance.html">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html">Landing Page Controls</a></li>
+                <li><a href="admin-inventory-worth.html">Inventory Worth</a></li>
+                <li><a href="admin-seller-management.html" class="active">Seller Management</a></li>
+                <li><a href="admin-system-settings.html">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Seller Management</h1>
+
+            <!-- Section 1: Seller Onboarding -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section1')">
+                    <h3>Section 1: Seller Onboarding</h3>
+                    <span class="section-toggle-icon" id="section1-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section1-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Review and approve seller registration requests</p>
+                
+                <div class="aging-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Status Filter</label>
+                        <select class="filter-select" id="status-filter" onchange="filterSellers()">
+                            <option value="all">All Requests</option>
+                            <option value="pending" selected>Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Search</label>
+                        <input type="text" class="filter-select" id="seller-search" placeholder="Search by name or email" onkeyup="filterSellers()">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Seller Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Business Name</th>
+                                <th>GST Number</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sellers-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Product Approval -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section2')">
+                    <h3>Section 2: Product Approval</h3>
+                    <span class="section-toggle-icon" id="section2-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section2-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Review and approve seller product listings</p>
+                
+                <div class="aging-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Status Filter</label>
+                        <select class="filter-select" id="product-status-filter" onchange="filterProducts()">
+                            <option value="all">All Products</option>
+                            <option value="pending" selected>Pending Review</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Seller</label>
+                        <select class="filter-select" id="seller-filter" onchange="filterProducts()">
+                            <option value="all">All Sellers</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Category</label>
+                        <select class="filter-select" id="product-category-filter" onchange="filterProducts()">
+                            <option value="all">All Categories</option>
+                            <option value="Rings">Rings</option>
+                            <option value="Earrings">Earrings</option>
+                            <option value="Bracelets">Bracelets</option>
+                            <option value="Necklaces">Necklaces</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Seller</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Submitted Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Seller Performance Analytics -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section3')">
+                    <h3>Section 3: Seller Performance Analytics</h3>
+                    <span class="section-toggle-icon" id="section3-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section3-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Track seller performance metrics and sales data</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Seller Name</th>
+                                <th>Total Products</th>
+                                <th>Active Products</th>
+                                <th>Total Sales</th>
+                                <th>Revenue Generated</th>
+                                <th>Avg. Rating</th>
+                                <th>Return Rate</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performance-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Commission Tracking & Payouts -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section4')">
+                    <h3>Section 4: Commission Tracking & Payouts</h3>
+                    <span class="section-toggle-icon" id="section4-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section4-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Manage seller commissions and process payouts</p>
+                
+                <div class="aging-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Payout Status</label>
+                        <select class="filter-select" id="payout-filter" onchange="filterPayouts()">
+                            <option value="all">All Payouts</option>
+                            <option value="pending" selected>Pending</option>
+                            <option value="processed">Processed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Month</label>
+                        <select class="filter-select" id="month-filter" onchange="filterPayouts()">
+                            <option value="all">All Months</option>
+                            <option value="2024-01" selected>January 2024</option>
+                            <option value="2023-12">December 2023</option>
+                            <option value="2023-11">November 2023</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Seller Name</th>
+                                <th>Period</th>
+                                <th>Total Sales</th>
+                                <th>Commission Rate</th>
+                                <th>Commission Amount</th>
+                                <th>Payout Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payouts-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Demo Sellers Data
+        const demoSellers = [
+            { id: 1, name: 'Priya Sharma', email: 'priya@jewelcraft.com', phone: '+91 9876543210', business: 'JewelCraft India', gst: '27AABCU9603R1ZM', appliedDate: '2024-01-15', status: 'pending' },
+            { id: 2, name: 'Rajesh Kumar', email: 'rajesh@goldenhues.com', phone: '+91 9876543211', business: 'Golden Hues', gst: '29AABCU9603R1ZN', appliedDate: '2024-01-12', status: 'pending' },
+            { id: 3, name: 'Anita Desai', email: 'anita@silverline.com', phone: '+91 9876543212', business: 'Silverline Jewels', gst: '27AABCU9603R1ZO', appliedDate: '2024-01-10', status: 'approved' },
+            { id: 4, name: 'Vikram Singh', email: 'vikram@royalgems.com', phone: '+91 9876543213', business: 'Royal Gems', gst: '29AABCU9603R1ZP', appliedDate: '2024-01-08', status: 'approved' },
+            { id: 5, name: 'Meera Patel', email: 'meera@diamondtouch.com', phone: '+91 9876543214', business: 'Diamond Touch', gst: '27AABCU9603R1ZQ', appliedDate: '2024-01-05', status: 'rejected' }
+        ];
+
+        // Demo Products Data
+        const demoProducts = [
+            { id: 1, name: 'Rose Gold Ring', seller: 'Priya Sharma', category: 'Rings', price: 2499, stock: 50, submittedDate: '2024-01-16', status: 'pending' },
+            { id: 2, name: 'Pearl Earrings', seller: 'Rajesh Kumar', category: 'Earrings', price: 1899, stock: 30, submittedDate: '2024-01-14', status: 'pending' },
+            { id: 3, name: 'Silver Bracelet', seller: 'Anita Desai', category: 'Bracelets', price: 1599, stock: 40, submittedDate: '2024-01-12', status: 'approved' },
+            { id: 4, name: 'Diamond Necklace', seller: 'Vikram Singh', category: 'Necklaces', price: 8999, stock: 15, submittedDate: '2024-01-10', status: 'approved' },
+            { id: 5, name: 'Gold Pendant', seller: 'Meera Patel', category: 'Necklaces', price: 3499, stock: 25, submittedDate: '2024-01-08', status: 'rejected' }
+        ];
+
+        // Demo Performance Data
+        const demoPerformance = [
+            { seller: 'Anita Desai', totalProducts: 45, activeProducts: 42, totalSales: 328, revenue: 524800, rating: 4.7, returnRate: 2.1, performance: 'Excellent' },
+            { seller: 'Vikram Singh', totalProducts: 38, activeProducts: 35, totalSales: 256, revenue: 458900, rating: 4.5, returnRate: 3.2, performance: 'Good' },
+            { seller: 'Priya Sharma', totalProducts: 12, activeProducts: 10, totalSales: 89, revenue: 142300, rating: 4.3, returnRate: 4.5, performance: 'Average' },
+            { seller: 'Rajesh Kumar', totalProducts: 8, activeProducts: 6, totalSales: 45, revenue: 78900, rating: 4.1, returnRate: 5.8, performance: 'Average' }
+        ];
+
+        // Demo Payouts Data
+        const demoPayouts = [
+            { seller: 'Anita Desai', period: 'Jan 2024', totalSales: 524800, commissionRate: 15, commissionAmount: 78720, payoutAmount: 446080, status: 'pending' },
+            { seller: 'Vikram Singh', period: 'Jan 2024', totalSales: 458900, commissionRate: 15, commissionAmount: 68835, payoutAmount: 390065, status: 'pending' },
+            { seller: 'Anita Desai', period: 'Dec 2023', totalSales: 498500, commissionRate: 15, commissionAmount: 74775, payoutAmount: 423725, status: 'processed' },
+            { seller: 'Vikram Singh', period: 'Dec 2023', totalSales: 412300, commissionRate: 15, commissionAmount: 61845, payoutAmount: 350455, status: 'processed' }
+        ];
+
+        function filterSellers() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const searchTerm = document.getElementById('seller-search').value.toLowerCase();
+            
+            let filtered = demoSellers.filter(seller => {
+                const matchStatus = statusFilter === 'all' || seller.status === statusFilter;
+                const matchSearch = seller.name.toLowerCase().includes(searchTerm) || seller.email.toLowerCase().includes(searchTerm);
+                return matchStatus && matchSearch;
+            });
+
+            const tbody = document.getElementById('sellers-table');
+            tbody.innerHTML = filtered.map(seller => {
+                const statusClass = seller.status === 'approved' ? 'status-approved' : 
+                                   seller.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${seller.name}</strong></td>
+                        <td>${seller.email}</td>
+                        <td>${seller.phone}</td>
+                        <td>${seller.business}</td>
+                        <td>${seller.gst}</td>
+                        <td>${new Date(seller.appliedDate).toLocaleDateString('en-IN')}</td>
+                        <td><span class="aging-badge ${statusClass}">${seller.status.toUpperCase()}</span></td>
+                        <td style="white-space: nowrap;">
+                            ${seller.status === 'pending' ? `
+                                <button class="btn-action btn-approve" onclick="approveSeller(${seller.id})">Approve</button>
+                                <button class="btn-action btn-reject" onclick="rejectSeller(${seller.id})">Reject</button>
+                            ` : ''}
+                            <button class="btn-action btn-view" onclick="viewSeller(${seller.id})">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterProducts() {
+            const statusFilter = document.getElementById('product-status-filter').value;
+            const sellerFilter = document.getElementById('seller-filter').value;
+            const categoryFilter = document.getElementById('product-category-filter').value;
+            
+            let filtered = demoProducts.filter(product => {
+                const matchStatus = statusFilter === 'all' || product.status === statusFilter;
+                const matchSeller = sellerFilter === 'all' || product.seller === sellerFilter;
+                const matchCategory = categoryFilter === 'all' || product.category === categoryFilter;
+                return matchStatus && matchSeller && matchCategory;
+            });
+
+            const tbody = document.getElementById('products-table');
+            tbody.innerHTML = filtered.map(product => {
+                const statusClass = product.status === 'approved' ? 'status-approved' : 
+                                   product.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${product.name}</strong></td>
+                        <td>${product.seller}</td>
+                        <td>${product.category}</td>
+                        <td>₹${product.price.toLocaleString('en-IN')}</td>
+                        <td>${product.stock}</td>
+                        <td>${new Date(product.submittedDate).toLocaleDateString('en-IN')}</td>
+                        <td><span class="aging-badge ${statusClass}">${product.status.toUpperCase()}</span></td>
+                        <td style="white-space: nowrap;">
+                            ${product.status === 'pending' ? `
+                                <button class="btn-action btn-approve" onclick="approveProduct(${product.id})">Approve</button>
+                                <button class="btn-action btn-reject" onclick="rejectProduct(${product.id})">Reject</button>
+                            ` : ''}
+                            <button class="btn-action btn-view" onclick="viewProduct(${product.id})">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadPerformance() {
+            const tbody = document.getElementById('performance-table');
+            tbody.innerHTML = demoPerformance.map(perf => {
+                const perfClass = perf.performance === 'Excellent' ? 'status-approved' : 
+                                 perf.performance === 'Good' ? 'status-processed' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${perf.seller}</strong></td>
+                        <td>${perf.totalProducts}</td>
+                        <td>${perf.activeProducts}</td>
+                        <td>${perf.totalSales}</td>
+                        <td><strong>₹${perf.revenue.toLocaleString('en-IN')}</strong></td>
+                        <td>⭐ ${perf.rating}</td>
+                        <td>${perf.returnRate}%</td>
+                        <td><span class="aging-badge ${perfClass}">${perf.performance}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterPayouts() {
+            const statusFilter = document.getElementById('payout-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            
+            let filtered = demoPayouts.filter(payout => {
+                const matchStatus = statusFilter === 'all' || payout.status === statusFilter;
+                return matchStatus;
+            });
+
+            const tbody = document.getElementById('payouts-table');
+            tbody.innerHTML = filtered.map(payout => {
+                const statusClass = payout.status === 'processed' ? 'status-processed' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${payout.seller}</strong></td>
+                        <td>${payout.period}</td>
+                        <td>₹${payout.totalSales.toLocaleString('en-IN')}</td>
+                        <td>${payout.commissionRate}%</td>
+                        <td>₹${payout.commissionAmount.toLocaleString('en-IN')}</td>
+                        <td><strong>₹${payout.payoutAmount.toLocaleString('en-IN')}</strong></td>
+                        <td><span class="aging-badge ${statusClass}">${payout.status.toUpperCase()}</span></td>
+                        <td style="white-space: nowrap;">
+                            ${payout.status === 'pending' ? `
+                                <button class="btn-action btn-payout" onclick="processPayout('${payout.seller}', '${payout.period}')">Process Payout</button>
+                            ` : ''}
+                            <button class="btn-action btn-view" onclick="viewPayout('${payout.seller}', '${payout.period}')">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function approveSeller(id) {
+            if(confirm('Approve this seller?')) {
+                alert(`Seller ${id} approved successfully!`);
+                filterSellers();
+            }
+        }
+
+        function rejectSeller(id) {
+            const reason = prompt('Enter rejection reason:');
+            if(reason) {
+                alert(`Seller ${id} rejected. Reason: ${reason}`);
+                filterSellers();
+            }
+        }
+
+        function viewSeller(id) {
+            alert(`Viewing seller details for ID: ${id}`);
+        }
+
+        function approveProduct(id) {
+            if(confirm('Approve this product?')) {
+                alert(`Product ${id} approved and will be listed on website!`);
+                filterProducts();
+            }
+        }
+
+        function rejectProduct(id) {
+            const reason = prompt('Enter rejection reason:');
+            if(reason) {
+                alert(`Product ${id} rejected. Reason: ${reason}`);
+                filterProducts();
+            }
+        }
+
+        function viewProduct(id) {
+            alert(`Viewing product details for ID: ${id}`);
+        }
+
+        function processPayout(seller, period) {
+            if(confirm(`Process payout for ${seller} (${period})?`)) {
+                alert(`Payout processed successfully for ${seller}!`);
+                filterPayouts();
+            }
+        }
+
+        function viewPayout(seller, period) {
+            alert(`Viewing payout details for ${seller} - ${period}`);
+        }
+
+        // Populate seller filter dropdown
+        function populateSellerFilter() {
+            const sellerFilter = document.getElementById('seller-filter');
+            const uniqueSellers = [...new Set(demoProducts.map(p => p.seller))];
+            uniqueSellers.forEach(seller => {
+                const option = document.createElement('option');
+                option.value = seller;
+                option.textContent = seller;
+                sellerFilter.appendChild(option);
+            });
+        }
+
+        window.onload = function() {
+            filterSellers();
+            populateSellerFilter();
+            filterProducts();
+            loadPerformance();
+            filterPayouts();
+        };
+    </script>
+</body>
+</html>

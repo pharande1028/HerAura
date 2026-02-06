@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fefdf8; overflow-x: hidden; }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #8B4513;
+            font-weight: 700;
+        }
+        
+        .admin-info { display: flex; align-items: center; gap: 1.5rem; }
+        .admin-name { font-weight: 600; color: #333; }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover { background: #c82333; }
+        
+        .dashboard {
+            display: flex;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .section-header h3 {
+            font-family: 'Inter', sans-serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-toggle-icon.collapsed {
+            transform: rotate(-180deg);
+        }
+        
+        .section-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #8B4513;
+        }
+        
+        .section-content {
+            display: block;
+        }
+        
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .worth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .worth-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .worth-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,165,116,0.2);
+        }
+
+        .worth-card.total {
+            background: white;
+            color: #333;
+            border: 2px solid #d4a574;
+        }
+
+        .worth-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .worth-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .worth-count {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            transform: rotateX(180deg);
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #d4a574;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+            transform: rotateX(180deg);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f4ef;
+            font-weight: 600;
+            color: #8B4513;
+        }
+
+        tr:hover {
+            background: #fefdf8;
+        }
+
+        .aging-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .aging-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .aging-badge.critical {
+            background: #d4a574;
+            color: white;
+        }
+
+        .aging-badge.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .aging-badge.moderate {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-action {
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #218838;
+        }
+
+        .btn-reject {
+            background: #d4a574;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #8B4513;
+        }
+
+        .btn-payout {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-payout:hover {
+            background: #138496;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-processed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #138496;
+        }
+
+        .suggestions-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li {
+            color: #856404;
+            margin: 0.3rem 0;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a href="admin-orders.html">Order Management</a></li>
+                <li><a href="admin-finance.html">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html">Landing Page Controls</a></li>
+                <li><a href="admin-inventory-worth.html">Inventory Worth</a></li>
+                <li><a href="admin-seller-management.html">Seller Management</a></li>
+                <li><a href="admin-system-settings.html" class="active">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">System Settings</h1>
+
+            <!-- Section 1: Store Information -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section1')">
+                    <h3>Section 1: Store Information</h3>
+                    <span class="section-toggle-icon" id="section1-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section1-content" class="section-content">
+                <form id="storeForm" style="max-width: 800px;">
+                    <div class="aging-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Store Name *</label>
+                            <input type="text" class="filter-select" id="storeName" value="HerAura" required>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Store Email *</label>
+                            <input type="email" class="filter-select" id="storeEmail" value="contact@heraura.com" required>
+                        </div>
+                    </div>
+                    <div class="aging-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Store Phone *</label>
+                            <input type="tel" class="filter-select" id="storePhone" value="+91 9876543210" required>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">GST Number</label>
+                            <input type="text" class="filter-select" id="storeGST" value="27AABCU9603R1ZM">
+                        </div>
+                    </div>
+                    <div class="filter-group" style="margin-bottom: 1.5rem;">
+                        <label class="filter-label">Store Address *</label>
+                        <textarea class="filter-select" id="storeAddress" rows="3" required>123, MG Road, Mumbai, Maharashtra - 400001</textarea>
+                    </div>
+                    <div class="aging-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Currency</label>
+                            <select class="filter-select" id="storeCurrency">
+                                <option value="INR" selected>INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Timezone</label>
+                            <select class="filter-select" id="storeTimezone">
+                                <option value="IST" selected>IST (India)</option>
+                                <option value="UTC">UTC</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-action btn-approve" style="padding: 0.8rem 2rem; margin-top: 1rem;">Save Store Info</button>
+                </form>
+                </div>
+            </div>
+
+            <!-- Section 2: Payment Gateways -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section2')">
+                    <h3>Section 2: Payment Gateways</h3>
+                    <span class="section-toggle-icon" id="section2-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section2-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Configure payment gateway integrations</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gateway</th>
+                                <th>Status</th>
+                                <th>API Key</th>
+                                <th>Secret Key</th>
+                                <th>Mode</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payment-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Shipping Partners -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section3')">
+                    <h3>Section 3: Shipping Partners</h3>
+                    <span class="section-toggle-icon" id="section3-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section3-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Manage shipping and logistics integrations</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Partner</th>
+                                <th>Status</th>
+                                <th>API Key</th>
+                                <th>Tracking Enabled</th>
+                                <th>COD Available</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shipping-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Email & SMS Templates -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section4')">
+                    <h3>Section 4: Email & SMS Templates</h3>
+                    <span class="section-toggle-icon" id="section4-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section4-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Customize notification templates</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Template Name</th>
+                                <th>Type</th>
+                                <th>Subject/Title</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="templates-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Payment Gateways Data
+        const paymentGateways = [
+            { id: 1, name: 'Razorpay', status: 'active', apiKey: 'rzp_live_***********', secretKey: '***********', mode: 'Live' },
+            { id: 2, name: 'PayU', status: 'inactive', apiKey: 'merchant_***********', secretKey: '***********', mode: 'Test' },
+            { id: 3, name: 'Paytm', status: 'inactive', apiKey: 'paytm_***********', secretKey: '***********', mode: 'Test' },
+            { id: 4, name: 'Stripe', status: 'inactive', apiKey: 'sk_test_***********', secretKey: '***********', mode: 'Test' }
+        ];
+
+        // Shipping Partners Data
+        const shippingPartners = [
+            { id: 1, name: 'Shiprocket', status: 'active', apiKey: 'ship_***********', tracking: true, cod: true },
+            { id: 2, name: 'Delhivery', status: 'inactive', apiKey: 'delh_***********', tracking: true, cod: true },
+            { id: 3, name: 'Blue Dart', status: 'inactive', apiKey: 'blue_***********', tracking: true, cod: false },
+            { id: 4, name: 'DTDC', status: 'inactive', apiKey: 'dtdc_***********', tracking: true, cod: true }
+        ];
+
+        // Email & SMS Templates Data
+        const templates = [
+            { id: 1, name: 'Order Confirmation', type: 'Email', subject: 'Your HerAura Order is Confirmed!', status: 'active', updated: '2024-01-15' },
+            { id: 2, name: 'Order Shipped', type: 'Email', subject: 'Your Order is On The Way!', status: 'active', updated: '2024-01-14' },
+            { id: 3, name: 'Order Delivered', type: 'SMS', subject: 'Order Delivered Successfully', status: 'active', updated: '2024-01-13' },
+            { id: 4, name: 'Payment Success', type: 'Email', subject: 'Payment Received - Thank You!', status: 'active', updated: '2024-01-12' },
+            { id: 5, name: 'Welcome Email', type: 'Email', subject: 'Welcome to HerAura!', status: 'active', updated: '2024-01-10' },
+            { id: 6, name: 'Order Cancelled', type: 'SMS', subject: 'Order Cancellation Confirmation', status: 'active', updated: '2024-01-08' },
+            { id: 7, name: 'Password Reset', type: 'Email', subject: 'Reset Your Password', status: 'active', updated: '2024-01-05' },
+            { id: 8, name: 'OTP Verification', type: 'SMS', subject: 'Your OTP Code', status: 'active', updated: '2024-01-03' }
+        ];
+
+        // Store Form Submit
+        document.getElementById('storeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Store information saved successfully!');
+        });
+
+        // Load Payment Gateways
+        function loadPaymentGateways() {
+            const tbody = document.getElementById('payment-table');
+            tbody.innerHTML = paymentGateways.map(gateway => {
+                const statusClass = gateway.status === 'active' ? 'status-approved' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${gateway.name}</strong></td>
+                        <td><span class="aging-badge ${statusClass}">${gateway.status.toUpperCase()}</span></td>
+                        <td>${gateway.apiKey}</td>
+                        <td>${gateway.secretKey}</td>
+                        <td>${gateway.mode}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-action btn-view" onclick="editGateway(${gateway.id})">Edit</button>
+                            <button class="btn-action ${gateway.status === 'active' ? 'btn-reject' : 'btn-approve'}" onclick="toggleGateway(${gateway.id})">${gateway.status === 'active' ? 'Disable' : 'Enable'}</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Load Shipping Partners
+        function loadShippingPartners() {
+            const tbody = document.getElementById('shipping-table');
+            tbody.innerHTML = shippingPartners.map(partner => {
+                const statusClass = partner.status === 'active' ? 'status-approved' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${partner.name}</strong></td>
+                        <td><span class="aging-badge ${statusClass}">${partner.status.toUpperCase()}</span></td>
+                        <td>${partner.apiKey}</td>
+                        <td>${partner.tracking ? '✅ Yes' : '❌ No'}</td>
+                        <td>${partner.cod ? '✅ Yes' : '❌ No'}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-action btn-view" onclick="editShipping(${partner.id})">Edit</button>
+                            <button class="btn-action ${partner.status === 'active' ? 'btn-reject' : 'btn-approve'}" onclick="toggleShipping(${partner.id})">${partner.status === 'active' ? 'Disable' : 'Enable'}</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Load Templates
+        function loadTemplates() {
+            const tbody = document.getElementById('templates-table');
+            tbody.innerHTML = templates.map(template => {
+                const statusClass = template.status === 'active' ? 'status-approved' : 'status-pending';
+                const typeClass = template.type === 'Email' ? 'status-processed' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td><strong>${template.name}</strong></td>
+                        <td><span class="aging-badge ${typeClass}">${template.type}</span></td>
+                        <td>${template.subject}</td>
+                        <td><span class="aging-badge ${statusClass}">${template.status.toUpperCase()}</span></td>
+                        <td>${new Date(template.updated).toLocaleDateString('en-IN')}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-action btn-view" onclick="viewTemplate(${template.id})">View</button>
+                            <button class="btn-action btn-payout" onclick="editTemplate(${template.id})">Edit</button>
+                            <button class="btn-action ${template.status === 'active' ? 'btn-reject' : 'btn-approve'}" onclick="toggleTemplate(${template.id})">${template.status === 'active' ? 'Disable' : 'Enable'}</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function editGateway(id) {
+            alert(`Edit payment gateway ${id} - Would open modal with API configuration`);
+        }
+
+        function toggleGateway(id) {
+            const gateway = paymentGateways.find(g => g.id === id);
+            if(gateway) {
+                gateway.status = gateway.status === 'active' ? 'inactive' : 'active';
+                loadPaymentGateways();
+                alert(`${gateway.name} ${gateway.status === 'active' ? 'enabled' : 'disabled'} successfully!`);
+            }
+        }
+
+        function editShipping(id) {
+            alert(`Edit shipping partner ${id} - Would open modal with API configuration`);
+        }
+
+        function toggleShipping(id) {
+            const partner = shippingPartners.find(p => p.id === id);
+            if(partner) {
+                partner.status = partner.status === 'active' ? 'inactive' : 'active';
+                loadShippingPartners();
+                alert(`${partner.name} ${partner.status === 'active' ? 'enabled' : 'disabled'} successfully!`);
+            }
+        }
+
+        function viewTemplate(id) {
+            const template = templates.find(t => t.id === id);
+            if(template) {
+                alert(`Template: ${template.name}\nType: ${template.type}\nSubject: ${template.subject}\n\nWould show full template content here.`);
+            }
+        }
+
+        function editTemplate(id) {
+            alert(`Edit template ${id} - Would open editor with template content`);
+        }
+
+        function toggleTemplate(id) {
+            const template = templates.find(t => t.id === id);
+            if(template) {
+                template.status = template.status === 'active' ? 'inactive' : 'active';
+                loadTemplates();
+                alert(`${template.name} template ${template.status === 'active' ? 'enabled' : 'disabled'} successfully!`);
+            }
+        }
+
+        window.onload = function() {
+            loadPaymentGateways();
+            loadShippingPartners();
+            loadTemplates();
+        };
+    </script>
+</body>
+</html>

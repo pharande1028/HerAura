@@ -1242,22 +1242,12 @@
     </header>
 
     <section id="home" class="hero">
-        <div class="hero-slide active" style="background-image: url('hero-image.webp');"></div>
-        <div class="hero-slide" style="background-image: url('hero-image2.webp');"></div>
-        <div class="hero-slide" style="background-image: url('hero-image3.webp');"></div>
-        <div class="hero-slide" style="background-image: url('hero-image4.webp');"></div>
-        <div class="hero-slide" style="background-image: url('hero-image5.webp');"></div>
+        <div id="heroSlides"></div>
         
         <button class="hero-nav hero-prev" onclick="changeSlide(-1)">‹</button>
         <button class="hero-nav hero-next" onclick="changeSlide(1)">›</button>
         
-        <div class="hero-dots">
-            <div class="hero-dot active" onclick="goToSlide(0)"></div>
-            <div class="hero-dot" onclick="goToSlide(1)"></div>
-            <div class="hero-dot" onclick="goToSlide(2)"></div>
-            <div class="hero-dot" onclick="goToSlide(3)"></div>
-            <div class="hero-dot" onclick="goToSlide(4)"></div>
-        </div>
+        <div class="hero-dots" id="heroDots"></div>
         
         <div class="hero-container">
             <div class="hero-text">
@@ -1678,9 +1668,10 @@
         }, 1000); // 1 second normal display
     });
 
-    // Hero Slider - Simple Working Version
-    let currentSlide = 0;
-    const imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
+    // Hero Slider - Load from localStorage or use defaults
+    let imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
+    
+    // Load banner images from admin controls`r`n    const savedBanners = localStorage.getItem('herauraBanners');`r`n    console.log('Checking localStorage for banners:', savedBanners);`r`n    if(savedBanners) {`r`n        const banners = JSON.parse(savedBanners);`r`n        console.log('Found banners in localStorage:', banners);`r`n        if(banners.length > 0) {`r`n            imageNames = banners.map(b => b.image);`r`n            console.log('Using banner images:', imageNames);`r`n        }`r`n    } else {`r`n        console.log('No banners in localStorage, using defaults');`r`n    }
     let slideInterval;
 
     function showSlide(index) {
@@ -1893,3 +1884,7 @@
     document.body.appendChild(adminBtn);
 </script>
 </html>
+
+
+
+

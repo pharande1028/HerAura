@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Worth - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fefdf8; overflow-x: hidden; }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #8B4513;
+            font-weight: 700;
+        }
+        
+        .admin-info { display: flex; align-items: center; gap: 1.5rem; }
+        .admin-name { font-weight: 600; color: #333; }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover { background: #c82333; }
+        
+        .dashboard {
+            display: flex;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-toggle-icon.collapsed {
+            transform: rotate(-180deg);
+        }
+        
+        .section-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #8B4513;
+        }
+        
+        .section-content {
+            display: block;
+        }
+        
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .worth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .worth-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .worth-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,165,116,0.2);
+        }
+
+        .worth-card.total {
+            background: white;
+            color: #333;
+            border: 2px solid #d4a574;
+        }
+
+        .worth-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .worth-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .worth-count {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            transform: rotateX(180deg);
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #d4a574;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+            transform: rotateX(180deg);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f4ef;
+            font-weight: 600;
+            color: #8B4513;
+        }
+
+        tr:hover {
+            background: #fefdf8;
+        }
+
+        .aging-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .aging-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .aging-badge.critical {
+            background: #d4a574;
+            color: white;
+        }
+
+        .aging-badge.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .aging-badge.moderate {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-action {
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-discount {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-discount:hover {
+            background: #e0a800;
+        }
+
+        .btn-clearance {
+            background: #d4a574;
+            color: white;
+        }
+
+        .btn-clearance:hover {
+            background: #8B4513;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #138496;
+        }
+
+        .suggestions-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li {
+            color: #856404;
+            margin: 0.3rem 0;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .suggestions-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a href="admin-orders.html">Order Management</a></li>
+                <li><a href="admin-finance.html">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html">Landing Page Controls</a></li>
+                <li><a href="admin-inventory-worth.html" class="active">Inventory Worth</a></li>
+                <li><a href="admin-seller-management.html">Seller Management</a></li>
+                <li><a href="admin-system-settings.html">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Inventory Worth</h1>
+
+            <!-- Section 1: Asset Worth -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section1')">
+                    <h3>Section 1: Asset Worth</h3>
+                    <span class="section-toggle-icon" id="section1-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section1-content" class="section-content">
+                <div class="worth-grid">
+                    <div class="worth-card total">
+                        <div class="worth-label">Total Stock Value</div>
+                        <div class="worth-value" id="total-worth">₹0</div>
+                        <div class="worth-count" id="total-products">0 Products</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Products</th>
+                                <th>Total Units</th>
+                                <th>Stock Value</th>
+                                <th>Avg. Price</th>
+                                <th>% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="category-worth-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Inventory Aging -->
+            <div class="section-card">
+                <div class="section-header" onclick="toggleSection('section2')">
+                    <h3>Section 2: Inventory Aging</h3>
+                    <span class="section-toggle-icon" id="section2-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section2-content" class="section-content">
+                <p style="color: #666; margin-bottom: 1.5rem;">Products unsold for 90+ days with clearance suggestions</p>
+                
+                <div class="aging-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Age Filter</label>
+                        <select class="filter-select" id="age-filter" onchange="filterAgingProducts()">
+                            <option value="all">All Products</option>
+                            <option value="90+" selected>90+ Days</option>
+                            <option value="180+">180+ Days</option>
+                            <option value="365+">365+ Days</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Category</label>
+                        <select class="filter-select" id="category-filter" onchange="filterAgingProducts()">
+                            <option value="all">All Categories</option>
+                            <option value="Ring">Ring</option>
+                            <option value="Earring">Earring</option>
+                            <option value="Bracelet">Bracelet</option>
+                            <option value="Neckpiece">Neckpiece</option>
+                            <option value="Pendants">Pendants</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Sort By</label>
+                        <select class="filter-select" id="sort-filter" onchange="filterAgingProducts()">
+                            <option value="age-desc">Oldest First</option>
+                            <option value="age-asc">Newest First</option>
+                            <option value="value-desc">Highest Value</option>
+                            <option value="value-asc">Lowest Value</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>SKU</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                <th>Stock Value</th>
+                                <th>Days Unsold</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aging-products-table">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="suggestions-box">
+                    <div class="suggestions-title">💡 Clearance Suggestions</div>
+                    <ul class="suggestions-list" id="clearance-suggestions">
+                        <!-- Populated by JavaScript -->
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Demo Products Data with dates
+        const demoProducts = [
+            { id: 'PRD-1001', name: 'Rose Gold Infinity Ring', category: 'Rings', price: 2499, stock: 45, dateAdded: '2023-08-15' },
+            { id: 'PRD-1002', name: 'Pearl Drop Earrings', category: 'Earrings', price: 1499, stock: 32, dateAdded: '2023-09-20' },
+            { id: 'PRD-1003', name: 'Diamond Cut Bracelet', category: 'Bracelets', price: 2799, stock: 28, dateAdded: '2023-07-10' },
+            { id: 'PRD-1004', name: 'Emerald Pendant', category: 'Pendants', price: 3999, stock: 15, dateAdded: '2023-06-05' },
+            { id: 'PRD-1005', name: 'Butterfly Anklet', category: 'Neckpiece', price: 1299, stock: 52, dateAdded: '2024-01-10' },
+            { id: 'PRD-1006', name: 'Solitaire Ring', category: 'Rings', price: 4999, stock: 18, dateAdded: '2023-05-15' },
+            { id: 'PRD-1007', name: 'Hoop Earrings Set', category: 'Earrings', price: 999, stock: 60, dateAdded: '2024-01-05' },
+            { id: 'PRD-1008', name: 'Charm Bracelet', category: 'Bracelets', price: 1799, stock: 22, dateAdded: '2023-08-25' },
+            { id: 'PRD-1009', name: 'Layered Necklace', category: 'Neckpiece', price: 2399, stock: 35, dateAdded: '2023-10-12' },
+            { id: 'PRD-1010', name: 'Beaded Anklet', category: 'Pendants', price: 1099, stock: 40, dateAdded: '2024-01-08' },
+            { id: 'PRD-1011', name: 'Vintage Gold Ring', category: 'Rings', price: 2999, stock: 12, dateAdded: '2023-04-20' },
+            { id: 'PRD-1012', name: 'Crystal Studs', category: 'Earrings', price: 1399, stock: 48, dateAdded: '2023-11-15' },
+            { id: 'PRD-1013', name: 'Tennis Bracelet', category: 'Bracelets', price: 3699, stock: 8, dateAdded: '2023-03-10' },
+            { id: 'PRD-1014', name: 'Heart Pendant', category: 'Pendants', price: 1899, stock: 25, dateAdded: '2023-09-05' },
+            { id: 'PRD-1015', name: 'Chain Anklet', category: 'Neckpiece', price: 899, stock: 55, dateAdded: '2024-01-12' }
+        ];
+
+        function calculateAssetWorth() {
+            const products = demoProducts;
+            
+            let totalWorth = 0;
+            let totalProducts = 0;
+            const categoryData = {};
+
+            products.forEach(product => {
+                const price = parseFloat(product.price) || 0;
+                const stock = parseInt(product.stock) || 0;
+                const value = price * stock;
+                
+                totalWorth += value;
+                totalProducts += stock;
+
+                if (!categoryData[product.category]) {
+                    categoryData[product.category] = {
+                        products: 0,
+                        units: 0,
+                        value: 0,
+                        prices: []
+                    };
+                }
+
+                categoryData[product.category].products++;
+                categoryData[product.category].units += stock;
+                categoryData[product.category].value += value;
+                categoryData[product.category].prices.push(price);
+            });
+
+            document.getElementById('total-worth').textContent = '₹' + totalWorth.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('total-products').textContent = totalProducts + ' Products';
+
+            const tbody = document.getElementById('category-worth-table');
+            tbody.innerHTML = '';
+
+            Object.keys(categoryData).sort((a, b) => categoryData[b].value - categoryData[a].value).forEach(category => {
+                const data = categoryData[category];
+                const avgPrice = data.prices.reduce((a, b) => a + b, 0) / data.prices.length;
+                const percentage = ((data.value / totalWorth) * 100).toFixed(1);
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${category}</strong></td>
+                        <td>${data.products}</td>
+                        <td>${data.units}</td>
+                        <td><strong>₹${data.value.toLocaleString('en-IN', {maximumFractionDigits: 0})}</strong></td>
+                        <td>₹${avgPrice.toLocaleString('en-IN', {maximumFractionDigits: 0})}</td>
+                        <td>${percentage}%</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateInventoryAging() {
+            const products = demoProducts;
+            const today = new Date();
+
+            const agingProducts = products.map(product => {
+                const addedDate = new Date(product.dateAdded);
+                const daysUnsold = Math.floor((today - addedDate) / (1000 * 60 * 60 * 24));
+                const stockValue = (parseFloat(product.price) || 0) * (parseInt(product.stock) || 0);
+
+                return {
+                    ...product,
+                    daysUnsold,
+                    stockValue
+                };
+            });
+
+            return agingProducts;
+        }
+
+        function filterAgingProducts() {
+            const ageFilter = document.getElementById('age-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+
+            let products = calculateInventoryAging();
+
+            if (ageFilter !== 'all') {
+                const minDays = parseInt(ageFilter);
+                products = products.filter(p => p.daysUnsold >= minDays);
+            }
+
+            if (categoryFilter !== 'all') {
+                products = products.filter(p => p.category === categoryFilter);
+            }
+
+            products.sort((a, b) => {
+                switch(sortFilter) {
+                    case 'age-desc': return b.daysUnsold - a.daysUnsold;
+                    case 'age-asc': return a.daysUnsold - b.daysUnsold;
+                    case 'value-desc': return b.stockValue - a.stockValue;
+                    case 'value-asc': return a.stockValue - b.stockValue;
+                    default: return 0;
+                }
+            });
+
+            const tbody = document.getElementById('aging-products-table');
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                const agingStatus = product.daysUnsold >= 365 ? 'critical' : 
+                                   product.daysUnsold >= 180 ? 'warning' : 'moderate';
+                const statusText = product.daysUnsold >= 365 ? 'Critical' : 
+                                  product.daysUnsold >= 180 ? 'High Risk' : 'Moderate';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.category}</td>
+                        <td>${product.id}</td>
+                        <td>${product.stock || 0}</td>
+                        <td>₹${parseFloat(product.price || 0).toLocaleString('en-IN')}</td>
+                        <td><strong>₹${product.stockValue.toLocaleString('en-IN', {maximumFractionDigits: 0})}</strong></td>
+                        <td><strong>${product.daysUnsold}</strong> days</td>
+                        <td><span class="aging-badge ${agingStatus}">${statusText}</span></td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-action btn-discount" onclick="applyDiscount('${product.id}')">Apply Discount</button>
+                            <button class="btn-action btn-clearance" onclick="markClearance('${product.id}')">Clearance</button>
+                            <button class="btn-action btn-view" onclick="viewProduct('${product.id}')">View</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            generateSuggestions(products);
+        }
+
+        function generateSuggestions(products) {
+            const suggestionsList = document.getElementById('clearance-suggestions');
+            suggestionsList.innerHTML = '';
+
+            const critical = products.filter(p => p.daysUnsold >= 365);
+            const highRisk = products.filter(p => p.daysUnsold >= 180 && p.daysUnsold < 365);
+            const highValue = products.filter(p => p.stockValue > 50000);
+
+            if (critical.length > 0) {
+                suggestionsList.innerHTML += `<li><strong>${critical.length} products</strong> unsold for 365+ days - Consider 40-50% discount or clearance sale</li>`;
+            }
+
+            if (highRisk.length > 0) {
+                suggestionsList.innerHTML += `<li><strong>${highRisk.length} products</strong> unsold for 180+ days - Apply 25-35% discount to move inventory</li>`;
+            }
+
+            if (highValue.length > 0) {
+                suggestionsList.innerHTML += `<li><strong>${highValue.length} high-value products</strong> (₹50K+) aging - Priority clearance recommended</li>`;
+            }
+
+            const categoryCount = {};
+            products.forEach(p => {
+                categoryCount[p.category] = (categoryCount[p.category] || 0) + 1;
+            });
+
+            const topCategory = Object.keys(categoryCount).sort((a, b) => categoryCount[b] - categoryCount[a])[0];
+            if (topCategory) {
+                suggestionsList.innerHTML += `<li><strong>${topCategory}</strong> category has most aging products (${categoryCount[topCategory]}) - Run category-specific promotion</li>`;
+            }
+
+            if (products.length === 0) {
+                suggestionsList.innerHTML = '<li>No aging products found matching current filters</li>';
+            }
+        }
+
+        function applyDiscount(productId) {
+            const discount = prompt('Enter discount percentage (e.g., 25 for 25%):');
+            if (discount && !isNaN(discount)) {
+                alert(`${discount}% discount will be applied to product ${productId}`);
+            }
+        }
+
+        function markClearance(productId) {
+            if (confirm('Mark this product for clearance sale?')) {
+                alert(`Product ${productId} marked for clearance`);
+            }
+        }
+
+        function viewProduct(productId) {
+            alert(`Viewing product details for ${productId}`);
+        }
+
+        window.onload = function() {
+            calculateAssetWorth();
+            filterAgingProducts();
+        };
+    </script>
+</body>
+</html>

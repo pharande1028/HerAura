@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .dashboard { 
+            display: flex; 
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-left: 250px;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-title-clickable {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title-clickable:hover {
+            color: #d4a574;
+        }
+        
+        .section-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .section-toggle-icon.collapsed {
+            transform: rotate(-180deg);
+        }
+        
+        .section-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #8B4513;
+        }
+        
+        .section-content {
+            display: block;
+        }
+        
+        .section-content.collapsed {
+            display: none;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #fefdf8 0%, #f8f4ef 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid rgba(212,165,116,0.2);
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .subsection {
+            margin-bottom: 2rem;
+        }
+        
+        .subsection-title {
+            font-family: 'Inter', sans-serif;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(212,165,116,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a href="admin-orders.html">Order Management</a></li>
+                <li><a class="active">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html">Landing Page Controls</a></li>
+                <li><a href="admin-inventory-worth.html">Inventory Worth</a></li>
+                <li><a href="admin-seller-management.html">Seller Management</a></li>
+                <li><a href="admin-system-settings.html">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Finance</h1>
+            
+            <!-- Section 1: Revenue Reports -->
+            <div class="section-card">
+                <div class="section-header section-title-clickable" onclick="toggleSection('section1')">
+                    <h3>Section 1: Revenue Reports</h3>
+                    <span class="section-toggle-icon" id="section1-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section1-content" class="section-content">
+                    
+                    <!-- Revenue by Period -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Revenue by Period</h4>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Daily Revenue</div>
+                                <div class="stat-value">₹12,450</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Weekly Revenue</div>
+                                <div class="stat-value">₹87,150</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Monthly Revenue</div>
+                                <div class="stat-value">₹3,45,600</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Quarterly Revenue</div>
+                                <div class="stat-value">₹10,36,800</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Yearly Revenue</div>
+                                <div class="stat-value">₹41,47,200</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">All Years Revenue</div>
+                                <div class="stat-value">₹1,24,41,600</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gross vs Net Revenue -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Gross vs Net Revenue</h4>
+                        <div class="chart-container">
+                            <div class="chart-title">Revenue Comparison</div>
+                            <canvas id="grossNetChart" height="80"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Discount Impact Analysis -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Discount Impact Analysis</h4>
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                            <div class="stat-box">
+                                <div class="stat-label">Total Discounts Given</div>
+                                <div class="stat-value">₹8,29,440</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Average Discount %</div>
+                                <div class="stat-value">18.5%</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Revenue Lost to Discounts</div>
+                                <div class="stat-value">₹8,29,440</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">Discount Impact Over Time</div>
+                            <canvas id="discountImpactChart" height="80"></canvas>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Section 2: Profit Analysis -->
+            <div class="section-card">
+                <div class="section-header section-title-clickable" onclick="toggleSection('section2')">
+                    <h3>Section 2: Profit Analysis</h3>
+                    <span class="section-toggle-icon" id="section2-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section2-content" class="section-content">
+                    
+                    <!-- Profit by Period -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Profit by Period</h4>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Daily Profit</div>
+                                <div class="stat-value">₹4,980</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Weekly Profit</div>
+                                <div class="stat-value">₹34,860</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Monthly Profit</div>
+                                <div class="stat-value">₹1,38,240</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Quarterly Profit</div>
+                                <div class="stat-value">₹4,14,720</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Yearly Profit</div>
+                                <div class="stat-value">₹16,58,880</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">All Years Profit</div>
+                                <div class="stat-value">₹49,76,640</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cost Price vs Selling Price -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Cost Price vs Selling Price</h4>
+                        <div class="chart-container">
+                            <div class="chart-title">Price Comparison by Product</div>
+                            <canvas id="costSellingChart" height="80"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Profit per Category -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">Profit per Category</h4>
+                        <div class="chart-container">
+                            <div class="chart-title">Category-wise Profit Distribution</div>
+                            <canvas id="categoryProfitChart" height="80"></canvas>
+                        </div>
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 1.5rem;">
+                            <div class="stat-box">
+                                <div class="stat-label">Rings</div>
+                                <div class="stat-value">₹6,42,000</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Earrings</div>
+                                <div class="stat-value">₹4,28,000</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Bracelets</div>
+                                <div class="stat-value">₹3,56,000</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Necklaces</div>
+                                <div class="stat-value">₹5,35,000</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Anklets</div>
+                                <div class="stat-value">₹2,14,000</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+        
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                icon.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                icon.classList.add('collapsed');
+            }
+        }
+        
+        // Gross vs Net Revenue Chart
+        const grossNetCtx = document.getElementById('grossNetChart').getContext('2d');
+        new Chart(grossNetCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Yearly'],
+                datasets: [{
+                    label: 'Gross Revenue',
+                    data: [15000, 105000, 420000, 1260000, 5040000],
+                    backgroundColor: '#d4a574'
+                }, {
+                    label: 'Net Revenue',
+                    data: [12450, 87150, 345600, 1036800, 4147200],
+                    backgroundColor: '#8B4513'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        
+        // Discount Impact Chart
+        const discountCtx = document.getElementById('discountImpactChart').getContext('2d');
+        new Chart(discountCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Revenue Without Discount',
+                    data: [420000, 450000, 480000, 510000, 540000, 570000, 600000, 630000, 660000, 690000, 720000, 750000],
+                    borderColor: '#d4a574',
+                    backgroundColor: 'rgba(212,165,116,0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Actual Revenue',
+                    data: [345600, 370800, 396000, 421200, 446400, 471600, 496800, 522000, 547200, 572400, 597600, 622800],
+                    borderColor: '#8B4513',
+                    backgroundColor: 'rgba(139,69,19,0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        
+        // Cost vs Selling Price Chart
+        const costSellingCtx = document.getElementById('costSellingChart').getContext('2d');
+        new Chart(costSellingCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Rose Gold Ring', 'Pearl Earrings', 'Diamond Bracelet', 'Emerald Necklace', 'Butterfly Anklet'],
+                datasets: [{
+                    label: 'Cost Price',
+                    data: [1200, 900, 1680, 2400, 780],
+                    backgroundColor: '#dc3545'
+                }, {
+                    label: 'Selling Price',
+                    data: [1999, 1499, 2799, 3999, 1299],
+                    backgroundColor: '#28a745'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        
+        // Category Profit Chart
+        const categoryProfitCtx = document.getElementById('categoryProfitChart').getContext('2d');
+        new Chart(categoryProfitCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Rings', 'Earrings', 'Bracelets', 'Necklaces', 'Anklets'],
+                datasets: [{
+                    data: [642000, 428000, 356000, 535000, 214000],
+                    backgroundColor: ['#d4a574', '#8B4513', '#c19a6b', '#a0826d', '#8b7355']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'right' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

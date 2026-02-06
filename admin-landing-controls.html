@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Controls - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f5; }
+        
+        .header {
+            background: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #d4a574;
+        }
+        
+        .admin-info { display: flex; align-items: center; gap: 1.5rem; }
+        .admin-name { font-weight: 600; color: #333; }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover { background: #c82333; }
+        
+        .dashboard {
+            display: flex;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #8B4513;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            background: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        .section-header:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .chevron {
+            transition: transform 0.3s;
+            color: #d4a574;
+        }
+        
+        .section-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .banner-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .banner-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #d4a574;
+        }
+        
+        .banner-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .banner-info {
+            padding: 1rem;
+        }
+        
+        .banner-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .banner-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            color: white;
+        }
+        
+        .btn-edit {
+            background: #ffc107;
+            color: #333;
+        }
+        .btn-edit:hover { background: #e0a800; }
+        
+        .btn-delete {
+            background: #d4a574;
+        }
+        .btn-delete:hover { background: #8B4513; }
+        
+        .btn-add {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-add:hover { background: #8B4513; }
+        .btn-add svg { width: 20px; height: 20px; }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #d4a574;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fefdf8;
+        }
+        .upload-zone:hover {
+            border-color: #8B4513;
+            background: white;
+        }
+        
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            fill: #d4a574;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show { display: flex; }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input[type="file"] {
+            display: none;
+        }
+        
+        .preview-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-primary {
+            background: #d4a574;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { background: #8B4513; }
+        
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a href="admin-orders.html">Order Management</a></li>
+                <li><a href="admin-finance.html">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html" class="active">Landing Page Controls</a></li>
+            <li><a href="admin-inventory-worth.html">Inventory Worth</a></li>
+            <li><a href="admin-seller-management.html">Seller Management</a></li>
+            <li><a href="admin-system-settings.html">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Landing Page Controls</h1>
+
+            <!-- Section 1: Change Banner Images -->
+            <div class="section-header" onclick="toggleSection('bannerImages')">
+                <h2>Section 1: Change Banner Images</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="bannerImages" class="section-content">
+                <div style="margin-bottom: 2rem;">
+                    <button class="btn-add" onclick="openAddModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Add New Banner Image</span>
+                    </button>
+                </div>
+
+                <div class="banner-grid" id="bannerGrid"></div>
+            </div>
+
+            <!-- Section 2: Edit Our Collection -->
+            <div class="section-header" onclick="toggleSection('ourCollection')">
+                <h2>Section 2: Edit Our Collection</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="ourCollection" class="section-content" style="display: none;">
+                <p style="color: #666; margin-bottom: 1.5rem;">Manage the 5 collection categories displayed on your landing page</p>
+                <div class="banner-grid" id="collectionGrid"></div>
+            </div>
+
+            <!-- Section 3: Edit Why Choose HerAura -->
+            <div class="section-header" onclick="toggleSection('whyChoose')">
+                <h2>Section 3: Edit Why Choose HerAura</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="whyChoose" class="section-content" style="display: none;">
+                <p style="color: #666; margin-bottom: 1.5rem;">Edit the 6 feature cards in Why Choose HerAura section</p>
+                <div class="banner-grid" id="featuresGrid"></div>
+            </div>
+
+            <!-- Section 4: Get In Touch -->
+            <div class="section-header" onclick="toggleSection('getInTouch')">
+                <h2>Section 4: Get In Touch</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="getInTouch" class="section-content" style="display: none;">
+                <form id="contactForm" style="max-width: 600px;">
+                    <div class="form-group">
+                        <label>Instagram Handle</label>
+                        <input type="text" id="instagram" placeholder="@heraura_official">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="contact@heraura.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+91 9876543210">
+                    </div>
+                    <button type="submit" class="btn-primary">Save Contact Info</button>
+                </form>
+            </div>
+
+            <!-- Section 5: Change About Section -->
+            <div class="section-header" onclick="toggleSection('aboutSection')">
+                <h2>Section 5: Change About Section</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="aboutSection" class="section-content" style="display: none;">
+                <form id="aboutForm" style="max-width: 800px;">
+                    <div class="form-group">
+                        <label>About Title</label>
+                        <input type="text" id="aboutTitle" placeholder="About HerAura">
+                    </div>
+                    <div class="form-group">
+                        <label>About Subtitle</label>
+                        <input type="text" id="aboutSubtitle" placeholder="Where everyday elegance meets lasting beauty">
+                    </div>
+                    <div class="form-group">
+                        <label>About Description</label>
+                        <textarea id="aboutDescription" rows="6" placeholder="Enter your about section content..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Save About Section</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="bannerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Banner Image</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="bannerForm">
+                <div class="form-group">
+                    <label>Banner Image *</label>
+                    <input type="file" id="bannerImageInput" accept="image/*" onchange="previewImage(event)">
+                    <div class="upload-zone" onclick="document.getElementById('bannerImageInput').click()">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p style="color: #333; font-weight: 500; margin-bottom: 0.5rem;">Click to upload banner image</p>
+                        <small style="color: #666;">Recommended: 1920x600px, JPG/PNG</small>
+                    </div>
+                    <img id="imagePreview" class="preview-image" style="display: none;">
+                </div>
+                <button type="submit" class="btn-primary">Save Banner</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const header = section.previousElementSibling;
+            const chevron = header.querySelector('.chevron');
+            
+            if(section.style.display === 'none') {
+                section.style.display = 'block';
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                section.style.display = 'none';
+                chevron.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        let bannerImages = [];
+        let editingIndex = -1;
+        let currentImageData = null;
+
+        function initializeBanners() {
+            const saved = localStorage.getItem('herauraBanners');
+            if(saved) {
+                bannerImages = JSON.parse(saved);
+            } else {
+                // Initialize with actual landing page images
+                bannerImages = [
+                    { id: 1, image: 'hero-image.webp', active: true },
+                    { id: 2, image: 'hero-image2.webp', active: true },
+                    { id: 3, image: 'hero-image3.webp', active: true },
+                    { id: 4, image: 'hero-image4.webp', active: true },
+                    { id: 5, image: 'hero-image5.webp', active: true }
+                ];
+                saveBanners();
+            }
+            renderBanners();
+        }
+
+        function saveBanners() {
+            localStorage.setItem('herauraBanners', JSON.stringify(bannerImages));
+        }
+
+        function renderBanners() {
+            const grid = document.getElementById('bannerGrid');
+            grid.innerHTML = bannerImages.map((banner, index) => `
+                <div class="banner-card">
+                    ${banner.active ? '<span class="status-badge">Active</span>' : ''}
+                    <img src="${banner.image}" alt="Banner ${index + 1}" class="banner-image" onerror="this.src='https://via.placeholder.com/300x200?text=Banner+${index + 1}'">
+                    <div class="banner-info">
+                        <div class="banner-label">Banner Image ${index + 1}</div>
+                        <div class="banner-actions">
+                            <button class="btn-action btn-edit" onclick="editBanner(${index})">Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteBanner(${index})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openAddModal() {
+            editingIndex = -1;
+            currentImageData = null;
+            document.getElementById('modalTitle').textContent = 'Add Banner Image';
+            document.getElementById('bannerForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('bannerModal').classList.add('show');
+        }
+
+        function editBanner(index) {
+            editingIndex = index;
+            const banner = bannerImages[index];
+            document.getElementById('modalTitle').textContent = 'Edit Banner Image';
+            document.getElementById('imagePreview').src = banner.image;
+            document.getElementById('imagePreview').style.display = 'block';
+            currentImageData = banner.image;
+            document.getElementById('bannerModal').classList.add('show');
+        }
+
+        function deleteBanner(index) {
+            if(confirm('Are you sure you want to delete this banner image?')) {
+                bannerImages.splice(index, 1);
+                saveBanners();
+                renderBanners();
+                alert('Banner deleted successfully!');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('bannerModal').classList.remove('show');
+            document.getElementById('bannerForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            editingIndex = -1;
+            currentImageData = null;
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageData = e.target.result;
+                    document.getElementById('imagePreview').src = currentImageData;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('bannerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if(!currentImageData) {
+                alert('Please select an image');
+                return;
+            }
+
+            if(editingIndex >= 0) {
+                bannerImages[editingIndex].image = currentImageData;
+                console.log('Banner updated:', bannerImages[editingIndex]);
+                alert('Banner updated successfully! Refresh landing.html to see changes.');
+            } else {
+                const newBanner = {
+                    id: bannerImages.length > 0 ? Math.max(...bannerImages.map(b => b.id)) + 1 : 1,
+                    image: currentImageData,
+                    active: true
+                };
+                bannerImages.push(newBanner);
+                console.log('Banner added:', newBanner);
+                alert('Banner added successfully! Refresh landing.html to see changes.');
+            }
+
+            saveBanners();
+            console.log('Saved to localStorage:', localStorage.getItem('herauraBanners'));
+            renderBanners();
+            closeModal();
+        });
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('bannerModal');
+            if(event.target === modal) {
+                closeModal();
+            }
+        };
+
+        window.onload = function() {
+            initializeBanners();
+            initializeCollection();
+            initializeFeatures();
+            initializeContact();
+            initializeAbout();
+        };
+
+        // Collection Management
+        function initializeCollection() {
+            const saved = localStorage.getItem('herauraCollection');
+            let collections = saved ? JSON.parse(saved) : [
+                {id: 1, name: 'Rings', image: 'our_collection_1 (2).webp'},
+                {id: 2, name: 'Necklaces', image: 'our_collection_2.webp'},
+                {id: 3, name: 'Earrings', image: 'our_collection_3.webp'},
+                {id: 4, name: 'Bracelets', image: 'our_collection_4.webp'},
+                {id: 5, name: 'Anklets', image: 'our_collection_5.webp'}
+            ];
+            
+            const grid = document.getElementById('collectionGrid');
+            grid.innerHTML = collections.map((item, index) => `
+                <div class="banner-card">
+                    <img src="${item.image}" alt="${item.name}" class="banner-image" onerror="this.src='https://via.placeholder.com/300x200?text=${item.name}'">
+                    <div class="banner-info">
+                        <div class="banner-label">${item.name}</div>
+                        <div class="banner-actions">
+                            <button class="btn-action btn-edit" onclick="editCollection(${index})">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editCollection(index) {
+            alert('Collection edit feature - Would open modal to change image and name');
+        }
+
+        // Features Management
+        function initializeFeatures() {
+            const saved = localStorage.getItem('herauraFeatures');
+            let features = saved ? JSON.parse(saved) : [
+                {id: 1, title: 'Anti-Tarnish Technology', description: 'Our jewelry maintains its shine and luster for years'},
+                {id: 2, title: 'Premium Quality', description: 'Crafted with the finest materials and attention to detail'},
+                {id: 3, title: 'Skin Safe', description: 'Hypoallergenic and safe for sensitive skin'},
+                {id: 4, title: 'Waterproof', description: 'Wear it anywhere, anytime without worry'},
+                {id: 5, title: 'Lifetime Warranty', description: 'We stand behind our products with lifetime support'},
+                {id: 6, title: 'Free Shipping', description: 'Complimentary shipping on all orders'}
+            ];
+            
+            const grid = document.getElementById('featuresGrid');
+            grid.innerHTML = features.map((item, index) => `
+                <div class="banner-card">
+                    <div class="banner-info" style="padding: 1.5rem;">
+                        <div class="banner-label" style="font-size: 1.1rem; margin-bottom: 0.5rem;">${item.title}</div>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">${item.description}</p>
+                        <div class="banner-actions">
+                            <button class="btn-action btn-edit" onclick="editFeature(${index})">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editFeature(index) {
+            alert('Feature edit - Would open modal to edit title and description');
+        }
+
+        // Contact Management
+        function initializeContact() {
+            const saved = localStorage.getItem('herauraContact');
+            const contact = saved ? JSON.parse(saved) : {
+                instagram: '@heraura_official',
+                email: 'contact@heraura.com',
+                phone: '+91 9876543210'
+            };
+            
+            document.getElementById('instagram').value = contact.instagram;
+            document.getElementById('email').value = contact.email;
+            document.getElementById('phone').value = contact.phone;
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const contact = {
+                instagram: document.getElementById('instagram').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+            localStorage.setItem('herauraContact', JSON.stringify(contact));
+            alert('Contact information updated successfully!');
+        });
+
+        // About Section Management
+        function initializeAbout() {
+            const saved = localStorage.getItem('herauraAbout');
+            const about = saved ? JSON.parse(saved) : {
+                title: 'About HerAura',
+                subtitle: 'Where everyday elegance meets lasting beauty',
+                description: 'At HerAura, we believe that jewelry is more than just an accessory...'
+            };
+            
+            document.getElementById('aboutTitle').value = about.title;
+            document.getElementById('aboutSubtitle').value = about.subtitle;
+            document.getElementById('aboutDescription').value = about.description;
+        }
+
+        document.getElementById('aboutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const about = {
+                title: document.getElementById('aboutTitle').value,
+                subtitle: document.getElementById('aboutSubtitle').value,
+                description: document.getElementById('aboutDescription').value
+            };
+            localStorage.setItem('herauraAbout', JSON.stringify(about));
+            alert('About section updated successfully!');
+        });
+    </script>
+</body>
+</html>

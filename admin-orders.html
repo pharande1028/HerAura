@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - HerAura Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .dashboard { 
+            display: flex; 
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-left: 250px;
+            overflow-x: auto;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .filter-select {
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            transform: rotateX(180deg);
+        }
+        
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1600px;
+            transform: rotateX(180deg);
+        }
+        
+        .orders-table thead {
+            background: #f8f4ef;
+        }
+        
+        .orders-table th {
+            padding: 1rem 0.8rem;
+            text-align: left;
+            font-weight: 600;
+            color: #8B4513;
+            border-bottom: 2px solid #d4a574;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .orders-table td {
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .orders-table tbody tr:hover {
+            background: #fefdf8;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .status-processing {
+            background: #e7f1ff;
+            color: #0c63e4;
+        }
+        
+        .status-shipped {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .payment-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .payment-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .payment-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .payment-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: #138496;
+        }
+        
+        .btn-update {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-update:hover {
+            background: #218838;
+        }
+        
+        .btn-cancel {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #8B4513;
+        }
+        
+        .btn-confirm {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-confirm:hover {
+            background: #0056b3;
+        }
+        
+        .btn-courier {
+            background: #6f42c1;
+            color: white;
+        }
+        
+        .btn-courier:hover {
+            background: #5a32a3;
+        }
+        
+        .btn-refund {
+            background: #fd7e14;
+            color: white;
+        }
+        
+        .btn-refund:hover {
+            background: #e8590c;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .pagination-btn {
+            padding: 0.6rem 1.2rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            background: #8B4513;
+        }
+        
+        .pagination-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .section-title-clickable {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title-clickable:hover {
+            color: #d4a574;
+        }
+        
+        .section-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .section-toggle-icon.collapsed {
+            transform: rotate(-180deg);
+        }
+        
+        .section-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #8B4513;
+        }
+        
+        .section-content {
+            display: block;
+        }
+        
+        .section-content.collapsed {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand-name">HerAura Admin Portal</div>
+        <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="admin-home.html">Home</a></li>
+                <li><a href="admin-dashboard-module.html">Dashboard</a></li>
+                <li><a href="admin-alerts.html">Alerts & Notifications</a></li>
+                <li><a href="admin-products.html">Product Management</a></li>
+                <li><a class="active">Order Management</a></li>
+                <li><a href="admin-finance.html">Finance</a></li>
+                <li><a href="admin-customers.html">Customer Management</a></li>
+                <li><a href="admin-coupons.html">Coupons & Offers</a></li>
+                <li><a href="admin-landing-controls.html">Landing Page Controls</a></li>
+                <li><a href="admin-inventory-worth.html">Inventory Worth</a></li>
+                <li><a href="admin-seller-management.html">Seller Management</a></li>
+                <li><a href="admin-system-settings.html">System Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">Order Management</h1>
+            
+            <!-- Section 1: All Orders -->
+            <div class="section-card">
+                <div class="section-header section-title-clickable" onclick="toggleSection('section1')">
+                    <h3>Section 1: All Orders</h3>
+                    <span class="section-toggle-icon" id="section1-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                        </svg>
+                    </span>
+                </div>
+                <div id="section1-content" class="section-content">
+                    <div class="section-actions">
+                        <input type="text" id="searchOrders" placeholder="Search by Order ID, Customer, Email, Phone..." class="search-input" style="min-width: 300px;">
+                        <select id="filterStatus" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <select id="filterPayment" class="filter-select">
+                            <option value="all">All Payment Status</option>
+                            <option value="paid">Paid</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                        <select id="filterPaymentMethod" class="filter-select">
+                            <option value="all">All Payment Methods</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Debit Card">Debit Card</option>
+                            <option value="Net Banking">Net Banking</option>
+                        </select>
+                        <select id="filterCity" class="filter-select">
+                            <option value="all">All Cities</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Chennai">Chennai</option>
+                        </select>
+                    </div>
+                    
+                    <div class="pagination" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
+                        <button class="pagination-btn" onclick="changePage('prev')">← Previous</button>
+                        <span class="pagination-info">Page <span id="currentPage">1</span> of <span id="totalPages">3</span></span>
+                        <button class="pagination-btn" onclick="changePage('next')">Next →</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Order Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Products</th>
+                                    <th>Quantity</th>
+                                    <th>Total Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Payment Status</th>
+                                    <th>Order Status</th>
+                                    <th>Shipping Address</th>
+                                    <th>Courier</th>
+                                    <th>Tracking ID</th>
+                                    <th>Order Timeline</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminData');
+                window.location.href = 'admin-login.html';
+            }
+        }
+        
+        // Demo Orders Data
+        const demoOrders = [
+            { id: 'ORD-2024-001', date: '2024-01-15', customer: 'Priya Sharma', email: 'priya@example.com', phone: '+91 9876543210', products: 'Rose Gold Infinity Ring', qty: 1, amount: 1999, payment: 'UPI', paymentStatus: 'paid', status: 'delivered', address: 'Mumbai, Maharashtra', courier: 'BlueDart', tracking: 'BD123456789', timeline: 'Placed→Confirmed→Shipped→Delivered' },
+            { id: 'ORD-2024-002', date: '2024-01-15', customer: 'Rahul Verma', email: 'rahul@example.com', phone: '+91 9876543211', products: 'Pearl Drop Earrings', qty: 1, amount: 1499, payment: 'Credit Card', paymentStatus: 'paid', status: 'shipped', address: 'Delhi, Delhi', courier: 'Delhivery', tracking: 'DL987654321', timeline: 'Placed→Confirmed→Shipped' },
+            { id: 'ORD-2024-003', date: '2024-01-14', customer: 'Ananya Patel', email: 'ananya@example.com', phone: '+91 9876543212', products: 'Diamond Cut Bracelet', qty: 2, amount: 5598, payment: 'Debit Card', paymentStatus: 'paid', status: 'processing', address: 'Bangalore, Karnataka', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Confirmed→Processing' },
+            { id: 'ORD-2024-004', date: '2024-01-14', customer: 'Vikram Singh', email: 'vikram@example.com', phone: '+91 9876543213', products: 'Emerald Pendant Necklace', qty: 1, amount: 3999, payment: 'Net Banking', paymentStatus: 'paid', status: 'confirmed', address: 'Pune, Maharashtra', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Confirmed' },
+            { id: 'ORD-2024-005', date: '2024-01-13', customer: 'Sneha Reddy', email: 'sneha@example.com', phone: '+91 9876543214', products: 'Butterfly Anklet', qty: 1, amount: 1299, payment: 'UPI', paymentStatus: 'pending', status: 'pending', address: 'Hyderabad, Telangana', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed' },
+            { id: 'ORD-2024-006', date: '2024-01-13', customer: 'Arjun Mehta', email: 'arjun@example.com', phone: '+91 9876543215', products: 'Solitaire Engagement Ring', qty: 1, amount: 4999, payment: 'Credit Card', paymentStatus: 'paid', status: 'delivered', address: 'Chennai, Tamil Nadu', courier: 'DTDC', tracking: 'DT456789123', timeline: 'Placed→Confirmed→Shipped→Delivered' },
+            { id: 'ORD-2024-007', date: '2024-01-12', customer: 'Kavya Nair', email: 'kavya@example.com', phone: '+91 9876543216', products: 'Hoop Earrings Set', qty: 2, amount: 1998, payment: 'UPI', paymentStatus: 'paid', status: 'shipped', address: 'Kochi, Kerala', courier: 'Ecom Express', tracking: 'EC789123456', timeline: 'Placed→Confirmed→Shipped' },
+            { id: 'ORD-2024-008', date: '2024-01-12', customer: 'Rohan Gupta', email: 'rohan@example.com', phone: '+91 9876543217', products: 'Charm Bracelet', qty: 1, amount: 1799, payment: 'Debit Card', paymentStatus: 'failed', status: 'cancelled', address: 'Jaipur, Rajasthan', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Cancelled' },
+            { id: 'ORD-2024-009', date: '2024-01-11', customer: 'Ishita Desai', email: 'ishita@example.com', phone: '+91 9876543218', products: 'Layered Chain Necklace', qty: 1, amount: 2399, payment: 'Net Banking', paymentStatus: 'paid', status: 'processing', address: 'Ahmedabad, Gujarat', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Confirmed→Processing' },
+            { id: 'ORD-2024-010', date: '2024-01-11', customer: 'Aditya Kumar', email: 'aditya@example.com', phone: '+91 9876543219', products: 'Beaded Anklet', qty: 3, amount: 3297, payment: 'UPI', paymentStatus: 'paid', status: 'confirmed', address: 'Kolkata, West Bengal', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Confirmed' },
+            { id: 'ORD-2024-011', date: '2024-01-10', customer: 'Meera Iyer', email: 'meera@example.com', phone: '+91 9876543220', products: 'Vintage Ring', qty: 1, amount: 2999, payment: 'Credit Card', paymentStatus: 'paid', status: 'delivered', address: 'Lucknow, Uttar Pradesh', courier: 'BlueDart', tracking: 'BD321654987', timeline: 'Placed→Confirmed→Shipped→Delivered' },
+            { id: 'ORD-2024-012', date: '2024-01-10', customer: 'Karan Malhotra', email: 'karan@example.com', phone: '+91 9876543221', products: 'Crystal Stud Earrings', qty: 2, amount: 2798, payment: 'Debit Card', paymentStatus: 'paid', status: 'shipped', address: 'Chandigarh, Punjab', courier: 'Delhivery', tracking: 'DL654987321', timeline: 'Placed→Confirmed→Shipped' },
+            { id: 'ORD-2024-013', date: '2024-01-09', customer: 'Divya Joshi', email: 'divya@example.com', phone: '+91 9876543222', products: 'Tennis Bracelet', qty: 1, amount: 3699, payment: 'UPI', paymentStatus: 'pending', status: 'pending', address: 'Indore, Madhya Pradesh', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed' },
+            { id: 'ORD-2024-014', date: '2024-01-09', customer: 'Siddharth Rao', email: 'siddharth@example.com', phone: '+91 9876543223', products: 'Heart Pendant Necklace', qty: 1, amount: 1899, payment: 'Net Banking', paymentStatus: 'paid', status: 'processing', address: 'Nagpur, Maharashtra', courier: 'Not Assigned', tracking: 'N/A', timeline: 'Placed→Confirmed→Processing' },
+            { id: 'ORD-2024-015', date: '2024-01-08', customer: 'Pooja Kapoor', email: 'pooja@example.com', phone: '+91 9876543224', products: 'Delicate Chain Anklet', qty: 2, amount: 1798, payment: 'Credit Card', paymentStatus: 'paid', status: 'delivered', address: 'Surat, Gujarat', courier: 'DTDC', tracking: 'DT987321654', timeline: 'Placed→Confirmed→Shipped→Delivered' }
+        ];
+        
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredOrders = [...demoOrders];
+        
+        function getStatusClass(status) {
+            return `status-${status.toLowerCase()}`;
+        }
+        
+        function getPaymentClass(status) {
+            return `payment-${status.toLowerCase()}`;
+        }
+        
+        function renderOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageOrders = filteredOrders.slice(start, end);
+            
+            tbody.innerHTML = pageOrders.map(order => {
+                return `
+                    <tr>
+                        <td><strong>${order.id}</strong></td>
+                        <td>${order.date}</td>
+                        <td>${order.customer}</td>
+                        <td>${order.email}</td>
+                        <td>${order.phone}</td>
+                        <td>${order.products}</td>
+                        <td>${order.qty}</td>
+                        <td><strong>₹${order.amount.toLocaleString()}</strong></td>
+                        <td>${order.payment}</td>
+                        <td><span class="payment-badge ${getPaymentClass(order.paymentStatus)}">${order.paymentStatus.toUpperCase()}</span></td>
+                        <td><span class="status-badge ${getStatusClass(order.status)}">${order.status.toUpperCase()}</span></td>
+                        <td>${order.address}</td>
+                        <td>${order.courier}</td>
+                        <td>${order.tracking}</td>
+                        <td style="font-size: 0.75rem;">${order.timeline}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="action-btn btn-view" onclick="viewOrder('${order.id}')">View</button>
+                            <button class="action-btn btn-confirm" onclick="confirmOrder('${order.id}')">Confirm</button>
+                            <button class="action-btn btn-update" onclick="updateStatus('${order.id}')">Update Status</button>
+                            <button class="action-btn btn-courier" onclick="assignCourier('${order.id}')">Assign Courier</button>
+                            <button class="action-btn btn-refund" onclick="initiateRefund('${order.id}')">Initiate Refund</button>
+                            <button class="action-btn btn-cancel" onclick="cancelOrder('${order.id}')">Cancel</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updatePagination();
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+        
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            renderOrders();
+        }
+        
+        function filterOrders() {
+            const searchTerm = document.getElementById('searchOrders').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+            const paymentFilter = document.getElementById('filterPayment').value;
+            const paymentMethodFilter = document.getElementById('filterPaymentMethod').value;
+            const cityFilter = document.getElementById('filterCity').value;
+            
+            filteredOrders = demoOrders.filter(order => {
+                const matchesSearch = order.id.toLowerCase().includes(searchTerm) || 
+                                     order.customer.toLowerCase().includes(searchTerm) ||
+                                     order.email.toLowerCase().includes(searchTerm) ||
+                                     order.phone.includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
+                const matchesPayment = paymentFilter === 'all' || order.paymentStatus === paymentFilter;
+                const matchesPaymentMethod = paymentMethodFilter === 'all' || order.payment === paymentMethodFilter;
+                const matchesCity = cityFilter === 'all' || order.address.includes(cityFilter);
+                
+                return matchesSearch && matchesStatus && matchesPayment && matchesPaymentMethod && matchesCity;
+            });
+            
+            currentPage = 1;
+            renderOrders();
+        }
+        
+        document.getElementById('searchOrders').addEventListener('input', filterOrders);
+        document.getElementById('filterStatus').addEventListener('change', filterOrders);
+        document.getElementById('filterPayment').addEventListener('change', filterOrders);
+        document.getElementById('filterPaymentMethod').addEventListener('change', filterOrders);
+        document.getElementById('filterCity').addEventListener('change', filterOrders);
+        
+        function viewOrder(orderId) {
+            alert(`Viewing details for order: ${orderId}\n\nThis will open a detailed order view modal with complete order information.`);
+        }
+        
+        function confirmOrder(orderId) {
+            if (confirm(`Confirm order ${orderId}?`)) {
+                alert(`Order ${orderId} confirmed successfully!`);
+            }
+        }
+        
+        function updateStatus(orderId) {
+            alert(`Update status for order: ${orderId}\n\nThis will open a status update form with options: Pending, Confirmed, Processing, Shipped, Delivered, Cancelled.`);
+        }
+        
+        function assignCourier(orderId) {
+            alert(`Assign courier for order: ${orderId}\n\nThis will open a form to select courier partner (BlueDart, Delhivery, DTDC, Ecom Express) and enter tracking ID.`);
+        }
+        
+        function initiateRefund(orderId) {
+            if (confirm(`Initiate refund for order ${orderId}?\n\nThis action will process a refund to the customer.`)) {
+                alert(`Refund initiated for order ${orderId}!\n\nRefund will be processed within 5-7 business days.`);
+            }
+        }
+        
+        function cancelOrder(orderId) {
+            if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+                alert(`Order ${orderId} cancelled successfully!`);
+            }
+        }
+        
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                icon.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                icon.classList.add('collapsed');
+            }
+        }
+        
+        renderOrders();
+    </script>
+</body>
+</html>
