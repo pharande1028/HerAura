@@ -381,43 +381,105 @@
             document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
         }
 
-        // Fetch dashboard data
-        async function fetchDashboardData() {
+        // Fetch dashboard data from localStorage
+        function fetchDashboardData() {
             try {
-                // TODO: Replace with actual API endpoint
-                const data = {
-                    totalProducts: 156,
-                    totalProductsValue: '₹12,45,000',
-                    recentOrders: 23,
-                    pendingOrders: 8,
-                    totalRevenue: '₹8,24,500',
-                    todaysSales: '₹45,200',
-                    weeklySales: '₹2,85,400',
-                    monthlySales: '₹12,45,000',
-                    quarterlySales: '₹35,20,000',
-                    yearlySales: '₹1,42,50,000',
-                    returns: 5,
-                    refunds: 3,
-                    supportRequests: 12
+                // Get products from localStorage (stored as 'shopProducts')
+                const products = JSON.parse(localStorage.getItem('shopProducts') || '[]');
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+                console.log('Products loaded:', products.length);
+                console.log('Orders loaded:', orders.length);
+
+                // Format currency
+                const formatCurrency = (amount) => {
+                    return '₹' + amount.toLocaleString('en-IN');
                 };
 
-                document.getElementById('totalProducts').textContent = data.totalProducts || 'N/A';
-                document.getElementById('totalProductsValue').textContent = data.totalProductsValue || 'N/A';
-                document.getElementById('recentOrders').textContent = data.recentOrders || '0';
-                document.getElementById('pendingOrders').textContent = data.pendingOrders || '0';
-                document.getElementById('totalRevenue').textContent = data.totalRevenue || 'N/A';
-                document.getElementById('todaysSales').textContent = data.todaysSales || '₹0';
-                document.getElementById('weeklySales').textContent = data.weeklySales || '₹0';
-                document.getElementById('monthlySales').textContent = data.monthlySales || '₹0';
-                document.getElementById('quarterlySales').textContent = data.quarterlySales || '₹0';
-                document.getElementById('yearlySales').textContent = data.yearlySales || '₹0';
-                document.getElementById('returns').textContent = data.returns || '0';
-                document.getElementById('refunds').textContent = data.refunds || '0';
-                document.getElementById('supportRequests').textContent = data.supportRequests || '0';
+                // Total Products (Active only)
+                const activeProducts = products.filter(p => p.status === 'Active');
+                const totalProducts = activeProducts.length;
+
+                // Total Products Value (price * stock)
+                const totalProductsValue = activeProducts.reduce((sum, product) => {
+                    const price = product.discountPrice || product.price;
+                    const stock = product.stock || 0;
+                    return sum + (price * stock);
+                }, 0);
+
+                // Total Revenue (paid orders only)
+                const paidOrders = orders.filter(o => o.paymentStatus === 'Paid');
+                const totalRevenue = paidOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Recent Orders (last 30 days)
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                const recentOrders = orders.filter(o => new Date(o.orderDate) >= thirtyDaysAgo).length;
+
+                // Pending Orders
+                const pendingOrders = orders.filter(o => ['Pending', 'Processing'].includes(o.status)).length;
+
+                // Today's Sales
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todaysSales = orders
+                    .filter(o => new Date(o.orderDate) >= today && o.paymentStatus === 'Paid')
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Weekly Sales
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                const weeklySales = orders
+                    .filter(o => new Date(o.orderDate) >= weekAgo && o.paymentStatus === 'Paid')
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Monthly Sales
+                const monthAgo = new Date();
+                monthAgo.setMonth(monthAgo.getMonth() - 1);
+                const monthlySales = orders
+                    .filter(o => new Date(o.orderDate) >= monthAgo && o.paymentStatus === 'Paid')
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Quarterly Sales
+                const quarterAgo = new Date();
+                quarterAgo.setMonth(quarterAgo.getMonth() - 3);
+                const quarterlySales = orders
+                    .filter(o => new Date(o.orderDate) >= quarterAgo && o.paymentStatus === 'Paid')
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Yearly Sales
+                const yearAgo = new Date();
+                yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+                const yearlySales = orders
+                    .filter(o => new Date(o.orderDate) >= yearAgo && o.paymentStatus === 'Paid')
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+                // Update Products & Revenue
+                document.getElementById('totalProducts').textContent = totalProducts;
+                document.getElementById('totalProductsValue').textContent = formatCurrency(totalProductsValue);
+                document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+
+                // Update Orders
+                document.getElementById('recentOrders').textContent = recentOrders;
+                document.getElementById('pendingOrders').textContent = pendingOrders;
+
+                // Update Sales
+                document.getElementById('todaysSales').textContent = formatCurrency(todaysSales);
+                document.getElementById('weeklySales').textContent = formatCurrency(weeklySales);
+                document.getElementById('monthlySales').textContent = formatCurrency(monthlySales);
+                document.getElementById('quarterlySales').textContent = formatCurrency(quarterlySales);
+                document.getElementById('yearlySales').textContent = formatCurrency(yearlySales);
+
+                // Update Returns & Refunds (placeholder)
+                document.getElementById('returns').textContent = '0';
+                document.getElementById('refunds').textContent = '0';
+
+                // Update Support (placeholder)
+                document.getElementById('supportRequests').textContent = '0';
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
                 document.querySelectorAll('.stat-value').forEach(el => {
-                    if (el.textContent === '--') el.textContent = 'N/A';
+                    if (el.textContent === '--') el.textContent = '0';
                 });
             }
         }

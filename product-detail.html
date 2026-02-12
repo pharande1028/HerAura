@@ -1628,7 +1628,7 @@
             <div class="product-detail">
                 <!-- Product Images -->
                 <div class="product-images">
-                    <img id="mainProductImage" src="our_collection_1 (2).webp" alt="Product Image" class="main-image" onclick="openGallery(0)">
+                    <img id="mainProductImage" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+" alt="Loading..." class="main-image" onclick="openGallery(0)">
                     <button class="image-navigation nav-prev" onclick="prevMainImage()">‹</button>
                     <button class="image-navigation nav-next" onclick="nextMainImage()">›</button>
                     <div class="media-timeline" id="mediaTimeline">
@@ -1641,9 +1641,9 @@
                 </div>
 
                 <!-- Product Info -->
-                <div class="product-info">
+                <div class="product-info" style="opacity: 0; transition: opacity 0.5s ease;" id="productInfoContainer">
                     <div class="product-header">
-                        <h1 id="productName">Elegant Gold Necklace</h1>
+                        <h1 id="productName">Loading...</h1>
                         <div class="product-header-actions">
                             <div style="display: flex; align-items: center; gap: 0.3rem; margin-right: 0.5rem; font-size: 0.8rem; font-weight: 600; background: rgba(212,165,116,0.1); padding: 0.3rem 0.8rem; border-radius: 15px; border: 1px solid rgba(212,165,116,0.3); position: relative; top: -5px;">
                                 <span style="color: #ffc107;">★★★★★</span>
@@ -1662,11 +1662,11 @@
                             </button>
                         </div>
                     </div>
-                    <p class="product-short-description" id="productShortDescription">Premium anti-tarnish jewelry for everyday elegance</p>
+                    <p class="product-short-description" id="productShortDescription">Loading product details...</p>
                     <div class="product-price">
-                        <span class="current-price" id="currentPrice">₹2,999</span>
-                        <span class="original-price" id="originalPrice">₹3,999</span>
-                        <span class="discount" id="discountPercent">25% OFF</span>
+                        <span class="current-price" id="currentPrice">₹0</span>
+                        <span class="original-price" id="originalPrice"></span>
+                        <span class="discount" id="discountPercent" style="display: none;"></span>
                         <span class="stock-status" id="stockStatus" style="color: #28a745; font-size: 1rem; font-weight: 600; margin-left: 1rem;">Ready to Ship - In Stock</span>
                     </div>
                     <div class="size-selection">
@@ -2079,6 +2079,7 @@
         </div>
     </div>
 
+    <script src="api-config.js"></script>
     <script>
         let currentProduct = {};
         let mediaItems = [
@@ -2090,6 +2091,37 @@
         ];
         let currentMediaIndex = 0;
         let zoomLevel = 1;
+        
+        // Load product from backend
+        async function loadProductFromBackend(productId) {
+            try {
+                const backendProduct = await api.getProduct(productId);
+                return {
+                    id: backendProduct._id,
+                    name: backendProduct.name,
+                    category: backendProduct.category,
+                    price: backendProduct.discountPrice || backendProduct.price,
+                    originalPrice: backendProduct.price,
+                    image: backendProduct.images && backendProduct.images.length > 0 ? backendProduct.images[0] : 'our_collection_1 (2).webp',
+                    images: backendProduct.images || [],
+                    description: backendProduct.description,
+                    shortDescription: backendProduct.shortDescription || 'Premium anti-tarnish jewelry for everyday elegance',
+                    features: backendProduct.features || [],
+                    availableSizes: backendProduct.availableSizes || ['One Size'],
+                    sizeGuideImage: backendProduct.sizeGuideImage,
+                    specifications: backendProduct.specifications,
+                    supplierInfo: backendProduct.supplierInfo,
+                    careInstructions: backendProduct.careInstructions,
+                    stock: backendProduct.stock,
+                    antiTarnish: backendProduct.antiTarnish,
+                    rating: 4.8,
+                    reviews: 156
+                };
+            } catch (error) {
+                console.error('Error loading product from backend:', error);
+                return null;
+            }
+        }
 
         // Main image navigation functions
         function generateTimeline() {
@@ -2281,41 +2313,53 @@
         });
 
         // Load product details from URL parameters
-        function loadProductDetails() {
+        async function loadProductDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
             
             if (productId) {
+                // Load from localStorage only
                 const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-                currentProduct = products.find(p => p.id === productId);
+                currentProduct = products.find(p => (p.id === productId || p._id === productId));
                 
                 if (currentProduct) {
+                    console.log('Product loaded from localStorage:', currentProduct.name);
                     displayProductDetails(currentProduct);
                 } else {
-                    // Fallback to demo product
-                    currentProduct = {
-                        id: 'demo-1',
-                        name: 'Elegant Gold Necklace',
-                        price: 2999,
-                        originalPrice: 3999,
-                        image: 'our_collection_1 (2).webp',
-                        category: 'Necklaces',
-                        description: 'Beautiful anti-tarnish gold plated necklace perfect for everyday wear',
-                        rating: 4.8,
-                        reviews: 156
-                    };
-                    displayProductDetails(currentProduct);
+                    console.error('Product not found:', productId);
+                    // Show error message
+                    document.getElementById('productInfoContainer').style.opacity = '1';
+                    document.getElementById('productName').textContent = 'Product Not Found';
+                    document.getElementById('productShortDescription').textContent = 'This product could not be loaded. Please try again.';
+                    document.getElementById('currentPrice').textContent = '₹0';
+                    document.getElementById('originalPrice').textContent = '';
+                    document.getElementById('discountPercent').style.display = 'none';
                 }
             }
         }
 
         function displayProductDetails(product) {
+            if (!product) return;
+            
+            // Show the product info container
+            document.getElementById('productInfoContainer').style.opacity = '1';
+            
             document.getElementById('productName').textContent = product.name;
-            document.getElementById('productShortDescription').textContent = product.shortDescription || 'Premium anti-tarnish jewelry for everyday elegance';
+            document.getElementById('productShortDescription').textContent = product.shortDescription || product.description || 'Premium anti-tarnish jewelry for everyday elegance';
             document.getElementById('breadcrumbProductName').textContent = product.name;
-            document.getElementById('productCategory').textContent = product.category || 'Necklaces';
+            document.getElementById('productCategory').textContent = product.category || 'Jewelry';
             document.getElementById('currentPrice').textContent = `₹${product.price.toLocaleString()}`;
             document.getElementById('originalPrice').textContent = product.originalPrice ? `₹${product.originalPrice.toLocaleString()}` : '';
+            
+            // Show/hide discount badge
+            const discountElement = document.getElementById('discountPercent');
+            if (product.originalPrice && product.originalPrice > product.price) {
+                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                discountElement.textContent = `${discount}% OFF`;
+                discountElement.style.display = 'inline-block';
+            } else {
+                discountElement.style.display = 'none';
+            }
             
             // Update product features
             if (product.features && product.features.length > 0) {
@@ -2333,23 +2377,43 @@
             }
             
             if (product.specifications) {
-                document.getElementById('productSpecificationsContent').innerHTML = product.specifications.replace(/\n/g, '<br>');
+                // Handle both string and array formats
+                let specsContent = '';
+                if (typeof product.specifications === 'string') {
+                    specsContent = product.specifications.replace(/\n/g, '<br>');
+                } else if (Array.isArray(product.specifications)) {
+                    specsContent = '<ul>' + product.specifications.map(spec => `<li>${spec}</li>`).join('') + '</ul>';
+                }
+                document.getElementById('productSpecificationsContent').innerHTML = specsContent;
             }
             
             if (product.supplierInfo) {
-                document.getElementById('productSupplierContent').innerHTML = product.supplierInfo.replace(/\n/g, '<br>');
+                // Handle both string and array formats
+                let supplierContent = '';
+                if (typeof product.supplierInfo === 'string') {
+                    supplierContent = product.supplierInfo.replace(/\n/g, '<br>');
+                } else if (Array.isArray(product.supplierInfo)) {
+                    supplierContent = '<ul>' + product.supplierInfo.map(info => `<li>${info}</li>`).join('') + '</ul>';
+                }
+                document.getElementById('productSupplierContent').innerHTML = supplierContent;
             }
             
             if (product.careInstructions) {
-                document.getElementById('productCareContent').innerHTML = product.careInstructions.replace(/\n/g, '<br>');
+                // Handle both string and array formats
+                let careContent = '';
+                if (typeof product.careInstructions === 'string') {
+                    careContent = product.careInstructions.replace(/\n/g, '<br>');
+                } else if (Array.isArray(product.careInstructions)) {
+                    careContent = '<ul>' + product.careInstructions.map(care => `<li>${care}</li>`).join('') + '</ul>';
+                }
+                document.getElementById('productCareContent').innerHTML = careContent;
             }
             
-            document.getElementById('mainProductImage').src = product.image;
-            
-            // Calculate discount
-            if (product.originalPrice) {
-                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-                document.getElementById('discountPercent').textContent = `${discount}% OFF`;
+            // Set main product image
+            if (product.image) {
+                document.getElementById('mainProductImage').src = product.image;
+            } else if (product.images && product.images.length > 0) {
+                document.getElementById('mainProductImage').src = product.images[0];
             }
             
             // Update size options
@@ -2496,6 +2560,7 @@
         }
 
         function loadRelatedProducts() {
+            // Load from localStorage for related products (fallback)
             const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
             const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
             const recommendedProducts = products.filter(p => p.id !== currentProduct.id).slice(0, 4);
@@ -2840,8 +2905,8 @@
         });
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProductDetails();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadProductDetails();
             generateTimeline();
             loadProductMedia();
             loadRelatedProducts();

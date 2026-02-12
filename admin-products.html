@@ -815,6 +815,11 @@
                     <!-- Pricing -->
                     <div class="form-subsection">
                         <h4 class="subsection-title">Pricing</h4>
+                        <div class="form-field">
+                            <label style="color: #dc3545; font-weight: 700;">Product Actual Value/Cost (₹) *</label>
+                            <input type="number" id="prodActualCost" required min="0" step="any" placeholder="200">
+                            <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.3rem;">Admin only - Used for revenue reports. Not visible to customers.</small>
+                        </div>
                         <div class="form-row-2col">
                             <div class="form-field">
                                 <label>Price (₹) *</label>
@@ -932,10 +937,6 @@
                             <label style="display: block; margin-bottom: 0.7rem; font-weight: 600; color: #8B4513; font-size: 0.95rem;">Shop by Category</label>
                             <div class="features-checkboxes">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="shopCategory" value="All Categories">
-                                    <span>All Categories</span>
-                                </label>
-                                <label class="checkbox-label">
                                     <input type="checkbox" name="shopCategory" value="Rings">
                                     <span>Rings</span>
                                 </label>
@@ -984,6 +985,10 @@
                                     <span>Anniversary</span>
                                 </label>
                                 <label class="checkbox-label">
+                                    <input type="checkbox" name="giftingCategory" value="Wedding">
+                                    <span>Wedding</span>
+                                </label>
+                                <label class="checkbox-label">
                                     <input type="checkbox" name="giftingCategory" value="Mothers Day">
                                     <span>Mothers Day</span>
                                 </label>
@@ -1026,6 +1031,7 @@
                             <option value="low-stock">Low Stock</option>
                             <option value="out-of-stock">Out of Stock</option>
                         </select>
+                        <button class="btn-add-product" onclick="clearAllProducts()" style="background: #dc3545; padding: 0.6rem 1rem; font-size: 0.85rem;">Clear All Products</button>
                     </div>
                 
                 <div class="pagination" style="margin-bottom: 1.5rem;">
@@ -1092,26 +1098,7 @@
                             </thead>
                             <tbody id="stockLogsBody">
                                 <tr>
-                                    <td>2024-01-15 14:30</td>
-                                    <td>PRD-1015</td>
-                                    <td>Rose Gold Infinity Ring</td>
-                                    <td><span class="stock-badge stock-in-stock">Stock In</span></td>
-                                    <td>+50</td>
-                                    <td>45</td>
-                                    <td>95</td>
-                                    <td>New Inventory</td>
-                                    <td>Admin</td>
-                                </tr>
-                                <tr>
-                                    <td>2024-01-14 10:15</td>
-                                    <td>PRD-1014</td>
-                                    <td>Pearl Drop Earrings</td>
-                                    <td><span class="stock-badge stock-out-of-stock">Stock Out</span></td>
-                                    <td>-2</td>
-                                    <td>5</td>
-                                    <td>3</td>
-                                    <td>Customer Order</td>
-                                    <td>System</td>
+                                    <td colspan="9" style="text-align: center; color: #666;">Loading inventory data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1150,11 +1137,7 @@
                                 </thead>
                                 <tbody id="lowStockAlerts">
                                     <tr>
-                                        <td>PRD-1014</td>
-                                        <td>Pearl Drop Earrings</td>
-                                        <td>3</td>
-                                        <td><span class="stock-badge stock-low-stock">Low Stock</span></td>
-                                        <td><button class="action-btn btn-edit" onclick="alert('Restock product')">Restock</button></td>
+                                        <td colspan="5" style="text-align: center; color: #666;">Loading low stock alerts...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1192,11 +1175,7 @@
                                 </thead>
                                 <tbody id="disabledProducts">
                                     <tr>
-                                        <td>PRD-1012</td>
-                                        <td>Emerald Pendant Necklace</td>
-                                        <td>0</td>
-                                        <td>2024-01-12</td>
-                                        <td><button class="action-btn btn-edit" onclick="alert('Enable product')">Enable</button></td>
+                                        <td colspan="5" style="text-align: center; color: #666;">Loading disabled products...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1240,45 +1219,33 @@
                             </thead>
                             <tbody id="valuationReport">
                                 <tr>
-                                    <td><strong>Rings</strong></td>
-                                    <td>3</td>
-                                    <td>82</td>
-                                    <td>₹3,999</td>
-                                    <td>₹3,27,918</td>
-                                    <td>38.8%</td>
+                                    <td colspan="6" style="text-align: center; color: #666;">Loading category data...</td>
                                 </tr>
-                                <tr>
-                                    <td><strong>Earrings</strong></td>
-                                    <td>3</td>
-                                    <td>71</td>
-                                    <td>₹1,532</td>
-                                    <td>₹1,08,772</td>
-                                    <td>12.9%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Bracelets</strong></td>
-                                    <td>3</td>
-                                    <td>46</td>
-                                    <td>₹3,232</td>
-                                    <td>₹1,48,672</td>
-                                    <td>17.6%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Necklaces</strong></td>
-                                    <td>3</td>
-                                    <td>37</td>
-                                    <td>₹3,299</td>
-                                    <td>₹1,22,063</td>
-                                    <td>14.4%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Anklets</strong></td>
-                                    <td>3</td>
-                                    <td>96</td>
-                                    <td>₹1,366</td>
-                                    <td>₹1,31,136</td>
-                                    <td>15.5%</td>
-                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <h5 style="margin-bottom: 1rem; color: #8B4513;">Per-Product Inventory Breakdown (Admin Debug View)</h5>
+                        <div class="table-container">
+                            <table class="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Actual Cost</th>
+                                        <th>Stock</th>
+                                        <th>Inventory Value</th>
+                                        <th>Categories</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="perProductValuation">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #666;">Loading product data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                             </tbody>
                         </table>
                     </div>
@@ -1293,12 +1260,14 @@
         </div>
     </div>
 
+    <script src="api-config.js"></script>
     <script>
         if (localStorage.getItem('adminLoggedIn') !== 'true') {
             window.location.href = 'admin-login.html';
         }
 
         const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+        const adminToken = localStorage.getItem('adminToken') || 'demo_token';
         document.getElementById('adminName').textContent = `${adminData.firstName} ${adminData.lastName}`;
 
         function logout() {
@@ -1309,24 +1278,31 @@
             }
         }
         
-        // Demo Products Data (sorted by date - newest first)
-        const demoProducts = [
-            { id: 'PRD-1015', name: 'Rose Gold Infinity Ring', category: 'Rings', material: 'Rose Gold Plated', price: 2499, discountPrice: 1999, stock: 45, sku: 'RG-INF-001', date: '2024-01-15', antiTarnish: true },
-            { id: 'PRD-1014', name: 'Pearl Drop Earrings', category: 'Earrings', material: 'Sterling Silver', price: 1899, discountPrice: 1499, stock: 3, sku: 'SS-PRL-002', date: '2024-01-14', antiTarnish: true },
-            { id: 'PRD-1013', name: 'Diamond Cut Bracelet', category: 'Bracelets', material: 'White Gold Plated', price: 3299, discountPrice: 2799, stock: 28, sku: 'WG-DMD-003', date: '2024-01-13', antiTarnish: true },
-            { id: 'PRD-1012', name: 'Emerald Pendant Necklace', category: 'Necklaces', material: 'Gold Plated', price: 4599, discountPrice: 3999, stock: 0, sku: 'GP-EMR-004', date: '2024-01-12', antiTarnish: true },
-            { id: 'PRD-1011', name: 'Butterfly Anklet', category: 'Anklets', material: 'Sterling Silver', price: 1599, discountPrice: 1299, stock: 52, sku: 'SS-BTF-005', date: '2024-01-11', antiTarnish: true },
-            { id: 'PRD-1010', name: 'Solitaire Engagement Ring', category: 'Rings', material: 'Platinum Plated', price: 5999, discountPrice: 4999, stock: 15, sku: 'PT-SOL-006', date: '2024-01-10', antiTarnish: true },
-            { id: 'PRD-1009', name: 'Hoop Earrings Set', category: 'Earrings', material: 'Gold Plated', price: 1299, discountPrice: 999, stock: 8, sku: 'GP-HOP-007', date: '2024-01-09', antiTarnish: true },
-            { id: 'PRD-1008', name: 'Charm Bracelet', category: 'Bracelets', material: 'Rose Gold Plated', price: 2199, discountPrice: 1799, stock: 0, sku: 'RG-CHM-008', date: '2024-01-08', antiTarnish: true },
-            { id: 'PRD-1007', name: 'Layered Chain Necklace', category: 'Necklaces', material: 'Sterling Silver', price: 2899, discountPrice: 2399, stock: 35, sku: 'SS-LAY-009', date: '2024-01-07', antiTarnish: true },
-            { id: 'PRD-1006', name: 'Beaded Anklet', category: 'Anklets', material: 'Gold Plated', price: 1399, discountPrice: 1099, stock: 4, sku: 'GP-BED-010', date: '2024-01-06', antiTarnish: true },
-            { id: 'PRD-1005', name: 'Vintage Ring', category: 'Rings', material: 'Antique Gold', price: 3499, discountPrice: 2999, stock: 22, sku: 'AG-VIN-011', date: '2024-01-05', antiTarnish: true },
-            { id: 'PRD-1004', name: 'Crystal Stud Earrings', category: 'Earrings', material: 'White Gold Plated', price: 1699, discountPrice: 1399, stock: 60, sku: 'WG-CRY-012', date: '2024-01-04', antiTarnish: true },
-            { id: 'PRD-1003', name: 'Tennis Bracelet', category: 'Bracelets', material: 'Platinum Plated', price: 4299, discountPrice: 3699, stock: 18, sku: 'PT-TEN-013', date: '2024-01-03', antiTarnish: true },
-            { id: 'PRD-1002', name: 'Heart Pendant Necklace', category: 'Necklaces', material: 'Rose Gold Plated', price: 2299, discountPrice: 1899, stock: 2, sku: 'RG-HRT-014', date: '2024-01-02', antiTarnish: true },
-            { id: 'PRD-1001', name: 'Delicate Chain Anklet', category: 'Anklets', material: 'Sterling Silver', price: 1199, discountPrice: 899, stock: 40, sku: 'SS-DEL-015', date: '2024-01-01', antiTarnish: true }
-        ];
+        // Products Data
+        let demoProducts = [];
+        
+        // Load products from localStorage only
+        async function loadProducts() {
+            const localProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            demoProducts = localProducts.map(p => ({
+                id: p.id || p._id,
+                name: p.name,
+                category: p.category,
+                material: p.material || 'N/A',
+                price: p.price,
+                discountPrice: p.discountPrice || p.price,
+                stock: p.stock,
+                sku: p.sku,
+                date: new Date(p.createdAt || p.addedDate || Date.now()).toISOString().split('T')[0],
+                antiTarnish: p.antiTarnish
+            }));
+            console.log('Loaded', demoProducts.length, 'products from localStorage');
+            filteredProducts = [...demoProducts];
+            renderProducts();
+        }
+        
+        loadProducts();
+        loadInventoryData(); // Load inventory valuation report
         
         let currentPage = 1;
         const itemsPerPage = 10;
@@ -1344,6 +1320,12 @@
             const end = start + itemsPerPage;
             const pageProducts = filteredProducts.slice(start, end);
             
+            if (pageProducts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 2rem; color: #666;">No products found. Add your first product using the form above.</td></tr>';
+                updatePagination();
+                return;
+            }
+            
             tbody.innerHTML = pageProducts.map((product, index) => {
                 const stockInfo = getStockStatus(product.stock);
                 const srNo = start + index + 1;
@@ -1353,7 +1335,7 @@
                         <td>${srNo}</td>
                         <td><strong>${product.id}</strong></td>
                         <td>${product.name}</td>
-                        <td>${product.category}</td>
+                        <td>${(product.categories && product.categories.length > 0) ? product.categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ') : product.category}</td>
                         <td>${product.material}</td>
                         <td>₹${product.price.toLocaleString()}</td>
                         <td>₹${product.discountPrice.toLocaleString()}</td>
@@ -1427,13 +1409,51 @@
             // TODO: Implement product edit functionality
         }
         
-        function deleteProduct(productId) {
-            if (confirm(`Are you sure you want to delete product ${productId}?\n\nThis action cannot be undone.`)) {
-                alert(`Product ${productId} deleted successfully!`);
-                const index = demoProducts.findIndex(p => p.id === productId);
-                if (index > -1) {
-                    demoProducts.splice(index, 1);
-                    filterProducts();
+        async function deleteProduct(productId) {
+            if (confirm(`Are you sure you want to delete this product?\n\nThis action cannot be undone.`)) {
+                try {
+                    await api.deleteProduct(productId, adminToken);
+                    alert('Product deleted successfully!');
+                    await loadProducts();
+                    loadInventoryData(); // Update inventory report
+                } catch (error) {
+                    console.error('Backend error, deleting from localStorage:', error);
+                    // Fallback: Delete from localStorage
+                    const localProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+                    const updatedProducts = localProducts.filter(p => p.id !== productId && p._id !== productId);
+                    localStorage.setItem('shopProducts', JSON.stringify(updatedProducts));
+                    
+                    alert('Product deleted successfully!\n\nNote: Deleted from local storage (backend server not running)');
+                    await loadProducts();
+                    loadInventoryData(); // Update inventory report
+                }
+            }
+        }
+        
+        // Clear all products function
+        async function clearAllProducts() {
+            if (confirm('⚠️ WARNING: This will delete ALL products!\n\nThis action cannot be undone. Are you sure?')) {
+                if (confirm('This is your final confirmation. Delete ALL products?')) {
+                    try {
+                        // Try to delete from backend first
+                        for (const product of demoProducts) {
+                            try {
+                                await api.deleteProduct(product.id, adminToken);
+                            } catch (error) {
+                                console.error(`Error deleting product ${product.id}:`, error);
+                            }
+                        }
+                        alert('All products cleared from database!');
+                    } catch (error) {
+                        console.error('Backend error, clearing localStorage:', error);
+                    }
+                    
+                    // Always clear localStorage regardless
+                    localStorage.removeItem('shopProducts');
+                    
+                    alert('All products cleared successfully!\n\nNote: Cleared from local storage (start backend for database sync)');
+                    await loadProducts();
+                    loadInventoryData(); // Update inventory report
                 }
             }
         }
@@ -1568,7 +1588,7 @@
             }
         };
         
-        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+        document.getElementById('addProductForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (productMedia.length === 0) {
@@ -1584,6 +1604,7 @@
             const price = parseFloat(document.getElementById('prodPrice').value);
             const discountPercent = parseInt(document.getElementById('prodDiscountPercent').value);
             const discountPrice = Math.round(price - (price * discountPercent / 100));
+            const actualCost = parseInt(document.getElementById('prodActualCost').value) || 0;
             
             // Get size options
             const sizeType = document.querySelector('input[name="sizeType"]:checked').value;
@@ -1615,49 +1636,53 @@
             const supplierInfo = document.getElementById('supplierInfo').value || '';
             const careInstructions = document.getElementById('materialCare').value || '';
             
-            // Create new product object with ALL data
-            const newProduct = {
-                id: 'PRD-' + Date.now(),
+            // Create product data for backend
+            const productData = {
                 name: document.getElementById('prodName').value,
                 shortDescription: document.getElementById('prodShortDesc').value,
                 category: mainCategory,
-                categories: shopCategories, // For filtering on shop page
                 price: price,
-                originalPrice: price,
                 discountPrice: discountPrice,
-                discountPercent: discountPercent,
-                stock: parseInt(document.getElementById('prodStock').value),
-                sku: 'SKU-' + Date.now(),
-                date: new Date().toISOString().split('T')[0],
-                image: productMedia[0].src, // First image as main
-                images: productMedia.map(m => m.src), // All images
-                media: productMedia, // Full media with type info
-                features: features,
-                antiTarnish: features.some(f => f.toLowerCase().includes('anti-tarnish')),
-                availableSizes: availableSizes,
-                sizeGuideImage: sizeGuideImage,
+                actualCost: actualCost,
                 description: description,
                 specifications: specifications,
                 supplierInfo: supplierInfo,
                 careInstructions: careInstructions,
+                material: 'Premium',
+                antiTarnish: features.some(f => f.toLowerCase().includes('anti-tarnish')),
+                stock: parseInt(document.getElementById('prodStock').value),
+                sku: 'SKU-' + Date.now(),
+                images: productMedia.map(m => m.src),
+                features: features,
+                availableSizes: availableSizes,
+                sizeGuideImage: sizeGuideImage,
+                categories: shopCategories,
                 limitedEdition: limitedEdition,
                 giftingOccasions: giftingCategories,
-                rating: 5.0,
-                reviews: 0
+                featured: false,
+                status: 'Active'
             };
             
-            // Save to localStorage for shop page
-            let shopProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
-            shopProducts.unshift(newProduct);
-            localStorage.setItem('shopProducts', JSON.stringify(shopProducts));
-            
-            // Also add to demo products for admin table
-            demoProducts.unshift(newProduct);
-            filteredProducts = [...demoProducts];
-            currentPage = 1;
-            renderProducts();
-            
-            alert(`Product "${newProduct.name}" added successfully!\n\nProduct ID: ${newProduct.id}\n\nThe product is now visible on the shop page.`);
+            try {
+                // Skip backend, save directly to localStorage
+                const fallbackProduct = {
+                    ...productData,
+                    id: 'local-' + Date.now(),
+                    _id: 'local-' + Date.now(),
+                    createdAt: new Date().toISOString(),
+                    addedDate: new Date().toISOString()
+                };
+                
+                const existingProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+                existingProducts.push(fallbackProduct);
+                localStorage.setItem('shopProducts', JSON.stringify(existingProducts));
+                
+                alert(`Product "${productData.name}" added successfully!`);
+                await loadProducts();
+                loadInventoryData(); // Update inventory report
+            } catch (error) {
+                alert('Error adding product: ' + error.message);
+            }
             
             // Reset form
             document.getElementById('addProductForm').reset();
@@ -1671,9 +1696,152 @@
         });
         
         // Inventory Control Functions
+        function loadInventoryData() {
+            const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            const stockLogs = JSON.parse(localStorage.getItem('stockLogs')) || [];
+            
+            // Update stock logs table
+            const stockLogsBody = document.getElementById('stockLogsBody');
+            if (stockLogsBody) {
+                if (stockLogs.length > 0) {
+                    stockLogsBody.innerHTML = stockLogs.map(log => `
+                        <tr>
+                            <td>${new Date(log.date).toLocaleString()}</td>
+                            <td>${log.productId}</td>
+                            <td>${log.productName}</td>
+                            <td><span class="stock-badge ${log.type === 'in' ? 'stock-in-stock' : 'stock-out-of-stock'}">${log.type === 'in' ? 'Stock In' : 'Stock Out'}</span></td>
+                            <td>${log.type === 'in' ? '+' : ''}${log.quantity}</td>
+                            <td>${log.previousStock}</td>
+                            <td>${log.newStock}</td>
+                            <td>${log.reason}</td>
+                            <td>${log.updatedBy}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    stockLogsBody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #666;">No stock logs yet. Stock changes will appear here.</td></tr>';
+                }
+            }
+            
+            // Calculate inventory metrics
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, p) => sum + (p.stock || 0), 0);
+            const inventoryCost = products.reduce((sum, p) => sum + ((p.actualCost || 0) * (p.stock || 0)), 0);
+            const potentialRevenue = products.reduce((sum, p) => sum + ((p.discountPrice || p.price || 0) * (p.stock || 0)), 0);
+            
+            // Update summary cards
+            const totalProductsEl = document.getElementById('totalProducts');
+            const totalStockEl = document.getElementById('totalStock');
+            const inventoryValueEl = document.getElementById('inventoryValue');
+            const potentialRevenueEl = document.getElementById('potentialRevenue');
+            
+            if (totalProductsEl) totalProductsEl.textContent = totalProducts;
+            if (totalStockEl) totalStockEl.textContent = totalStock;
+            if (inventoryValueEl) inventoryValueEl.textContent = '₹' + inventoryCost.toLocaleString('en-IN');
+            if (potentialRevenueEl) potentialRevenueEl.textContent = '₹' + potentialRevenue.toLocaleString('en-IN');
+            
+            // Build category report
+            const categoryData = {};
+            products.forEach(product => {
+                const cats = product.categories || [product.category] || ['Uncategorized'];
+                cats.forEach(cat => {
+                    const catKey = cat.toLowerCase();
+                    if (!categoryData[catKey]) {
+                        categoryData[catKey] = {
+                            name: cat.charAt(0).toUpperCase() + cat.slice(1),
+                            products: [],
+                            totalStock: 0,
+                            totalValue: 0
+                        };
+                    }
+                    categoryData[catKey].products.push(product);
+                    categoryData[catKey].totalStock += product.stock || 0;
+                    categoryData[catKey].totalValue += (product.actualCost || 0) * (product.stock || 0);
+                });
+            });
+            
+            // Update valuation report table
+            const valuationReportBody = document.getElementById('valuationReport');
+            if (valuationReportBody) {
+                const reportRows = Object.values(categoryData).map(cat => {
+                    const avgPrice = cat.products.length > 0 ? Math.round(cat.products.reduce((sum, p) => sum + (p.price || 0), 0) / cat.products.length) : 0;
+                    const percentOfInventory = inventoryCost > 0 ? ((cat.totalValue / inventoryCost) * 100).toFixed(1) : 0;
+                    return `
+                        <tr>
+                            <td><strong>${cat.name}</strong></td>
+                            <td>${cat.products.length}</td>
+                            <td>${cat.totalStock}</td>
+                            <td>₹${avgPrice.toLocaleString('en-IN')}</td>
+                            <td>₹${cat.totalValue.toLocaleString('en-IN')}</td>
+                            <td>${percentOfInventory}%</td>
+                        </tr>
+                    `;
+                }).join('');
+                valuationReportBody.innerHTML = reportRows;
+            }
+            
+            // Update per-product breakdown table
+            const perProductBody = document.getElementById('perProductValuation');
+            if (perProductBody) {
+                const productRows = products.map(product => {
+                    const productValue = (product.actualCost || 0) * (product.stock || 0);
+                    const categories = (product.categories || [product.category || 'Uncategorized']).map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ');
+                    return `
+                        <tr>
+                            <td>${product.name}</td>
+                            <td>₹${(product.actualCost || 0).toLocaleString('en-IN')}</td>
+                            <td>${product.stock || 0}</td>
+                            <td>₹${productValue.toLocaleString('en-IN')}</td>
+                            <td>${categories}</td>
+                        </tr>
+                    `;
+                }).join('');
+                perProductBody.innerHTML = productRows.length > 0 ? productRows : '<tr><td colspan="5" style="text-align: center; color: #666;">No products added yet.</td></tr>';
+            }
+            
+            const lowStockThreshold = parseInt(localStorage.getItem('lowStockThreshold')) || 10;
+            const lowStockProducts = products.filter(p => p.stock <= lowStockThreshold && p.stock > 0);
+            
+            // Update low stock alerts table
+            const lowStockAlertsBody = document.getElementById('lowStockAlerts');
+            if (lowStockAlertsBody) {
+                if (lowStockProducts.length > 0) {
+                    lowStockAlertsBody.innerHTML = lowStockProducts.map(product => `
+                        <tr>
+                            <td>${product.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.stock}</td>
+                            <td><span class="stock-badge stock-low-stock">Low Stock</span></td>
+                            <td><button class="action-btn btn-edit" onclick="alert('Restock ${product.name}')">Restock</button></td>
+                        </tr>
+                    `).join('');
+                } else {
+                    lowStockAlertsBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">No low stock products. All products are well stocked!</td></tr>';
+                }
+            }
+            
+            // Load saved threshold value
+            const thresholdInput = document.getElementById('globalThreshold');
+            if (thresholdInput) {
+                thresholdInput.value = lowStockThreshold;
+            }
+            
+            // Load auto-disable setting
+            const autoDisableToggle = document.getElementById('autoDisableToggle');
+            const autoDisableStatus = localStorage.getItem('autoDisableOutOfStock') === 'true';
+            if (autoDisableToggle) {
+                autoDisableToggle.checked = autoDisableStatus;
+                const statusText = document.getElementById('toggleStatus');
+                if (statusText) {
+                    statusText.textContent = autoDisableStatus ? 'ON' : 'OFF';
+                    statusText.className = autoDisableStatus ? 'toggle-status on' : 'toggle-status off';
+                }
+            }
+        }
+        
         function updateThresholds() {
             const threshold = document.getElementById('globalThreshold').value;
             localStorage.setItem('lowStockThreshold', threshold);
+            loadInventoryData(); // Refresh the low stock alerts
             alert(`Low stock threshold updated to ${threshold} units`);
         }
         
@@ -1690,7 +1858,30 @@
             }
             
             localStorage.setItem('autoDisableOutOfStock', isEnabled);
-            alert(isEnabled ? 'Auto-disable enabled for out of stock products' : 'Auto-disable disabled');
+            
+            // Apply auto-disable to products with 0 stock
+            if (isEnabled) {
+                const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+                let updated = false;
+                
+                products.forEach(product => {
+                    if (product.stock === 0 && product.status === 'Active') {
+                        product.status = 'Inactive';
+                        updated = true;
+                    }
+                });
+                
+                if (updated) {
+                    localStorage.setItem('shopProducts', JSON.stringify(products));
+                    loadProducts(); // Refresh product list
+                    loadInventoryData(); // Refresh inventory data
+                    alert('Auto-disable enabled. Products with 0 stock have been disabled.');
+                } else {
+                    alert('Auto-disable enabled. No out-of-stock products found.');
+                }
+            } else {
+                alert('Auto-disable disabled. Out-of-stock products will remain visible.');
+            }
         }
         
         function printReport() {
@@ -1698,9 +1889,14 @@
         }
         
         function refreshReport() {
-            alert('Refreshing inventory data...');
-            // TODO: Implement data refresh
+            loadInventoryData();
+            alert('Inventory data refreshed!');
         }
+        
+        // Load inventory data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInventoryData();
+        });
         
         // Toggle Section Collapse
         function toggleSection(sectionId) {

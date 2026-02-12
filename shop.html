@@ -541,6 +541,7 @@
             <div class="nav-btn">
                 SHOP BY CATEGORY
                 <div class="dropdown">
+                    <a href="#" class="dropdown-item" onclick="filterProducts('all')">All</a>
                     <a href="#" class="dropdown-item" onclick="filterProducts('rings')">Rings</a>
                     <a href="#" class="dropdown-item" onclick="filterProducts('earrings')">Earrings</a>
                     <a href="#" class="dropdown-item" onclick="filterProducts('neckpieces')">Neckpieces</a>
@@ -629,7 +630,7 @@
 
     <div class="container">
         <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;"></div>
         </div>
     </div>
 
@@ -679,15 +680,75 @@
             </div>
         </div>
     </footer>
+    <script src="api-config.js"></script>
     <script>
-        let products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-
+        let products = [];
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        
+        // Load products from localStorage only
+        async function loadProductsFromBackend() {
+            const localProducts = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            console.log('=== SHOP PAGE DEBUG ===');
+            console.log('Local products loaded:', localProducts.length);
+            console.log('Products data:', localProducts);
+            
+            if (localProducts.length === 0) {
+                console.warn('No products in localStorage!');
+                document.getElementById('productsGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No products available. Add products via admin panel.</div>';
+                return;
+            }
+            
+            products = localProducts.map(p => {
+                console.log('Processing product:', p.name, 'Status:', p.status);
+                return {
+                    id: p._id || p.id,
+                    name: p.name,
+                    category: p.category,
+                    price: p.discountPrice || p.price,
+                    originalPrice: p.price,
+                    image: p.images && p.images.length > 0 ? p.images[0] : 'our_collection_1 (2).webp',
+                    description: p.description,
+                    shortDescription: p.shortDescription || p.description,
+                    features: p.features || [],
+                    availableSizes: p.availableSizes || ['One Size'],
+                    sizeGuideImage: p.sizeGuideImage,
+                    specifications: p.specifications,
+                    supplierInfo: p.supplierInfo,
+                    careInstructions: p.careInstructions,
+                    categories: p.categories || [p.category.toLowerCase()],
+                    limitedEdition: p.limitedEdition,
+                    giftingOccasions: p.giftingOccasions,
+                    stock: p.stock,
+                    antiTarnish: p.antiTarnish,
+                    status: p.status
+                };
+            });
+            
+            console.log('Total products mapped:', products.length);
+            console.log('Products array:', products);
+            loadProducts();
+        }
 
         function loadProducts(category = 'all') {
+            console.log('loadProducts called with category:', category);
+            console.log('Products available:', products.length);
+            
             const grid = document.getElementById('productsGrid');
+            
+            if (products.length === 0) {
+                console.warn('No products to display');
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No products available. Add products via admin panel.</div>';
+                return;
+            }
+            
             const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            console.log('Filtered products:', filteredProducts.length);
+            
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No products found in category: ${category}</div>`;
+                return;
+            }
             
             grid.innerHTML = filteredProducts.map(product => {
                 const isInWishlist = wishlist.some(item => item.id === product.id);
@@ -820,11 +881,10 @@
         }
 
         function refreshProducts() {
-            // Always load from localStorage, no fallback to default products
-            products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            // Reload from backend to get latest products
+            loadProductsFromBackend();
             cart = JSON.parse(localStorage.getItem('cart')) || [];
             wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            loadProducts();
             updateCartCount();
             updateWishlistCount();
         }
@@ -912,8 +972,8 @@
                 'birthday': 'birthday',
                 'anniversary': 'anniversary', 
                 'wedding': 'wedding',
-                'valentine': 'valentines',
-                'mothers-day': 'mothers'
+                'valentine': 'valentine',
+                'mothers-day': 'mothers day'
             };
             
             const occasionValue = occasionMap[occasion];
@@ -958,7 +1018,7 @@
             // Show products marked as limited edition
             const filteredProducts = products.filter(product => {
                 // Check limitedEdition array from admin form
-                if (product.limitedEdition && product.limitedEdition.includes('limitedEdition')) {
+                if (product.limitedEdition && Array.isArray(product.limitedEdition) && product.limitedEdition.length > 0) {
                     return true;
                 }
                 // Check boolean field (backward compatibility)
@@ -1018,10 +1078,9 @@
         }
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Always load from localStorage only
-            products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+            // Load products from backend first
+            loadProductsFromBackend();
             
-            loadProducts();
             updateCartCount();
             updateWishlistCount();
             updateProfileIcon();
@@ -1048,11 +1107,11 @@
             });
         });
         
-        // Refresh products every 5 seconds to show new additions
+        // Refresh products every 10 seconds to show new additions
         setInterval(() => {
             refreshProducts();
             updateProfileIcon();
-        }, 5000);
+        }, 10000);
         
         // Handle footer navigation
         document.addEventListener('click', function(e) {
