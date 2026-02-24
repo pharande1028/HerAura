@@ -452,18 +452,29 @@
                 </svg>
             </div>
             <div id="aboutSection" class="section-content" style="display: none;">
-                <form id="aboutForm" style="max-width: 800px;">
+                <p style="color: #666; margin-bottom: 1.5rem;">Manage your About section content below.</p>
+                
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                    <button type="button" class="btn-add" onclick="editAbout()" style="padding: 0.6rem 1.2rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        <span>Edit Content</span>
+                    </button>
+                    <button type="button" class="btn-action btn-delete" onclick="deleteAbout()" style="padding: 0.6rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        <span>Delete Content</span>
+                    </button>
+                </div>
+                
+                <form id="aboutForm" style="max-width: 900px;">
                     <div class="form-group">
-                        <label>About Title</label>
-                        <input type="text" id="aboutTitle" placeholder="About HerAura">
-                    </div>
-                    <div class="form-group">
-                        <label>About Subtitle</label>
-                        <input type="text" id="aboutSubtitle" placeholder="Where everyday elegance meets lasting beauty">
-                    </div>
-                    <div class="form-group">
-                        <label>About Description</label>
-                        <textarea id="aboutDescription" rows="6" placeholder="Enter your about section content..."></textarea>
+                        <label>About Section Content</label>
+                        <textarea id="aboutContent" rows="20" placeholder="Enter complete about section content with all formatting..." style="font-family: 'Inter', sans-serif; line-height: 1.6;"></textarea>
                     </div>
                     <button type="submit" class="btn-primary">Save About Section</button>
                 </form>
@@ -746,26 +757,58 @@
         // About Section Management
         function initializeAbout() {
             const saved = localStorage.getItem('herauraAbout');
-            const about = saved ? JSON.parse(saved) : {
-                title: 'About HerAura',
-                subtitle: 'Where everyday elegance meets lasting beauty',
-                description: 'At HerAura, we believe that jewelry is more than just an accessory...'
-            };
+            const defaultContent = `About HerAura
+Where everyday elegance meets lasting beauty
+
+Jwellery That Belongs in Your Daily Story
+
+At HerAura, we believe beautiful jwellery shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.
+
+We create affordable, stylish pieces designed for the modern woman who wants to feel confident and elegant every single day, without breaking the bank or worrying about maintenance.
+
+Beauty That Lasts, Prices That Don't Hurt
+
+Why choose between looking good and staying within budget? Our anti-tarnish technology ensures your jewelry maintains its shine through busy days, long weeks, and countless memories.
+
+No more jwellery that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jwellery that works as hard as you do.
+
+Thoughtfully Designed, Carefully Made
+
+Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jwellery should enhance your confidence, not limit your activities.
+
+From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jwellery that looks expensive without the expensive price tag.
+
+For Every Woman, Every Day
+
+HerAura is for women who appreciate quality without compromise. Who want jwellery that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.
+
+Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jwellery for your real life. Comfortable, elegant, and refreshingly affordable.`;
             
-            document.getElementById('aboutTitle').value = about.title;
-            document.getElementById('aboutSubtitle').value = about.subtitle;
-            document.getElementById('aboutDescription').value = about.description;
+            document.getElementById('aboutContent').value = saved || defaultContent;
+        }
+        
+        function editAbout() {
+            document.getElementById('aboutContent').focus();
+            document.getElementById('aboutContent').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function deleteAbout() {
+            if (confirm('Are you sure you want to delete the About section content? This will clear the textarea.')) {
+                document.getElementById('aboutContent').value = '';
+                localStorage.removeItem('herauraAbout');
+                alert('About section content cleared!');
+            }
         }
 
         document.getElementById('aboutForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const about = {
-                title: document.getElementById('aboutTitle').value,
-                subtitle: document.getElementById('aboutSubtitle').value,
-                description: document.getElementById('aboutDescription').value
-            };
-            localStorage.setItem('herauraAbout', JSON.stringify(about));
-            alert('About section updated successfully!');
+            const content = document.getElementById('aboutContent').value;
+            if (content.trim()) {
+                localStorage.setItem('herauraAbout', content);
+                alert('About section updated successfully! Changes will reflect on landing page.');
+            } else {
+                alert('Please enter some content before saving.');
+            }
         });
     </script>
 </body>

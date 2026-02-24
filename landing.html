@@ -1923,6 +1923,7 @@
         loadCategoryProducts();
         loadFeatureCards();
         loadContactInfo();
+        loadAboutSection();
     });
     
     // Update badges every 2 seconds to sync with other pages
@@ -2014,6 +2015,47 @@
                     <p>Send your queries directly to admin with images for quick resolution</p>
                 </div>
             `;
+        }
+    }
+    
+    // Load About Section from localStorage
+    function loadAboutSection() {
+        const content = localStorage.getItem('herauraAbout');
+        const defaultContent = `About HerAura
+Where everyday elegance meets lasting beauty
+
+Jwellery That Belongs in Your Daily Story
+
+At HerAura, we believe beautiful jwellery shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.
+
+We create affordable, stylish pieces designed for the modern woman who wants to feel confident and elegant every single day, without breaking the bank or worrying about maintenance.
+
+Beauty That Lasts, Prices That Don't Hurt
+
+Why choose between looking good and staying within budget? Our anti-tarnish technology ensures your jewelry maintains its shine through busy days, long weeks, and countless memories.
+
+No more jwellery that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jwellery that works as hard as you do.
+
+Thoughtfully Designed, Carefully Made
+
+Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jwellery should enhance your confidence, not limit your activities.
+
+From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jwellery that looks expensive without the expensive price tag.
+
+For Every Woman, Every Day
+
+HerAura is for women who appreciate quality without compromise. Who want jwellery that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.
+
+Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jwellery for your real life. Comfortable, elegant, and refreshingly affordable.`;
+        
+        const aboutContent = content || defaultContent;
+        const aboutSection = document.querySelector('#about .about-content');
+        
+        if (aboutSection) {
+            aboutSection.innerHTML = aboutContent
+                .split('\n')
+                .map(line => line.trim() === '' ? '<br>' : `<p>${line}</p>`)
+                .join('');
         }
     }
     
