@@ -387,33 +387,72 @@
             document.querySelector(`input[value="${method}"]`).checked = true;
         }
 
-        function placeOrder() {
+        async function placeOrder() {
             const form = document.getElementById('checkoutForm');
             const formData = new FormData(form);
-            
+
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
 
-            const orderData = {
-                customer: Object.fromEntries(formData),
-                items: cart,
-                total: cart.reduce((total, item) => total + (item.price * item.quantity), 0) + (cart.reduce((total, item) => total + (item.price * item.quantity), 0) > 2000 ? 0 : 99),
-                orderDate: new Date().toISOString()
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 2000 ? 0 : 99;
+            const total = subtotal + shipping;
+
+            const orderDateISO = new Date().toISOString();
+            const orderId = 'ORD' + Date.now();
+
+            const customer = Object.fromEntries(formData);
+            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+            const paymentStatus = (paymentMethod === 'cod') ? 'Pending' : 'Paid';
+
+            // Build payload that matches backend Order schema
+            const payload = {
+                orderId,
+                customerName: `${customer.firstName || ''} ${customer.lastName || ''}`.trim() || (customer.email || 'Guest'),
+                email: customer.email || '',
+                phone: customer.phone || '',
+                products: cart.map(i => ({ productId: i.id || null, name: i.name, quantity: i.quantity, price: i.price })),
+                totalAmount: total,
+                status: 'Pending',
+                paymentStatus,
+                paymentMethod,
+                shippingAddress: { street: customer.address || '', city: customer.city || '', state: customer.state || '', pincode: customer.pincode || '' },
+                orderDate: orderDateISO
             };
 
-            // Save order to localStorage (in real app, send to backend)
-            const orders = JSON.parse(localStorage.getItem('orders')) || [];
-            const orderId = 'ORD' + Date.now();
-            orders.push({ id: orderId, ...orderData });
-            localStorage.setItem('orders', JSON.stringify(orders));
+            // Try to POST to backend; fall back to localStorage if network/back-end unavailable
+            const apiBase = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+            try {
+                const headers = { 'Content-Type': 'application/json' };
+                const token = localStorage.getItem('adminToken') || localStorage.getItem('token') || null;
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+                const res = await fetch(`${apiBase}/api/orders`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload)
+                });
 
-            // Clear cart
-            localStorage.removeItem('cart');
+                if (!res.ok) throw new Error('Backend order save failed');
 
-            // Redirect to success page
-            window.location.href = `order-success.html?orderId=${orderId}`;
+                const saved = await res.json();
+                // On success, clear cart and redirect using backend orderId if available
+                localStorage.removeItem('cart');
+                const redirectId = saved.orderId || saved._id || orderId;
+                window.location.href = `order-success.html?orderId=${redirectId}`;
+                return;
+            } catch (err) {
+                console.warn('Order POST failed, saving locally:', err.message);
+                // Save order to localStorage as fallback
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                orders.push({ id: orderId, customer, items: cart, total, orderDate: orderDateISO, paymentStatus });
+                localStorage.setItem('orders', JSON.stringify(orders));
+
+                // Clear cart and redirect
+                localStorage.removeItem('cart');
+                window.location.href = `order-success.html?orderId=${orderId}`;
+            }
         }
 
         // Initialize

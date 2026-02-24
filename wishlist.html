@@ -706,13 +706,13 @@
                 <div class="wishlist-grid">
                     ${wishlist.map(item => `
                         <div class="wishlist-item" data-id="${item.id}">
-                            <button class="remove-icon" onclick="removeFromWishlist(${item.id})">×</button>
+                            <button class="remove-icon" onclick="removeFromWishlist(${JSON.stringify(item.id)})">×</button>
                             <img src="${item.image}" alt="${item.name}" class="product-image">
                             <div class="product-info">
                                 <h3 class="product-name">${item.name}</h3>
                                 <p class="product-price">₹${item.price}</p>
                                 <div class="product-actions">
-                                    <button class="add-to-cart" onclick="addToCart(${item.id})">Move to Cart</button>
+                                    <button class="add-to-cart" onclick="addToCart(${JSON.stringify(item.id)})">Move to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -745,7 +745,7 @@
                                 <h3 class="product-name">${item.name}</h3>
                                 <p class="product-price">₹${item.price}</p>
                                 <div class="product-actions">
-                                    <button class="add-to-cart" onclick="addToCart(${item.id})">Move to Cart</button>
+                                    <button class="add-to-cart" onclick="addToCart(${JSON.stringify(item.id)})">Move to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -755,11 +755,13 @@
         }
         
         function removeFromWishlist(productId) {
+            const pid = String(productId);
             let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            wishlist = wishlist.filter(item => item.id !== productId);
+            wishlist = wishlist.filter(item => String(item.id) !== pid);
             localStorage.setItem('wishlist', JSON.stringify(wishlist));
             loadWishlist();
             updateBadges();
+            alert('Removed from wishlist!');
         }
         
         function addToCart(productId) {

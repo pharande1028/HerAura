@@ -550,53 +550,21 @@
             background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%);
         }
         .hero-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            z-index: 2;
         }
         .hero-text {
-            text-align: left;
+            position: absolute;
+            bottom: 3rem;
+            left: 3rem;
             z-index: 3;
-            position: relative;
         }
         .hero-image-container {
-            position: relative;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 0;
-        }
-        .hero-image-container img {
-            width: 100%;
-            max-width: 650px;
-            height: 550px;
-            object-fit: cover;
-            border-radius: 0;
-            box-shadow: none;
-            transition: all 1s ease-in-out;
-            position: relative;
-            z-index: 2;
-            margin-right: 0;
-            mask: linear-gradient(135deg, 
-                rgba(0,0,0,1) 0%, 
-                rgba(0,0,0,0.95) 30%, 
-                rgba(0,0,0,0.8) 60%, 
-                rgba(0,0,0,0.3) 85%, 
-                rgba(0,0,0,0) 100%);
-            -webkit-mask: linear-gradient(135deg, 
-                rgba(0,0,0,1) 0%, 
-                rgba(0,0,0,0.95) 30%, 
-                rgba(0,0,0,0.8) 60%, 
-                rgba(0,0,0,0.3) 85%, 
-                rgba(0,0,0,0) 100%);
+            display: none;
         }
         .hero-slide {
             position: absolute;
@@ -604,28 +572,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
+            background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0;
             transition: opacity 1.5s ease-in-out;
-            filter: blur(8px);
         }
         .hero-slide.active {
-            opacity: 0.6;
-        }
-        .hero-slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(248,246,240,0.2) 0%, 
-                rgba(255,248,231,0.3) 30%,
-                rgba(212,165,116,0.1) 70%,
-                transparent 100%);
+            opacity: 1;
         }
         .hero-nav {
             position: absolute;
@@ -721,80 +675,47 @@
         section { padding: 3rem 0; margin: 0; }
         .section-title { 
             font-family: 'Playfair Display', serif; 
-            font-size: 3.5rem; 
+            font-size: 2.5rem; 
             text-align: center; 
-            color: #2c2c2c; 
-            margin-bottom: 1.5rem; 
-            position: relative;
-            background: linear-gradient(135deg, #8B4513 0%, #d4a574 50%, #8B4513 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 8px rgba(212,165,116,0.3);
+            color: #000; 
+            margin-bottom: 1rem; 
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         .section-title::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #d4a574, transparent);
-            border-radius: 2px;
-        }
-        .section-title::after {
-            content: '✨';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.2rem;
-            animation: sparkle 2s ease-in-out infinite;
-        }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+            display: none;
         }
         .section-subtitle { 
             text-align: center; 
             color: #666; 
-            font-size: 1.2rem; 
+            font-size: 1rem; 
             margin-bottom: 3rem; 
             font-weight: 300; 
-            font-style: italic;
-            position: relative;
-        }
-        .section-subtitle::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #d4a574, transparent);
         }
         
         /* Our Collection */
-        .collection { background: #fafafa; padding: 5rem 0 5rem 0; margin-top: 0; }
+        .collection { background: #fafafa; padding: 2rem 0 2rem 0; margin-top: 0; }
         .collection-grid { display: flex; flex-direction: column; gap: 3rem; margin-top: 3rem; }
-        .collection-item { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; margin: 0 1rem; }
+        .collection-item { position: relative; background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; margin: 0 1rem 3rem 1rem; }
         .collection-item:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(212,165,116,0.15); }
-        .collection-item .collection-image { order: 1; }
-        .collection-item .collection-content { order: 2; }
         
-        .collection-image { position: relative; overflow: hidden; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .collection-image img { width: 100%; height: 400px; object-fit: cover; transition: transform 0.5s ease; }
-        .collection-image:hover img { transform: scale(1.05); }
-        
-        .collection-content { padding: 1rem 0; }
-        .collection-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 600; color: #2c2c2c; margin-bottom: 1rem; }
-        .collection-description { font-size: 1.1rem; color: #666; line-height: 1.7; margin-bottom: 2rem; }
-        .collection-features { list-style: none; margin-bottom: 2.5rem; }
-        .collection-features li { font-size: 0.95rem; color: #555; margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
-        .collection-features li::before { content: '✨'; position: absolute; left: 0; color: #d4a574; }
-        
+        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .category-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 600; color: #2c2c2c; }
+        .category-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2.5rem; }
+        .category-product-card { position: relative; background: white; border-radius: 15px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 1px solid rgba(212,165,116,0.2); }
+        .category-product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-color: rgba(212,165,116,0.4); }
+        .category-product-image { width: 100%; height: 250px; object-fit: cover; }
+        .category-product-info { padding: 1.5rem; }
+        .category-product-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: #333; margin-bottom: 0.5rem; }
+        .category-product-price { font-size: 1.2rem; color: #d4a574; font-weight: 600; margin-bottom: 1rem; }
+        .category-product-actions { display: flex; gap: 0.5rem; }
+        .category-add-to-cart { flex: 1; padding: 0.8rem; background: #d4a574; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .category-add-to-cart:hover { background: #8B4513; }
+        .category-buy-now { flex: 1; padding: 0.8rem; background: #8B4513; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .category-buy-now:hover { background: #654321; }
+        .category-wishlist-heart { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: 2px solid #d4a574; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .category-wishlist-heart:hover { background: #d4a574; color: white; }
+        .category-wishlist-heart.active { background: #dc3545; border-color: #dc3545; color: white; }
         .shop-category-btn { 
             background: #d4a574;
             color: white; 
@@ -807,6 +728,9 @@
             border: none;
             cursor: pointer;
             display: inline-block;
+            min-width: 220px;
+            text-align: center;
+            white-space: nowrap;
         }
         .shop-category-btn:hover { 
             background: #8B4513;
@@ -816,11 +740,9 @@
         /* Features - Why Choose HerAura Horizontal Carousel */
         .features { 
             background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); 
-            padding: 6rem 0;
+            padding: 2rem 0 3rem 0;
             position: relative;
             min-height: 70vh;
-            display: flex;
-            align-items: center;
         }
         .features::before {
             content: '';
@@ -834,11 +756,18 @@
         .features-slideshow {
             position: relative;
             width: 100%;
-            height: 500px;
+            height: 600px;
             overflow: hidden;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            margin-top: 0;
+        }
+        .features-slideshow .section-title {
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 10;
         }
         .features-carousel {
             display: flex;
@@ -850,8 +779,8 @@
         }
         .feature-slide {
             position: absolute;
-            width: 350px;
-            height: 400px;
+            width: 400px;
+            height: 450px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -890,7 +819,7 @@
         }
         .feature-slide.center {
             opacity: 1;
-            transform: scale(1.1) translateX(0);
+            transform: scale(1) translateX(0);
             box-shadow: 0 25px 80px rgba(212,165,116,0.3);
             z-index: 3;
         }
@@ -985,7 +914,7 @@
         .about-content h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
-            color: #8B4513;
+            color: #000;
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
@@ -1251,8 +1180,6 @@
         
         <div class="hero-container">
             <div class="hero-text">
-                <h1>Anti-Tarnish Jwellery<br>for Everyday You</h1>
-                <p>Handcrafted minimal jwellery that stays beautiful, designed for your daily elegance</p>
                 <div class="hero-buttons">
                     <a href="shop.html" class="btn">SHOP COLLECTION</a>
                 </div>
@@ -1270,132 +1197,53 @@
             <h2 class="section-title">Our Exquisite Collection</h2>
             <p class="section-subtitle">Discover timeless elegance crafted for the modern woman</p>
             <div class="collection-grid">
-                <div class="collection-item">
-                    <div class="collection-image">
-                        <img src="our_collection_1 (2).webp" alt="HerAura Neckpiece Collection">
+                <div class="collection-item" data-category="Neckpieces">
+                    <div class="category-header">
+                        <div class="category-name">Neckpieces</div>
+                        <a href="shop.html?category=neckpieces" class="shop-category-btn">SHOP FOR NECKPIECES</a>
                     </div>
-                    <div class="collection-content">
-                        <h3 class="collection-title">Neckpieces</h3>
-                        <p class="collection-description">Make a statement with our curated neckpiece collection. Each piece is designed to be the perfect finishing touch to your ensemble, day or night.</p>
-                        <ul class="collection-features">
-                            <li>Multiple chain length options</li>
-                            <li>Elegant clasp mechanisms</li>
-                            <li>Sophisticated layering possibilities</li>
-                        </ul>
-                        <a href="shop.html" class="shop-category-btn">SHOP NECKPIECES</a>
-                    </div>
+                    <div class="category-products-grid" id="neckpieces-grid"></div>
                 </div>
                 
-                <div class="collection-item">
-                    <div class="collection-image">
-                        <img src="our_collection_2.webp" alt="HerAura Pendants Collection">
+                <div class="collection-item" data-category="Pendants">
+                    <div class="category-header">
+                        <div class="category-name">Pendants</div>
+                        <a href="shop.html?category=pendants" class="shop-category-btn">SHOP FOR PENDANTS</a>
                     </div>
-                    <div class="collection-content">
-                        <h3 class="collection-title">Pendants</h3>
-                        <p class="collection-description">Express your personality with our pendant collection. From minimalist charms to intricate designs, find the perfect piece that resonates with your inner elegance.</p>
-                        <ul class="collection-features">
-                            <li>Meaningful symbolic designs</li>
-                            <li>Premium chain compatibility</li>
-                            <li>Personalized engraving options</li>
-                        </ul>
-                        <a href="shop.html" class="shop-category-btn">SHOP PENDANTS</a>
-                    </div>
+                    <div class="category-products-grid" id="pendants-grid"></div>
                 </div>
                 
-                <div class="collection-item">
-                    <div class="collection-image">
-                        <img src="our_collection_3.webp" alt="HerAura Rings Collection">
+                <div class="collection-item" data-category="Rings">
+                    <div class="category-header">
+                        <div class="category-name">Rings</div>
+                        <a href="shop.html?category=rings" class="shop-category-btn">SHOP FOR RINGS</a>
                     </div>
-                    <div class="collection-content">
-                        <h3 class="collection-title">Rings</h3>
-                        <p class="collection-description">Elegant rings that speak volumes without saying a word. From delicate bands to statement pieces, each ring is crafted to complement your unique style and grace.</p>
-                        <ul class="collection-features">
-                            <li>Anti-tarnish coating for lasting brilliance</li>
-                            <li>Comfortable everyday wear design</li>
-                            <li>Versatile styles for any occasion</li>
-                        </ul>
-                        <a href="shop.html" class="shop-category-btn">SHOP RINGS</a>
-                    </div>
+                    <div class="category-products-grid" id="rings-grid"></div>
                 </div>
                 
-                <div class="collection-item">
-                    <div class="collection-image">
-                        <img src="our_collection_4.webp" alt="HerAura Earrings Collection">
+                <div class="collection-item" data-category="Earrings">
+                    <div class="category-header">
+                        <div class="category-name">Earrings</div>
+                        <a href="shop.html?category=earrings" class="shop-category-btn">SHOP FOR EARRINGS</a>
                     </div>
-                    <div class="collection-content">
-                        <h3 class="collection-title">Earrings</h3>
-                        <p class="collection-description">Frame your face with sophistication. Our earring collection features designs that enhance your natural beauty, from subtle studs to elegant drops.</p>
-                        <ul class="collection-features">
-                            <li>Lightweight for all-day comfort</li>
-                            <li>Hypoallergenic materials</li>
-                            <li>Classic to contemporary designs</li>
-                        </ul>
-                        <a href="shop.html" class="shop-category-btn">SHOP EARRINGS</a>
-                    </div>
+                    <div class="category-products-grid" id="earrings-grid"></div>
                 </div>
                 
-                <div class="collection-item">
-                    <div class="collection-image">
-                        <img src="our_collection_5.webp" alt="HerAura Bracelets Collection">
+                <div class="collection-item" data-category="Bracelets">
+                    <div class="category-header">
+                        <div class="category-name">Bracelets</div>
+                        <a href="shop.html?category=bracelets" class="shop-category-btn">SHOP FOR BRACELETS</a>
                     </div>
-                    <div class="collection-content">
-                        <h3 class="collection-title">Bracelets</h3>
-                        <p class="collection-description">Adorn your wrists with pieces that tell your story. Our bracelet collection combines modern aesthetics with timeless appeal for the discerning woman.</p>
-                        <ul class="collection-features">
-                            <li>Adjustable sizing for perfect fit</li>
-                            <li>Stackable designs for versatility</li>
-                            <li>Durable construction for daily wear</li>
-                        </ul>
-                        <a href="shop.html" class="shop-category-btn">SHOP BRACELETS</a>
-                    </div>
+                    <div class="category-products-grid" id="bracelets-grid"></div>
                 </div>
             </div>
         </div>
     </section>
     
     <section class="features">
-        <div class="container">
+        <div class="features-slideshow">
             <h2 class="section-title">Why Choose HerAura</h2>
-            <p class="section-subtitle">Discover what makes our jewelry exceptional</p>
-            <div class="features-slideshow">
-                <div class="features-carousel">
-                <div class="feature-slide center">
-                    <div class="slide-number">01</div>
-                    <h3>Anti-Tarnish Technology</h3>
-                    <p>Our revolutionary coating ensures your jwellery maintains its lustrous shine for years. No more worrying about discoloration or frequent polishing - just enduring beauty that lasts.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                <div class="feature-slide right">
-                    <div class="slide-number">02</div>
-                    <h3>Everyday Elegance</h3>
-                    <p>Thoughtfully designed for daily wear without compromising sophistication. Each piece seamlessly transitions from morning meetings to evening gatherings with effortless grace.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                <div class="feature-slide hidden-right">
-                    <div class="slide-number">03</div>
-                    <h3>Handcrafted Excellence</h3>
-                    <p>Every piece is meticulously crafted by skilled artisans who understand the art of jwellery making. Attention to detail and quality craftsmanship in every curve and finish.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                <div class="feature-slide hidden-right">
-                    <div class="slide-number">04</div>
-                    <h3>Timeless Design Philosophy</h3>
-                    <p>Our minimal, classic designs transcend fleeting trends. Invest in pieces that remain stylish and relevant, becoming treasured additions to your jwellery collection for decades.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                <div class="feature-slide hidden-right">
-                    <div class="slide-number">05</div>
-                    <h3>Premium Materials</h3>
-                    <p>We source only the finest materials and use advanced techniques to ensure durability. Hypoallergenic metals and carefully selected components for sensitive skin compatibility.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                <div class="feature-slide hidden-left">
-                    <div class="slide-number">06</div>
-                    <h3>Confidence & Comfort</h3>
-                    <p>Lightweight designs that feel as good as they look. Our jwellery enhances your natural confidence while providing all-day comfort for your active lifestyle.</p>
-                    <div class="decorative-line"></div>
-                </div>
-                </div>
+            <div class="features-carousel" id="featuresCarousel">
             </div>
         </div>
     </section>
@@ -1458,6 +1306,16 @@
                         +91 9356948452
                     </a>
                     <p>Direct customer support line for emergencies and immediate assistance</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Direct Support</h3>
+                    <a href="#" onclick="openSupportModal(); return false;">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+                        </svg>
+                        Submit Query
+                    </a>
+                    <p>Send your queries directly to admin with images for quick resolution</p>
                 </div>
             </div>
         </div>
@@ -1574,6 +1432,25 @@
         </div>
     </div>
 
+    <!-- Support Request Modal -->
+    <div id="supportModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close" onclick="closeSupportModal()">&times;</span>
+            <h2 style="color: #8B4513; margin-bottom: 1.5rem;">Submit Support Request</h2>
+            <form id="supportForm">
+                <div class="form-group">
+                    <label>Your Query *</label>
+                    <textarea id="supportQuery" rows="5" placeholder="Describe your issue or question..." required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-family: 'Inter', sans-serif; font-size: 1rem;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Attach Image (Optional)</label>
+                    <input type="file" id="supportImage" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <button type="submit" class="login-btn">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
 </body>
 <script>
     // Loading Animation - Only for first-time visitors in session
@@ -1669,28 +1546,60 @@
     });
 
     // Hero Slider - Load from localStorage or use defaults
-    let imageNames = ['hero-image.webp', 'hero-image2.webp', 'hero-image3.webp', 'hero-image4.webp', 'hero-image5.webp'];
+    // Banner images - load from admin controls
+    let imageNames = [];
+    let currentSlide = 0;
     
-    // Load banner images from admin controls`r`n    const savedBanners = localStorage.getItem('herauraBanners');`r`n    console.log('Checking localStorage for banners:', savedBanners);`r`n    if(savedBanners) {`r`n        const banners = JSON.parse(savedBanners);`r`n        console.log('Found banners in localStorage:', banners);`r`n        if(banners.length > 0) {`r`n            imageNames = banners.map(b => b.image);`r`n            console.log('Using banner images:', imageNames);`r`n        }`r`n    } else {`r`n        console.log('No banners in localStorage, using defaults');`r`n    }
+    // FORCE CLEAR old banners on first load
+    if (!sessionStorage.getItem('bannersCleared')) {
+        localStorage.removeItem('herauraBanners');
+        sessionStorage.setItem('bannersCleared', 'true');
+        console.log('Cleared old banner data');
+    }
+    
+    // Load banner images from admin controls
+    const savedBanners = localStorage.getItem('herauraBanners');
+    console.log('Checking localStorage for banners:', savedBanners);
+    if(savedBanners) {
+        const banners = JSON.parse(savedBanners);
+        console.log('Found banners in localStorage:', banners);
+        if(banners.length > 0) {
+            imageNames = banners.map(b => b.image);
+            console.log('Using banner images:', imageNames);
+        }
+    }
+    
+    // Create banner slides
+    const heroSlidesContainer = document.getElementById('heroSlides');
+    const heroDotsContainer = document.getElementById('heroDots');
+    
+    if(imageNames.length > 0) {
+        imageNames.forEach((img, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide' + (index === 0 ? ' active' : '');
+            slide.style.backgroundImage = `url(${img})`;
+            heroSlidesContainer.appendChild(slide);
+            
+            const dot = document.createElement('div');
+            dot.className = 'hero-dot' + (index === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(index);
+            heroDotsContainer.appendChild(dot);
+        });
+    }
+    
     let slideInterval;
 
     function showSlide(index) {
-        const heroImage = document.getElementById('heroImage');
         const dots = document.querySelectorAll('.hero-dot');
         const slides = document.querySelectorAll('.hero-slide');
         
-        // Update dots
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
         
-        // Update background slides
         slides.forEach((slide, i) => {
             slide.classList.toggle('active', i === index);
         });
-        
-        // Change front image
-        heroImage.src = imageNames[index];
     }
 
     function goToSlide(index) {
@@ -1701,26 +1610,84 @@
     }
 
     function changeSlide(direction) {
+        if (imageNames.length === 0) return;
         currentSlide += direction;
         if (currentSlide >= imageNames.length) currentSlide = 0;
         if (currentSlide < 0) currentSlide = imageNames.length - 1;
         showSlide(currentSlide);
         clearInterval(slideInterval);
-        slideInterval = setInterval(nextSlide, 5000);
+        if (imageNames.length > 1) {
+            slideInterval = setInterval(nextSlide, 4000);
+        }
     }
 
     function nextSlide() {
+        if (imageNames.length === 0) return;
         currentSlide = (currentSlide + 1) % imageNames.length;
         showSlide(currentSlide);
     }
 
-    // Start with 15 seconds for first slide, then 5 seconds for others
-    setTimeout(() => {
-        slideInterval = setInterval(nextSlide, 5000);
-        nextSlide();
-    }, 15000);
+    // Start slideshow if there are multiple images
+    if (imageNames.length > 1) {
+        setTimeout(() => {
+            slideInterval = setInterval(nextSlide, 4000);
+        }, 4000);
+    }
 
     // Features horizontal carousel
+    function loadFeatureCards() {
+        const saved = localStorage.getItem('herauraFeatures');
+        const featureCards = saved ? JSON.parse(saved) : [];
+        const carousel = document.getElementById('featuresCarousel');
+        
+        if (featureCards.length === 0) {
+            carousel.innerHTML = '<div style="color: #666; text-align: center; padding: 3rem;">No feature cards available</div>';
+            return;
+        }
+        
+        carousel.innerHTML = featureCards.map((card, index) => `
+            <div class="feature-slide">
+                <div class="slide-number">${String(index + 1).padStart(2, '0')}</div>
+                <h3>${card.title}</h3>
+                <p>${card.description}</p>
+                <div class="decorative-line"></div>
+            </div>
+        `).join('');
+        
+        setTimeout(() => {
+            const features = document.querySelectorAll('.feature-slide');
+            if (features.length > 0) {
+                initFeatureCarousel(features);
+            }
+        }, 100);
+    }
+    
+    function initFeatureCarousel(features) {
+        let currentFeature = 0;
+        const totalFeatures = features.length;
+        
+        function updateCarousel() {
+            features.forEach((slide, index) => {
+                slide.className = 'feature-slide';
+                const position = (index - currentFeature + totalFeatures) % totalFeatures;
+                
+                if (position === 0) slide.classList.add('center');
+                else if (position === 1) slide.classList.add('right');
+                else if (position === totalFeatures - 1) slide.classList.add('left');
+                else if (position < totalFeatures / 2) slide.classList.add('hidden-right');
+                else slide.classList.add('hidden-left');
+            });
+        }
+        
+        function nextFeature() {
+            currentFeature = (currentFeature + 1) % totalFeatures;
+            updateCarousel();
+        }
+        
+        updateCarousel();
+        setInterval(nextFeature, 4000);
+    }
+    
     let currentFeature = 0;
     const features = document.querySelectorAll('.feature-slide');
     let featureInterval;
@@ -1818,6 +1785,11 @@
         alert('Logged out successfully!');
     }
 
+    const loginIcon = document.getElementById('loginIcon');
+    const loginModal = document.getElementById('loginModal');
+    const closeModal = document.querySelector('.close');
+    const loginForm = document.getElementById('loginForm');
+
     if (loginIcon && loginModal) {
         loginIcon.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1859,8 +1831,99 @@
         });
     }
     
-    // Initialize badges on page load
-    document.addEventListener('DOMContentLoaded', updateBadges);
+    // Load category products
+    function loadCategoryProducts() {
+        const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        console.log('Loading products:', products);
+        const categories = ['Neckpieces', 'Pendants', 'Rings', 'Earrings', 'Bracelets'];
+        
+        categories.forEach(category => {
+            const gridId = category.toLowerCase() + '-grid';
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            const categoryProducts = products.filter(p => p.category === category);
+            console.log(`${category} products:`, categoryProducts);
+            
+            if (categoryProducts.length === 0) {
+                grid.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">No products available</p>';
+                return;
+            }
+            
+            grid.innerHTML = categoryProducts.map(product => {
+                const isInWishlist = wishlist.some(item => String(item.id) === String(product.id));
+                const productImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+                return `
+                    <div class="category-product-card" data-product-id="${product.id}">
+                        <button class="category-wishlist-heart ${isInWishlist ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
+                            <svg width="20" height="20" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+                        <img src="${productImage}" alt="${product.name}" class="category-product-image" onclick="window.location.href='shop.html'">
+                        <div class="category-product-info">
+                            <div class="category-product-name">${product.name}</div>
+                            <div class="category-product-price">₹${product.discountPrice || product.price}</div>
+                            <div class="category-product-actions">
+                                <button class="category-buy-now" onclick="event.stopPropagation(); buyNow('${product.id}')">Buy Now</button>
+                                <button class="category-add-to-cart" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
+    }
+    
+    function toggleWishlist(productId) {
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+        const product = products.find(p => String(p.id) === String(productId));
+        const existingIndex = wishlist.findIndex(item => String(item.id) === String(productId));
+        
+        if (existingIndex > -1) {
+            wishlist.splice(existingIndex, 1);
+            alert('Removed from wishlist!');
+        } else {
+            if (product) wishlist.push(product);
+            alert('Added to wishlist!');
+        }
+        
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        updateBadges();
+        loadCategoryProducts();
+    }
+    
+    function addToCart(productId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
+        const product = products.find(p => String(p.id) === String(productId));
+        const existingItem = cart.find(item => String(item.id) === String(productId));
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateBadges();
+        alert('Product added to cart!');
+    }
+    
+    function buyNow(productId) {
+        addToCart(productId);
+        window.location.href = `product-detail.html?id=${productId}`;
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateBadges();
+        loadCategoryProducts();
+        loadFeatureCards();
+        loadContactInfo();
+    });
     
     // Update badges every 2 seconds to sync with other pages
     setInterval(updateBadges, 2000);
@@ -1882,6 +1945,118 @@
         window.open('admin-dashboard.html', '_blank');
     };
     document.body.appendChild(adminBtn);
+    
+    // Support Modal Functions
+    function openSupportModal() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn');
+        if (!isLoggedIn) {
+            alert('Please login to submit a support request');
+            return;
+        }
+        document.getElementById('supportModal').style.display = 'block';
+    }
+    
+    function closeSupportModal() {
+        document.getElementById('supportModal').style.display = 'none';
+        document.getElementById('supportForm').reset();
+    }
+    
+    // Load Contact Info from localStorage
+    function loadContactInfo() {
+        const saved = localStorage.getItem('herauraContact');
+        const contact = saved ? JSON.parse(saved) : {
+            instagram: '@heraura_jewel',
+            email: 'heraura26@gmail.com',
+            phone: '+91 9356948452'
+        };
+        
+        const contactGrid = document.querySelector('.contact-grid');
+        if (contactGrid) {
+            contactGrid.innerHTML = `
+                <div class="contact-card">
+                    <h3>Follow Us</h3>
+                    <a href="https://instagram.com/${contact.instagram.replace('@', '')}" target="_blank">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        ${contact.instagram}
+                    </a>
+                    <p>Visit our Instagram to see our latest collections and follow for daily jwellery inspiration</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Email Us</h3>
+                    <a href="mailto:${contact.email}">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        ${contact.email}
+                    </a>
+                    <p>Connect with our team for any issues, inquiries, or customer support</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Call Us</h3>
+                    <a href="tel:${contact.phone}">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        ${contact.phone}
+                    </a>
+                    <p>Direct customer support line for emergencies and immediate assistance</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Direct Support</h3>
+                    <a href="#" onclick="openSupportModal(); return false;">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+                        </svg>
+                        Submit Query
+                    </a>
+                    <p>Send your queries directly to admin with images for quick resolution</p>
+                </div>
+            `;
+        }
+    }
+    
+    document.getElementById('supportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+        const query = document.getElementById('supportQuery').value;
+        const imageFile = document.getElementById('supportImage').files[0];
+        
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                saveSupportRequest(customerData, query, event.target.result);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            saveSupportRequest(customerData, query, null);
+        }
+    });
+    
+    function saveSupportRequest(customerData, query, image) {
+        const requests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+        const newRequest = {
+            id: Date.now(),
+            customerName: customerData.name || 'Unknown',
+            customerEmail: customerData.email || 'Unknown',
+            query: query,
+            image: image,
+            status: 'pending',
+            date: new Date().toISOString()
+        };
+        requests.push(newRequest);
+        localStorage.setItem('supportRequests', JSON.stringify(requests));
+        closeSupportModal();
+        alert('Support request submitted successfully! Our team will contact you soon.');
+    }
+    
+    window.onclick = function(event) {
+        const supportModal = document.getElementById('supportModal');
+        if (event.target === supportModal) {
+            closeSupportModal();
+        }
+    };
 </script>
 </html>
 

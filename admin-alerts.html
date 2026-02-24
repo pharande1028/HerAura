@@ -373,30 +373,14 @@
                             <th>Customer</th>
                             <th>Email</th>
                             <th>Query</th>
+                            <th>Image</th>
                             <th>Time</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="supportRequestsTable">
                         <tr>
-                            <td>#TKT-501</td>
-                            <td>Meera Reddy</td>
-                            <td>meera@email.com</td>
-                            <td>Product size inquiry for ring</td>
-                            <td>1 hour ago</td>
-                            <td>
-                                <button class="action-btn btn-reply" onclick="replyToCustomer('TKT-501')">Reply via Email</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#TKT-502</td>
-                            <td>Arjun Kumar</td>
-                            <td>arjun@email.com</td>
-                            <td>Delivery status update request</td>
-                            <td>3 hours ago</td>
-                            <td>
-                                <button class="action-btn btn-reply" onclick="replyToCustomer('TKT-502')">Reply via Email</button>
-                            </td>
+                            <td colspan="7" class="empty-state">Loading support requests...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -895,6 +879,80 @@
                 window.location.href = 'admin-login.html';
             }
         }
+        
+        // Load Support Requests from localStorage
+        function loadSupportRequests() {
+            const requests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+            const tbody = document.getElementById('supportRequestsTable');
+            
+            if (requests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No support requests yet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = requests.map((req, index) => {
+                const timeAgo = getTimeAgo(new Date(req.date));
+                const imageCell = req.image ? `<a href="#" onclick="viewImage('${req.id}'); return false;" style="color: #d4a574;">View Image</a>` : 'No image';
+                return `
+                    <tr>
+                        <td>#TKT-${req.id}</td>
+                        <td>${req.customerName}</td>
+                        <td>${req.customerEmail}</td>
+                        <td>${req.query}</td>
+                        <td>${imageCell}</td>
+                        <td>${timeAgo}</td>
+                        <td>
+                            <button class="action-btn btn-reply" onclick="replyToSupport('${req.id}')">Reply</button>
+                            <button class="action-btn btn-complete" onclick="markResolved('${req.id}')">Mark Resolved</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            const days = Math.floor(hours / 24);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+        
+        function viewImage(requestId) {
+            const requests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+            const request = requests.find(r => r.id == requestId);
+            if (request && request.image) {
+                const win = window.open('', '_blank');
+                win.document.write(`<img src="${request.image}" style="max-width:100%; height:auto;">`);
+            }
+        }
+        
+        function replyToSupport(requestId) {
+            const requests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+            const request = requests.find(r => r.id == requestId);
+            if (request) {
+                const subject = encodeURIComponent(`Re: Support Request #TKT-${request.id}`);
+                const body = encodeURIComponent(`Dear ${request.customerName},\n\nThank you for contacting HerAura support.\n\nRegarding your query: "${request.query}"\n\n[Your response here]\n\nBest regards,\nHerAura Support Team`);
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${request.customerEmail}&su=${subject}&body=${body}`, '_blank');
+            }
+        }
+        
+        function markResolved(requestId) {
+            if (confirm('Mark this support request as resolved?')) {
+                let requests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+                requests = requests.filter(r => r.id != requestId);
+                localStorage.setItem('supportRequests', JSON.stringify(requests));
+                loadSupportRequests();
+                alert('Support request marked as resolved');
+            }
+        }
+        
+        // Load support requests on page load and refresh every 5 seconds
+        loadSupportRequests();
+        setInterval(loadSupportRequests, 5000);
     </script>
 </body>
 </html>

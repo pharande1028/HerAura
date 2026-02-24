@@ -202,6 +202,7 @@
         <div class="admin-info">
             <span class="admin-name" id="adminName">Admin</span>
             <button class="logout-btn" onclick="logout()">Logout</button>
+            <button id="syncBtn" class="logout-btn" style="background:#10b981;margin-left:6px;" onclick="handleSyncClick()">Sync local orders</button>
         </div>
     </div>
 
@@ -246,6 +247,14 @@
                     <div class="stat-value" id="totalProductsValue">--</div>
                     <div class="stat-change neutral">
                         <span>Inventory worth</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Total Orders</span>
+                    <div class="stat-value" id="totalOrders">--</div>
+                    <div class="stat-change neutral">
+                        <span>All orders received</span>
                     </div>
                 </div>
 
@@ -382,11 +391,92 @@
         }
 
         // Fetch dashboard data from localStorage
-        function fetchDashboardData() {
+        async function fetchDashboardData() {
             try {
-                // Get products from localStorage (stored as 'shopProducts')
+                // Try to load backend stats and merge local orders if present
+                let stats = null;
+                const apiBase = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+                try {
+                    const res = await fetch(`${apiBase}/api/dashboard/stats`);
+                    if (res.ok) stats = await res.json();
+                } catch (e) {
+                    console.warn('Backend stats fetch failed, will use localStorage only.');
+                }
+
                 const products = JSON.parse(localStorage.getItem('shopProducts') || '[]');
-                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+                // If backend stats are available, use them as base; otherwise compute from local orders
+                const formatCurrency = (amount) => '₹' + (Number(amount) || 0).toLocaleString('en-IN');
+
+                let totalProducts = 0;
+                let totalProductsValue = 0;
+                let totalRevenue = 0;
+                let recentOrders = 0;
+                let pendingOrders = 0;
+                let todaysSales = 0, weeklySales = 0, monthlySales = 0, quarterlySales = 0, yearlySales = 0;
+
+                if (stats) {
+                    // Use backend-provided values
+                    totalProducts = stats.totalProducts || 0;
+                    totalProductsValue = stats.totalProductsValue || 0;
+                    totalRevenue = stats.totalRevenue || 0;
+                    recentOrders = stats.recentOrders || 0;
+                    pendingOrders = stats.pendingOrders || 0;
+                    todaysSales = stats.todaysSales || 0;
+                    weeklySales = stats.weeklySales || 0;
+                    monthlySales = stats.monthlySales || 0;
+                    quarterlySales = stats.quarterlySales || 0;
+                    yearlySales = stats.yearlySales || 0;
+                } else {
+                    // compute totals from localStorage orders (fallback)
+                    const orders = localOrders;
+                    const activeProducts = products.filter(p => p.status === 'Active');
+                    totalProducts = activeProducts.length;
+                    totalProductsValue = activeProducts.reduce((sum, product) => {
+                        const price = product.discountPrice || product.price;
+                        const stock = product.stock || 0;
+                        return sum + (price * stock);
+                    }, 0);
+
+                    const paidOrders = orders.filter(o => o.paymentStatus === 'Paid');
+                    totalRevenue = paidOrders.reduce((sum, order) => sum + (order.totalAmount || order.total || 0), 0);
+                    const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    recentOrders = orders.filter(o => new Date(o.orderDate) >= thirtyDaysAgo).length;
+                    pendingOrders = orders.filter(o => ['Pending', 'Processing'].includes(o.status)).length;
+
+                    const today = new Date(); today.setHours(0,0,0,0);
+                    todaysSales = orders.filter(o => new Date(o.orderDate) >= today && o.paymentStatus === 'Paid').reduce((s,o) => s + (o.totalAmount || o.total || 0),0);
+                    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+                    weeklySales = orders.filter(o => new Date(o.orderDate) >= weekAgo && o.paymentStatus === 'Paid').reduce((s,o)=>s+(o.totalAmount||o.total||0),0);
+                    const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
+                    monthlySales = orders.filter(o => new Date(o.orderDate) >= monthAgo && o.paymentStatus === 'Paid').reduce((s,o)=>s+(o.totalAmount||o.total||0),0);
+                    const quarterAgo = new Date(); quarterAgo.setMonth(quarterAgo.getMonth() - 3);
+                    quarterlySales = orders.filter(o => new Date(o.orderDate) >= quarterAgo && o.paymentStatus === 'Paid').reduce((s,o)=>s+(o.totalAmount||o.total||0),0);
+                    const yearAgo = new Date(); yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+                    yearlySales = orders.filter(o => new Date(o.orderDate) >= yearAgo && o.paymentStatus === 'Paid').reduce((s,o)=>s+(o.totalAmount||o.total||0),0);
+                }
+
+                // Merge any local orders (avoid double-counting if backend already includes them — we assume backend includes orders saved server-side)
+                if (localOrders.length && stats) {
+                    localOrders.forEach(o => {
+                        const paid = (o.paymentStatus === 'Paid') || !o.paymentStatus;
+                        const amount = Number(o.totalAmount || o.total || 0) || 0;
+                        const date = o.orderDate ? new Date(o.orderDate) : new Date();
+                        if (paid) {
+                            totalRevenue += amount;
+                            if (date >= (new Date().setHours(0,0,0,0))) todaysSales += amount;
+                            const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+                            if (date >= weekAgo) weeklySales += amount;
+                            const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
+                            if (date >= monthAgo) monthlySales += amount;
+                            const quarterAgo = new Date(); quarterAgo.setMonth(quarterAgo.getMonth() - 3);
+                            if (date >= quarterAgo) quarterlySales += amount;
+                            const yearAgo = new Date(); yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+                            if (date >= yearAgo) yearlySales += amount;
+                        }
+                    });
+                }
 
                 console.log('Products loaded:', products.length);
                 console.log('Orders loaded:', orders.length);
@@ -474,8 +564,10 @@
                 document.getElementById('returns').textContent = '0';
                 document.getElementById('refunds').textContent = '0';
 
-                // Update Support (placeholder)
-                document.getElementById('supportRequests').textContent = '0';
+                // Update Support Requests (real-time from localStorage)
+                const supportRequests = JSON.parse(localStorage.getItem('supportRequests') || '[]');
+                const pendingSupportRequests = supportRequests.filter(r => r.status === 'pending').length;
+                document.getElementById('supportRequests').textContent = pendingSupportRequests;
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
                 document.querySelectorAll('.stat-value').forEach(el => {
@@ -495,7 +587,72 @@
         updateDateTime();
         setInterval(updateDateTime, 60000);
         fetchDashboardData();
-        setInterval(fetchDashboardData, 30000);
+        setInterval(fetchDashboardData, 5000); // Update every 5 seconds for real-time
+
+        // Sync local orders from localStorage to backend (admin only)
+        async function handleSyncClick() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            if (!orders.length) return alert('No local orders to sync.');
+
+            const proceed = confirm(`Sync ${orders.length} local order(s) to backend? You will be prompted to login to backend if not already.`);
+            if (!proceed) return;
+
+            const apiBase = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+
+            // Try existing token
+            let token = localStorage.getItem('adminToken');
+
+            async function doSync(tkn) {
+                try {
+                    const res = await fetch(`${apiBase}/api/orders/sync`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${tkn}` },
+                        body: JSON.stringify(orders)
+                    });
+                    if (res.status === 401 || res.status === 403) throw new Error('Unauthorized');
+                    if (!res.ok) {
+                        const text = await res.text();
+                        throw new Error(text || 'Sync failed');
+                    }
+                    const json = await res.json();
+                    localStorage.removeItem('orders');
+                    alert(`Synced ${json.createdCount || orders.length} orders successfully.`);
+                    fetchDashboardData();
+                } catch (err) {
+                    throw err;
+                }
+            }
+
+            if (token) {
+                try { await doSync(token); return; } catch (e) { console.warn('Token sync failed:', e.message); }
+            }
+
+            // Prompt for backend admin credentials to obtain token
+            const email = prompt('Enter backend admin email (backend user):');
+            if (!email) return alert('Sync cancelled');
+            const password = prompt('Enter backend admin password:');
+            if (!password) return alert('Sync cancelled');
+
+            try {
+                const loginRes = await fetch(`${apiBase}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                if (!loginRes.ok) {
+                    const txt = await loginRes.text();
+                    return alert('Login failed: ' + txt);
+                }
+                const data = await loginRes.json();
+                token = data.token;
+                if (!token) return alert('No token received from backend login');
+                localStorage.setItem('adminToken', token);
+                await doSync(token);
+            } catch (err) {
+                console.error('Sync error:', err);
+                alert('Sync failed: ' + (err.message || err));
+            }
+        }
     </script>
 </body>
 </html>

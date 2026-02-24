@@ -751,10 +751,10 @@
             }
             
             grid.innerHTML = filteredProducts.map(product => {
-                const isInWishlist = wishlist.some(item => item.id === product.id);
+                const isInWishlist = wishlist.some(item => String(item.id) === String(product.id));
                 return `
-                    <div class="product-card" onclick="viewProduct('${product.id}')" style="cursor: pointer;">
-                        <button class="wishlist-heart ${isInWishlist ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist(${product.id})">
+                    <div class="product-card" data-product-id="${product.id}" style="cursor: pointer;">
+                        <button class="wishlist-heart ${isInWishlist ? 'active' : ''}" data-product-id="${product.id}" onclick="toggleWishlistHandler(event, ${JSON.stringify(product.id)})">
                             <svg width="20" height="20" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                             </svg>
@@ -813,19 +813,24 @@
             updateCartCount();
             alert('Product added to cart!');
         }
+        function toggleWishlistHandler(e, productId) {
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            toggleWishlist(productId);
+        }
 
         function toggleWishlist(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingIndex = wishlist.findIndex(item => item.id === productId);
-            
+            const pid = String(productId);
+            const product = products.find(p => String(p.id) === pid);
+            const existingIndex = wishlist.findIndex(item => String(item.id) === pid);
+
             if (existingIndex > -1) {
                 wishlist.splice(existingIndex, 1);
                 alert('Removed from wishlist!');
             } else {
-                wishlist.push(product);
+                if (product) wishlist.push(product);
                 alert('Added to wishlist!');
             }
-            
+
             localStorage.setItem('wishlist', JSON.stringify(wishlist));
             updateWishlistCount();
             loadProducts(); // Reload to update heart icons
@@ -1055,10 +1060,10 @@
             }
             
             grid.innerHTML = results.map(product => {
-                const isInWishlist = wishlist.some(item => item.id === product.id);
+                const isInWishlist = wishlist.some(item => String(item.id) === String(product.id));
                 return `
-                    <div class="product-card" onclick="viewProduct('${product.id}')" style="cursor: pointer;">
-                        <button class="wishlist-heart ${isInWishlist ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
+                    <div class="product-card" data-product-id="${product.id}" style="cursor: pointer;">
+                        <button class="wishlist-heart ${isInWishlist ? 'active' : ''}" data-product-id="${product.id}" onclick="toggleWishlistHandler(event, ${JSON.stringify(product.id)})">
                             <svg width="20" height="20" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                             </svg>
@@ -1085,6 +1090,16 @@
             updateWishlistCount();
             updateProfileIcon();
             
+            // Check for category parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            if (category) {
+                // Wait for products to load, then filter
+                setTimeout(() => {
+                    filterProducts(category);
+                }, 500);
+            }
+            
             // Start typewriter effect
             setTimeout(typewriterEffect, 1000);
             
@@ -1105,6 +1120,30 @@
                     setTimeout(typewriterEffect, 500);
                 }
             });
+
+            // Delegated click handling for product grid: hearts and card navigation
+            const productsGrid = document.getElementById('productsGrid');
+            if (productsGrid) {
+                productsGrid.addEventListener('click', function(e) {
+                    const heart = e.target.closest('.wishlist-heart');
+                    if (heart) {
+                        e.stopPropagation();
+                        const pid = heart.dataset.productId || heart.getAttribute('data-product-id');
+                        if (pid) toggleWishlist(pid);
+                        return;
+                    }
+
+                    // Allow buttons (add-to-cart / buy-now) to handle their own stopPropagation
+                    const btn = e.target.closest('button');
+                    if (btn && (btn.classList.contains('add-to-cart') || btn.classList.contains('buy-now'))) return;
+
+                    const card = e.target.closest('.product-card');
+                    if (card) {
+                        const pid = card.dataset.productId || card.getAttribute('data-product-id');
+                        if (pid) viewProduct(pid);
+                    }
+                });
+            }
         });
         
         // Refresh products every 10 seconds to show new additions

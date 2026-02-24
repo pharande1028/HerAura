@@ -262,44 +262,187 @@
         let currentPeriod = 'month';
         let charts = {};
 
-        // Demo data for different time periods
+        // Placeholder structure for different time periods. We'll populate these from backend `/dashboard/stats`.
         const demoData = {
-            week: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                salesGrowth: [12000, 15000, 13000, 18000, 16000, 22000, 25000],
-                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [45, 38, 32, 28, 25] },
-                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [120, 95, 85, 70, 55] },
-                costRevenue: { cost: [8000, 10000, 9000, 12000, 11000, 15000, 17000], revenue: [12000, 15000, 13000, 18000, 16000, 22000, 25000] }
-            },
-            month: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                salesGrowth: [85000, 92000, 88000, 105000],
-                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [180, 152, 128, 112, 98] },
-                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [480, 380, 340, 280, 220] },
-                costRevenue: { cost: [55000, 60000, 58000, 68000], revenue: [85000, 92000, 88000, 105000] }
-            },
-            quarter: {
-                labels: ['Month 1', 'Month 2', 'Month 3'],
-                salesGrowth: [320000, 350000, 380000],
-                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [540, 456, 384, 336, 294] },
-                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [1440, 1140, 1020, 840, 660] },
-                costRevenue: { cost: [210000, 230000, 250000], revenue: [320000, 350000, 380000] }
-            },
-            year: {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                salesGrowth: [1050000, 1150000, 1250000, 1350000],
-                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [2160, 1824, 1536, 1344, 1176] },
-                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [5760, 4560, 4080, 3360, 2640] },
-                costRevenue: { cost: [690000, 750000, 820000, 880000], revenue: [1050000, 1150000, 1250000, 1350000] }
-            },
-            years: {
-                labels: ['2020', '2021', '2022', '2023', '2024'],
-                salesGrowth: [3200000, 3800000, 4500000, 5200000, 4800000],
-                topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [8640, 7296, 6144, 5376, 4704] },
-                topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [23040, 18240, 16320, 13440, 10560] },
-                costRevenue: { cost: [2100000, 2500000, 2950000, 3400000, 3150000], revenue: [3200000, 3800000, 4500000, 5200000, 4800000] }
-            }
+            week: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], salesGrowth: [0,0,0,0,0,0,0], topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [0,0,0,0,0] }, topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [0,0,0,0,0] }, costRevenue: { cost: [0,0,0,0,0,0,0], revenue: [0,0,0,0,0,0,0] } },
+            month: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], salesGrowth: [0,0,0,0], topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [0,0,0,0,0] }, topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [0,0,0,0,0] }, costRevenue: { cost: [0,0,0,0], revenue: [0,0,0,0] } },
+            quarter: { labels: ['Month 1', 'Month 2', 'Month 3'], salesGrowth: [0,0,0], topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [0,0,0,0,0] }, topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [0,0,0,0,0] }, costRevenue: { cost: [0,0,0], revenue: [0,0,0] } },
+            year: { labels: ['Q1', 'Q2', 'Q3', 'Q4'], salesGrowth: [0,0,0,0], topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [0,0,0,0,0] }, topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [0,0,0,0,0] }, costRevenue: { cost: [0,0,0,0], revenue: [0,0,0,0] } },
+            years: { labels: ['2020', '2021', '2022', '2023', '2024'], salesGrowth: [0,0,0,0,0], topProducts: { labels: ['Gold Pendant', 'Silver Ring', 'Diamond Earring', 'Pearl Necklace', 'Ruby Bracelet'], data: [0,0,0,0,0] }, topCategories: { labels: ['Pendants', 'Rings', 'Earrings', 'Necklaces', 'Bracelets'], data: [0,0,0,0,0] }, costRevenue: { cost: [0,0,0,0,0], revenue: [0,0,0,0,0] } }
         };
+
+        let noSales = true; // flag used to display helpful messaging when there are no sales yet
+
+        async function fetchStats() {
+            try {
+                const apiBase = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+                const res = await fetch(`${apiBase}/api/dashboard/stats`);
+                if (!res.ok) throw new Error('Failed to load dashboard stats');
+                const stats = await res.json();
+
+                // Determine if there's any sales data
+                // Merge any localStorage orders (saved when backend unavailable) so dashboard shows them too
+                const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+                if (localOrders.length > 0) {
+                    // Normalize and sum local orders into stats
+                    const now = new Date();
+                    const startOfToday = new Date(); startOfToday.setHours(0,0,0,0);
+                    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+                    const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
+                    const quarterAgo = new Date(); quarterAgo.setMonth(quarterAgo.getMonth() - 3);
+                    const yearAgo = new Date(); yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+
+                    let localTotal = 0, localToday = 0, localWeek = 0, localMonth = 0, localQuarter = 0, localYear = 0;
+                    const productCounts = new Map();
+                    const categoryCounts = new Map();
+
+                    localOrders.forEach(o => {
+                        const paid = (o.paymentStatus === 'Paid') || !o.paymentStatus;
+                        const amount = Number(o.totalAmount || o.total || 0) || 0;
+                        const date = o.orderDate ? new Date(o.orderDate) : new Date();
+                        if (paid) {
+                            localTotal += amount;
+                            if (date >= startOfToday) localToday += amount;
+                            if (date >= weekAgo) localWeek += amount;
+                            if (date >= monthAgo) localMonth += amount;
+                            if (date >= quarterAgo) localQuarter += amount;
+                            if (date >= yearAgo) localYear += amount;
+                        }
+
+                        // Top products/categories aggregation
+                        const items = o.items || o.products || [];
+                        items.forEach(it => {
+                            const name = it.name || it.productName || 'Unknown';
+                            const qty = Number(it.quantity || it.qty || 1) || 1;
+                            const cat = it.category || it.categoryName || 'Uncategorized';
+                            productCounts.set(name, (productCounts.get(name) || 0) + qty);
+                            categoryCounts.set(cat, (categoryCounts.get(cat) || 0) + qty);
+                        });
+                    });
+
+                    // Add local sums into backend stats
+                    stats.totalRevenue = (stats.totalRevenue || 0) + localTotal;
+                    stats.todaysSales = (stats.todaysSales || 0) + localToday;
+                    stats.weeklySales = (stats.weeklySales || 0) + localWeek;
+                    stats.monthlySales = (stats.monthlySales || 0) + localMonth;
+                    stats.quarterlySales = (stats.quarterlySales || 0) + localQuarter;
+                    stats.yearlySales = (stats.yearlySales || 0) + localYear;
+
+                    // Prepare top products and categories arrays (top 5)
+                    const topProductsArr = Array.from(productCounts.entries()).sort((a,b) => b[1]-a[1]).slice(0,5);
+                    const topCategoriesArr = Array.from(categoryCounts.entries()).sort((a,b) => b[1]-a[1]).slice(0,5);
+                    if (topProductsArr.length) {
+                        demoData[currentPeriod].topProducts.labels = topProductsArr.map(p => p[0]);
+                        demoData[currentPeriod].topProducts.data = topProductsArr.map(p => p[1]);
+                    }
+                    if (topCategoriesArr.length) {
+                        demoData[currentPeriod].topCategories.labels = topCategoriesArr.map(p => p[0]);
+                        demoData[currentPeriod].topCategories.data = topCategoriesArr.map(p => p[1]);
+                    }
+                }
+
+                const anySales = (stats.totalRevenue || 0) > 0 || (stats.todaysSales || 0) > 0 || (stats.monthlySales || 0) > 0 || (stats.weeklySales || 0) > 0 || (stats.yearlySales || 0) > 0;
+                noSales = !anySales;
+
+                // Populate sales series by distributing totals across labels for visualization when series data is not available from backend
+                // Prefer "all orders" totals when available so dashboard reflects every incoming order immediately
+                demoData.week.salesGrowth = distributeValue(stats.weeklySalesAll || stats.weeklySales || 0, demoData.week.labels.length);
+                demoData.month.salesGrowth = distributeValue(stats.monthlySalesAll || stats.monthlySales || 0, demoData.month.labels.length);
+                demoData.quarter.salesGrowth = distributeValue(stats.quarterlySalesAll || stats.quarterlySales || 0, demoData.quarter.labels.length);
+                demoData.year.salesGrowth = distributeValue(stats.yearlySalesAll || stats.yearlySales || 0, demoData.year.labels.length);
+                demoData.years.salesGrowth = distributeValue(stats.totalRevenueAll || stats.totalRevenue || 0, demoData.years.labels.length);
+
+                // For cost vs revenue, if we only have totals, show cost as zero (until more data exists)
+                demoData.week.costRevenue.cost = demoData.week.costRevenue.cost.map(() => 0);
+                demoData.week.costRevenue.revenue = distributeValue(stats.weeklySales || 0, demoData.week.labels.length);
+                demoData.month.costRevenue.cost = demoData.month.costRevenue.cost.map(() => 0);
+                demoData.month.costRevenue.revenue = distributeValue(stats.monthlySales || 0, demoData.month.labels.length);
+                demoData.quarter.costRevenue.cost = demoData.quarter.costRevenue.cost.map(() => 0);
+                demoData.quarter.costRevenue.revenue = distributeValue(stats.quarterlySales || 0, demoData.quarter.labels.length);
+                demoData.year.costRevenue.cost = demoData.year.costRevenue.cost.map(() => 0);
+                demoData.year.costRevenue.revenue = distributeValue(stats.yearlySales || 0, demoData.year.labels.length);
+                demoData.years.costRevenue.cost = demoData.years.costRevenue.cost.map(() => 0);
+                demoData.years.costRevenue.revenue = distributeValue(stats.totalRevenue || 0, demoData.years.labels.length);
+
+                // Top products/categories remain placeholders until backend provides ranked lists
+                // Optionally, you could create a `/dashboard/top` endpoint returning top products/categories.
+
+                // Try to fetch precise time-series for sales when backend provides it
+                try {
+                    const apiBase = (window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
+                    const { start, end } = periodToRange(currentPeriod);
+                    const tsRes = await fetch(`${apiBase}/api/dashboard/timeseries?start=${start}&end=${end}&period=daily`);
+                    if (tsRes.ok) {
+                        const ts = await tsRes.json();
+                        if (ts && ts.labels && ts.all) {
+                            demoData[currentPeriod].labels = ts.labels;
+                            demoData[currentPeriod].salesGrowth = ts.all;
+                            demoData[currentPeriod].costRevenue.revenue = ts.all;
+                        }
+                    }
+                } catch (e) {
+                    // ignore timeseries errors and fall back to distributed totals
+                    console.warn('Timeseries fetch failed:', e.message);
+                }
+
+                initCharts();
+                renderNoSalesMessage();
+            } catch (err) {
+                console.error('Error fetching dashboard stats:', err);
+                // fallback to existing demoData (all zeros)
+                renderNoSalesMessage();
+                initCharts();
+            }
+        }
+
+        function distributeValue(total, parts) {
+            total = Number(total) || 0;
+            if (parts <= 0) return [];
+            if (total === 0) return Array(parts).fill(0);
+            // distribute equally and ensure integers
+            const base = Math.floor(total / parts);
+            const arr = Array(parts).fill(base);
+            let remainder = total - base * parts;
+            let i = 0;
+            while (remainder > 0) {
+                arr[i % parts] += 1;
+                remainder--;
+                i++;
+            }
+            return arr;
+        }
+
+        function periodToRange(period) {
+            const end = new Date();
+            let start = new Date();
+            switch(period) {
+                case 'week': start.setDate(end.getDate() - 6); break;
+                case 'month': start.setDate(end.getDate() - 27); break;
+                case 'quarter': start.setDate(end.getDate() - 89); break;
+                case 'year': start.setDate(end.getDate() - 364); break;
+                default: start.setDate(end.getDate() - 29); break;
+            }
+            const s = start.toISOString().slice(0,10);
+            const e = end.toISOString().slice(0,10);
+            return { start: s, end: e };
+        }
+
+        function renderNoSalesMessage() {
+            const header = document.querySelector('.section-header');
+            let existing = document.getElementById('noSalesNotice');
+            if (noSales) {
+                if (!existing) {
+                    const notice = document.createElement('div');
+                    notice.id = 'noSalesNotice';
+                    notice.style.marginLeft = '1rem';
+                    notice.style.color = '#9ca3af';
+                    notice.textContent = 'No sales recorded yet — charts will update when orders start coming in.';
+                    header.appendChild(notice);
+                }
+            } else if (existing) {
+                existing.remove();
+            }
+        }
 
         function initCharts() {
             const data = demoData[currentPeriod];
@@ -402,7 +545,8 @@
             currentPeriod = period;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            initCharts();
+            // Re-fetch stats to build series appropriate for the selected period
+            fetchStats();
         }
 
         function logout() {
@@ -413,7 +557,8 @@
             }
         }
 
-        initCharts();
+        // Load data from backend and initialize charts
+        fetchStats();
     </script>
 </body>
 </html>

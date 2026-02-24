@@ -185,9 +185,9 @@
         .btn-edit:hover { background: #e0a800; }
         
         .btn-delete {
-            background: #d4a574;
+            background: #dc3545;
         }
-        .btn-delete:hover { background: #8B4513; }
+        .btn-delete:hover { background: #c82333; }
         
         .btn-add {
             background: #d4a574;
@@ -378,12 +378,13 @@
 
             <!-- Section 1: Change Banner Images -->
             <div class="section-header" onclick="toggleSection('bannerImages')">
-                <h2>Section 1: Change Banner Images</h2>
+                <h2>Section 1: Edit Hero Section</h2>
                 <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div id="bannerImages" class="section-content">
+                <h3 style="margin-bottom: 1.5rem; color: #8B4513;">Banner Images</h3>
                 <div style="margin-bottom: 2rem;">
                     <button class="btn-add" onclick="openAddModal()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -397,33 +398,30 @@
                 <div class="banner-grid" id="bannerGrid"></div>
             </div>
 
-            <!-- Section 2: Edit Our Collection -->
-            <div class="section-header" onclick="toggleSection('ourCollection')">
-                <h2>Section 2: Edit Our Collection</h2>
-                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </div>
-            <div id="ourCollection" class="section-content" style="display: none;">
-                <p style="color: #666; margin-bottom: 1.5rem;">Manage the 5 collection categories displayed on your landing page</p>
-                <div class="banner-grid" id="collectionGrid"></div>
-            </div>
-
             <!-- Section 3: Edit Why Choose HerAura -->
             <div class="section-header" onclick="toggleSection('whyChoose')">
-                <h2>Section 3: Edit Why Choose HerAura</h2>
+                <h2>Section 2: Edit Why Choose HerAura</h2>
                 <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div id="whyChoose" class="section-content" style="display: none;">
-                <p style="color: #666; margin-bottom: 1.5rem;">Edit the 6 feature cards in Why Choose HerAura section</p>
+                <p style="color: #666; margin-bottom: 1.5rem;">Manage feature cards in Why Choose HerAura section</p>
+                <div style="margin-bottom: 2rem;">
+                    <button class="btn-add" onclick="openFeatureModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Add New Feature Card</span>
+                    </button>
+                </div>
                 <div class="banner-grid" id="featuresGrid"></div>
             </div>
 
-            <!-- Section 4: Get In Touch -->
+            <!-- Section 3: Get In Touch -->
             <div class="section-header" onclick="toggleSection('getInTouch')">
-                <h2>Section 4: Get In Touch</h2>
+                <h2>Section 3: Get In Touch</h2>
                 <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -446,9 +444,9 @@
                 </form>
             </div>
 
-            <!-- Section 5: Change About Section -->
+            <!-- Section 4: Change About Section -->
             <div class="section-header" onclick="toggleSection('aboutSection')">
-                <h2>Section 5: Change About Section</h2>
+                <h2>Section 4: Change About Section</h2>
                 <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -500,6 +498,27 @@
         </div>
     </div>
 
+    <!-- Feature Card Modal -->
+    <div id="featureModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Feature Card</h3>
+                <button class="modal-close" onclick="closeFeatureModal()">&times;</button>
+            </div>
+            <form id="featureForm">
+                <div class="form-group">
+                    <label>Card Title *</label>
+                    <input type="text" id="featureTitle" placeholder="Enter card title" required style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 8px;">
+                </div>
+                <div class="form-group">
+                    <label>Card Description *</label>
+                    <textarea id="featureDescription" rows="4" placeholder="Enter card description" required style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 8px; font-family: 'Inter', sans-serif;"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Feature Card</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         function logout() {
             if(confirm('Are you sure you want to logout?')) {
@@ -526,20 +545,9 @@
         let currentImageData = null;
 
         function initializeBanners() {
-            const saved = localStorage.getItem('herauraBanners');
-            if(saved) {
-                bannerImages = JSON.parse(saved);
-            } else {
-                // Initialize with actual landing page images
-                bannerImages = [
-                    { id: 1, image: 'hero-image.webp', active: true },
-                    { id: 2, image: 'hero-image2.webp', active: true },
-                    { id: 3, image: 'hero-image3.webp', active: true },
-                    { id: 4, image: 'hero-image4.webp', active: true },
-                    { id: 5, image: 'hero-image5.webp', active: true }
-                ];
-                saveBanners();
-            }
+            // Clear existing banners and start fresh
+            bannerImages = [];
+            saveBanners();
             renderBanners();
         }
 
@@ -549,6 +557,10 @@
 
         function renderBanners() {
             const grid = document.getElementById('bannerGrid');
+            if (bannerImages.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No banner images yet. Click "Add New Banner Image" to get started.</div>';
+                return;
+            }
             grid.innerHTML = bannerImages.map((banner, index) => `
                 <div class="banner-card">
                     ${banner.active ? '<span class="status-badge">Active</span>' : ''}
@@ -556,7 +568,6 @@
                     <div class="banner-info">
                         <div class="banner-label">Banner Image ${index + 1}</div>
                         <div class="banner-actions">
-                            <button class="btn-action btn-edit" onclick="editBanner(${index})">Edit</button>
                             <button class="btn-action btn-delete" onclick="deleteBanner(${index})">Delete</button>
                         </div>
                     </div>
@@ -570,16 +581,6 @@
             document.getElementById('modalTitle').textContent = 'Add Banner Image';
             document.getElementById('bannerForm').reset();
             document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('bannerModal').classList.add('show');
-        }
-
-        function editBanner(index) {
-            editingIndex = index;
-            const banner = bannerImages[index];
-            document.getElementById('modalTitle').textContent = 'Edit Banner Image';
-            document.getElementById('imagePreview').src = banner.image;
-            document.getElementById('imagePreview').style.display = 'block';
-            currentImageData = banner.image;
             document.getElementById('bannerModal').classList.add('show');
         }
 
@@ -621,20 +622,14 @@
                 return;
             }
 
-            if(editingIndex >= 0) {
-                bannerImages[editingIndex].image = currentImageData;
-                console.log('Banner updated:', bannerImages[editingIndex]);
-                alert('Banner updated successfully! Refresh landing.html to see changes.');
-            } else {
-                const newBanner = {
-                    id: bannerImages.length > 0 ? Math.max(...bannerImages.map(b => b.id)) + 1 : 1,
-                    image: currentImageData,
-                    active: true
-                };
-                bannerImages.push(newBanner);
-                console.log('Banner added:', newBanner);
-                alert('Banner added successfully! Refresh landing.html to see changes.');
-            }
+            const newBanner = {
+                id: bannerImages.length > 0 ? Math.max(...bannerImages.map(b => b.id)) + 1 : 1,
+                image: currentImageData,
+                active: true
+            };
+            bannerImages.push(newBanner);
+            console.log('Banner added:', newBanner);
+            alert('Banner added successfully! Refresh landing.html to see changes.');
 
             saveBanners();
             console.log('Saved to localStorage:', localStorage.getItem('herauraBanners'));
@@ -651,78 +646,85 @@
 
         window.onload = function() {
             initializeBanners();
-            initializeCollection();
             initializeFeatures();
             initializeContact();
             initializeAbout();
         };
 
-        // Collection Management
-        function initializeCollection() {
-            const saved = localStorage.getItem('herauraCollection');
-            let collections = saved ? JSON.parse(saved) : [
-                {id: 1, name: 'Rings', image: 'our_collection_1 (2).webp'},
-                {id: 2, name: 'Necklaces', image: 'our_collection_2.webp'},
-                {id: 3, name: 'Earrings', image: 'our_collection_3.webp'},
-                {id: 4, name: 'Bracelets', image: 'our_collection_4.webp'},
-                {id: 5, name: 'Anklets', image: 'our_collection_5.webp'}
-            ];
-            
-            const grid = document.getElementById('collectionGrid');
-            grid.innerHTML = collections.map((item, index) => `
-                <div class="banner-card">
-                    <img src="${item.image}" alt="${item.name}" class="banner-image" onerror="this.src='https://via.placeholder.com/300x200?text=${item.name}'">
-                    <div class="banner-info">
-                        <div class="banner-label">${item.name}</div>
-                        <div class="banner-actions">
-                            <button class="btn-action btn-edit" onclick="editCollection(${index})">Edit</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function editCollection(index) {
-            alert('Collection edit feature - Would open modal to change image and name');
-        }
-
         // Features Management
+        let featureCards = [];
+
         function initializeFeatures() {
             const saved = localStorage.getItem('herauraFeatures');
-            let features = saved ? JSON.parse(saved) : [
-                {id: 1, title: 'Anti-Tarnish Technology', description: 'Our jewelry maintains its shine and luster for years'},
-                {id: 2, title: 'Premium Quality', description: 'Crafted with the finest materials and attention to detail'},
-                {id: 3, title: 'Skin Safe', description: 'Hypoallergenic and safe for sensitive skin'},
-                {id: 4, title: 'Waterproof', description: 'Wear it anywhere, anytime without worry'},
-                {id: 5, title: 'Lifetime Warranty', description: 'We stand behind our products with lifetime support'},
-                {id: 6, title: 'Free Shipping', description: 'Complimentary shipping on all orders'}
-            ];
-            
+            featureCards = saved ? JSON.parse(saved) : [];
+            renderFeatures();
+        }
+
+        function renderFeatures() {
             const grid = document.getElementById('featuresGrid');
-            grid.innerHTML = features.map((item, index) => `
+            if (featureCards.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No feature cards yet. Click "Add New Feature Card" to get started.</div>';
+                return;
+            }
+            grid.innerHTML = featureCards.map((item, index) => `
                 <div class="banner-card">
                     <div class="banner-info" style="padding: 1.5rem;">
-                        <div class="banner-label" style="font-size: 1.1rem; margin-bottom: 0.5rem;">${item.title}</div>
+                        <div style="position: absolute; top: 1rem; left: 1rem; background: #d4a574; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">${String(index + 1).padStart(2, '0')}</div>
+                        <div class="banner-label" style="font-size: 1.1rem; margin-bottom: 0.5rem; margin-top: 2rem;">${item.title}</div>
                         <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">${item.description}</p>
                         <div class="banner-actions">
-                            <button class="btn-action btn-edit" onclick="editFeature(${index})">Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteFeature(${index})">Delete</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function editFeature(index) {
-            alert('Feature edit - Would open modal to edit title and description');
+        function openFeatureModal() {
+            document.getElementById('featureForm').reset();
+            document.getElementById('featureModal').classList.add('show');
         }
+
+        function closeFeatureModal() {
+            document.getElementById('featureModal').classList.remove('show');
+        }
+
+        function deleteFeature(index) {
+            if(confirm('Are you sure you want to delete this feature card?')) {
+                featureCards.splice(index, 1);
+                localStorage.setItem('herauraFeatures', JSON.stringify(featureCards));
+                renderFeatures();
+                alert('Feature card deleted successfully!');
+            }
+        }
+
+        document.getElementById('featureForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newFeature = {
+                title: document.getElementById('featureTitle').value,
+                description: document.getElementById('featureDescription').value
+            };
+            featureCards.push(newFeature);
+            localStorage.setItem('herauraFeatures', JSON.stringify(featureCards));
+            renderFeatures();
+            closeFeatureModal();
+            alert('Feature card added successfully!');
+        });
+
+        window.onclick = function(event) {
+            const featureModal = document.getElementById('featureModal');
+            if(event.target === featureModal) {
+                closeFeatureModal();
+            }
+        };
 
         // Contact Management
         function initializeContact() {
             const saved = localStorage.getItem('herauraContact');
             const contact = saved ? JSON.parse(saved) : {
-                instagram: '@heraura_official',
-                email: 'contact@heraura.com',
-                phone: '+91 9876543210'
+                instagram: '@heraura_jewel',
+                email: 'heraura26@gmail.com',
+                phone: '+91 9356948452'
             };
             
             document.getElementById('instagram').value = contact.instagram;
@@ -738,7 +740,7 @@
                 phone: document.getElementById('phone').value
             };
             localStorage.setItem('herauraContact', JSON.stringify(contact));
-            alert('Contact information updated successfully!');
+            alert('Contact information updated successfully! Changes will reflect on landing page.');
         });
 
         // About Section Management
