@@ -17,17 +17,7 @@
         
         /* Loading Screen */
         .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 50%, #d4a574 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 1s ease;
+            display: none;
         }
         
         .loading-screen.fade-out {
@@ -238,11 +228,6 @@
 
         
         .main-content {
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-        
-        .main-content.show {
             opacity: 1;
         }
 
@@ -332,11 +317,6 @@
             top: 0.5rem;
             left: 2rem;
             z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        .signature-logo.show {
             opacity: 1;
         }
         
@@ -907,7 +887,7 @@
         .about-story, .about-promise, .about-craftsmanship, .about-vision {
             margin-bottom: 3rem;
             padding: 2rem;
-            background: rgba(255,255,255,0.7);
+            background: white;
             border-radius: 15px;
             box-shadow: 0 8px 30px rgba(212,165,116,0.1);
         }
@@ -1144,9 +1124,8 @@
                 </svg>
                 <span class="nav-label" id="profileLabel">Profile</span>
                 <div class="profile-dropdown">
-                    <div id="authButtons" style="display: flex; border-bottom: 1px solid rgba(212, 165, 116, 0.3);">
-                        <div style="flex: 1; padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; border-right: 1px solid rgba(212, 165, 116, 0.3); transition: all 0.3s ease;" onclick="window.location.href='customer-auth.html'" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">Login</div>
-                        <div style="flex: 1; padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="window.location.href='customer-auth.html'" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">Sign Up</div>
+                    <div id="authButtons" style="border-bottom: 1px solid rgba(212, 165, 116, 0.3); padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="openAuthModal()" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">
+                        Sign In
                     </div>
                     <div class="profile-logout" id="logoutButton" style="display: none;">
                         <div class="profile-dropdown-item" onclick="logout()" style="color: #dc3545; font-weight: 600;">Logout</div>
@@ -1323,9 +1302,9 @@
 
     <section id="about" class="about">
         <div class="container">
+            <h2 class="section-title">About HerAura</h2>
+            <p class="section-subtitle">Where everyday elegance meets lasting beauty</p>
             <div class="about-content">
-                <h2 class="section-title">About HerAura</h2>
-                <p class="section-subtitle">Where everyday elegance meets lasting beauty</p>
                 
                 <div class="about-story">
                     <h3>Jwellery That Belongs in Your Daily Story</h3>
@@ -1404,31 +1383,34 @@
     </footer>
     </div> <!-- End Main Content -->
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Sign In to HerAura</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <h2 id="authTitle">Sign In to HerAura</h2>
+            <form id="authForm">
+                <div class="form-group" id="emailStep">
+                    <label for="authEmail">Email or Mobile:</label>
+                    <input type="text" id="authEmail" required>
+                    <button type="button" class="btn login-btn" onclick="checkAccount()">Continue</button>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="form-group" id="passwordStep" style="display:none;">
+                    <label for="authPassword">Password:</label>
+                    <input type="password" id="authPassword">
+                    <button type="submit" class="btn login-btn">Sign In</button>
                 </div>
-                <div class="form-group">
-                    <label for="userType">Login as:</label>
-                    <select id="userType" name="userType" required>
-                        <option value="">Select Role</option>
-                        <option value="customer">Customer</option>
-                        <option value="seller">Seller</option>
-                    </select>
+                <div id="signupStep" style="display:none;">
+                    <div class="form-group">
+                        <label for="authName">Full Name:</label>
+                        <input type="text" id="authName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="authSignupPassword">Password:</label>
+                        <input type="password" id="authSignupPassword" required>
+                    </div>
+                    <button type="button" class="btn login-btn" onclick="signupAccount()">Create Account</button>
                 </div>
-                <button type="submit" class="btn login-btn">Sign In</button>
             </form>
-            <p class="signup-link">Don't have an account? <a href="#" id="signupLink">Sign up here</a></p>
         </div>
     </div>
 
@@ -1453,96 +1435,16 @@
 
 </body>
 <script>
-    // Loading Animation - Only for first-time visitors in session
+    // Loading Animation - Disabled
     window.addEventListener('load', function() {
-        // Check if animation has been shown in this session
-        const animationShown = sessionStorage.getItem('heraura_animation_shown');
-        
-        if (animationShown) {
-            // Skip animation if already shown in this session
-            const loadingScreen = document.getElementById('loadingScreen');
-            const mainContent = document.getElementById('mainContent');
-            const signatureLogo = document.querySelector('.signature-logo');
-            
-            loadingScreen.style.display = 'none';
-            mainContent.classList.add('show');
-            signatureLogo.classList.add('show');
-            window.scrollTo(0, 0);
-            return;
-        }
-        
-        // Mark animation as shown for this session
-        sessionStorage.setItem('heraura_animation_shown', 'true');
-        
         const loadingScreen = document.getElementById('loadingScreen');
-        const loadingLogo = document.getElementById('loadingLogo');
-        const loadingBrandName = document.querySelector('.loading-brand-name');
-        const loadingTagline = document.querySelector('.loading-tagline');
-        const welcomeSection = document.querySelector('.welcome-section');
         const mainContent = document.getElementById('mainContent');
         const signatureLogo = document.querySelector('.signature-logo');
         
-        // Step 1: Logo appears normally (1 second)
-        setTimeout(() => {
-            // Step 2: Add elegant glow effect (5 seconds for reading)
-            loadingBrandName.classList.add('animate');
-            loadingTagline.classList.add('animate');
-            welcomeSection.classList.add('animate');
-            
-            setTimeout(() => {
-                // Step 3: Remove glow animations smoothly
-                loadingBrandName.classList.remove('animate');
-                loadingTagline.classList.remove('animate');
-                welcomeSection.classList.remove('animate');
-                
-                // Step 4: Start seamless transition
-                const transitionLogo = loadingLogo.cloneNode(true);
-                transitionLogo.className = 'logo-transition';
-                
-                // Position at current logo location
-                const logoRect = loadingLogo.getBoundingClientRect();
-                transitionLogo.style.position = 'fixed';
-                transitionLogo.style.top = (logoRect.top + logoRect.height/2) + 'px';
-                transitionLogo.style.left = (logoRect.left + logoRect.width/2) + 'px';
-                transitionLogo.style.transform = 'translate(-50%, -50%)';
-                transitionLogo.style.zIndex = '8888';
-                document.body.appendChild(transitionLogo);
-                
-                // Fade welcome section first
-                document.querySelector('.loading-right').style.transition = 'opacity 0.8s ease';
-                document.querySelector('.loading-right').style.opacity = '0';
-                
-                setTimeout(() => {
-                    // Show main content
-                    mainContent.classList.add('show');
-                    
-                    // Move logo to final position
-                    const finalLogoRect = signatureLogo.getBoundingClientRect();
-                    transitionLogo.style.top = (finalLogoRect.top + finalLogoRect.height/2) + 'px';
-                    transitionLogo.style.left = (finalLogoRect.left + finalLogoRect.width/2) + 'px';
-                    transitionLogo.style.transform = 'translate(-50%, -50%) scale(0.6)';
-                    
-                    // Hide loading screen after logo starts moving
-                    setTimeout(() => {
-                        loadingScreen.classList.add('fade-out');
-                    }, 200);
-                    
-                    // Show final logo and cleanup
-                    setTimeout(() => {
-                        transitionLogo.style.opacity = '0';
-                        signatureLogo.classList.add('show');
-                        
-                        // Ensure page stays at top
-                        window.scrollTo(0, 0);
-
-                        setTimeout(() => {
-                            transitionLogo.remove();
-                            loadingScreen.remove();
-                        }, 500);
-                    }, 1200);
-                }, 300);
-            }, 5000); // 5 seconds glow for reading
-        }, 1000); // 1 second normal display
+        if (loadingScreen) loadingScreen.style.display = 'none';
+        if (mainContent) mainContent.style.opacity = '1';
+        if (signatureLogo) signatureLogo.style.opacity = '1';
+        window.scrollTo(0, 0);
     });
 
     // Hero Slider - Load from localStorage or use defaults
@@ -1785,51 +1687,92 @@
         alert('Logged out successfully!');
     }
 
-    const loginIcon = document.getElementById('loginIcon');
-    const loginModal = document.getElementById('loginModal');
-    const closeModal = document.querySelector('.close');
-    const loginForm = document.getElementById('loginForm');
-
-    if (loginIcon && loginModal) {
-        loginIcon.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
+    // Auth Modal Functions
+    function openAuthModal() {
+        document.getElementById('authModal').style.display = 'block';
+        document.getElementById('emailStep').style.display = 'block';
+        document.getElementById('passwordStep').style.display = 'none';
+        document.getElementById('signupStep').style.display = 'none';
+        document.getElementById('authTitle').textContent = 'Sign In to HerAura';
     }
-
-    if (closeModal && loginModal) {
-        closeModal.addEventListener('click', function() {
-            loginModal.style.display = 'none';
-        });
+    
+    function closeAuthModal() {
+        document.getElementById('authModal').style.display = 'none';
+        document.getElementById('authForm').reset();
     }
-
-    window.addEventListener('click', function(event) {
-        if (event.target === loginModal) {
-            loginModal.style.display = 'none';
+    
+    function checkAccount() {
+        const email = document.getElementById('authEmail').value.trim();
+        if (!email) {
+            alert('Please enter email or mobile');
+            return;
         }
-    });
+        
+        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+        const exists = customers.find(c => c.email === email || c.mobile === email);
+        
+        if (exists) {
+            document.getElementById('emailStep').style.display = 'none';
+            document.getElementById('passwordStep').style.display = 'block';
+            document.getElementById('authTitle').textContent = 'Welcome Back!';
+        } else {
+            document.getElementById('emailStep').style.display = 'none';
+            document.getElementById('signupStep').style.display = 'block';
+            document.getElementById('authTitle').textContent = 'Create Your Account';
+        }
+    }
+    
+    function signupAccount() {
+        const email = document.getElementById('authEmail').value.trim();
+        const name = document.getElementById('authName').value.trim();
+        const password = document.getElementById('authSignupPassword').value;
+        
+        if (!name || !password) {
+            alert('Please fill all fields');
+            return;
+        }
+        
+        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+        customers.push({ email, name, password, mobile: email });
+        localStorage.setItem('customers', JSON.stringify(customers));
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('customerData', JSON.stringify({ email, name }));
+        
+        closeAuthModal();
+        updateBadges();
+        alert('Account created successfully!');
+    }
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+    const loginIcon = document.getElementById('loginIcon');
+    const authModal = document.getElementById('authModal');
+    const authForm = document.getElementById('authForm');
+
+    if (authForm) {
+        authForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const userType = document.getElementById('userType').value;
-
-            if (!email || !password || !userType) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Simple demo login
-            if (userType === 'seller') {
-                alert('Redirecting to seller portal...');
-                window.location.href = 'seller-login.html';
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            
+            const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+            const customer = customers.find(c => (c.email === email || c.mobile === email) && c.password === password);
+            
+            if (customer) {
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('customerData', JSON.stringify(customer));
+                closeAuthModal();
+                updateBadges();
+                alert('Login successful!');
             } else {
-                alert('Login successful! (Demo mode) - UserType: ' + userType);
-                loginModal.style.display = 'none';
+                alert('Invalid password');
             }
         });
     }
+
+    window.onclick = function(event) {
+        if (event.target === authModal) {
+            closeAuthModal();
+        }
+    };
     
     // Load category products
     function loadCategoryProducts() {
@@ -2021,41 +1964,18 @@
     // Load About Section from localStorage
     function loadAboutSection() {
         const content = localStorage.getItem('herauraAbout');
-        const defaultContent = `About HerAura
-Where everyday elegance meets lasting beauty
-
-Jwellery That Belongs in Your Daily Story
-
-At HerAura, we believe beautiful jwellery shouldn't be saved for special occasions. It should be part of your everyday — from morning coffee runs to evening dinner dates, from work presentations to weekend adventures.
-
-We create affordable, stylish pieces designed for the modern woman who wants to feel confident and elegant every single day, without breaking the bank or worrying about maintenance.
-
-Beauty That Lasts, Prices That Don't Hurt
-
-Why choose between looking good and staying within budget? Our anti-tarnish technology ensures your jewelry maintains its shine through busy days, long weeks, and countless memories.
-
-No more jwellery that turns green after a week. No more pieces that look dull after a month. Just beautiful, reliable jwellery that works as hard as you do.
-
-Thoughtfully Designed, Carefully Made
-
-Every HerAura piece is designed with real life in mind. We focus on comfort, durability, and timeless style — because great jwellery should enhance your confidence, not limit your activities.
-
-From delicate everyday pieces to statement accessories, each design balances elegance with practicality. Because you deserve jwellery that looks expensive without the expensive price tag.
-
-For Every Woman, Every Day
-
-HerAura is for women who appreciate quality without compromise. Who want jwellery that enhances their natural confidence. Who believe that feeling beautiful shouldn't be reserved for special occasions.
-
-Whether you're a student, a working professional, or someone who simply loves beautiful things — this is jwellery for your real life. Comfortable, elegant, and refreshingly affordable.`;
-        
-        const aboutContent = content || defaultContent;
         const aboutSection = document.querySelector('#about .about-content');
         
-        if (aboutSection) {
-            aboutSection.innerHTML = aboutContent
-                .split('\n')
-                .map(line => line.trim() === '' ? '<br>' : `<p>${line}</p>`)
-                .join('');
+        if (aboutSection && content) {
+            const lines = content.split('\n').filter(line => line.trim() !== '');
+            let html = '<div class="about-story" style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 30px rgba(212,165,116,0.1); margin-bottom: 2rem;">';
+            
+            lines.forEach(line => {
+                html += `<p style="font-size: 1.1rem; color: #555; line-height: 1.8; margin-bottom: 1rem;">${line}</p>`;
+            });
+            
+            html += '</div>';
+            aboutSection.innerHTML = html;
         }
     }
     
