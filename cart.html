@@ -843,7 +843,7 @@
             }
 
             const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = subtotal > 2000 ? 0 : 99;
+            const shipping = subtotal >= 799 ? 0 : 99;
             const total = subtotal + shipping;
 
             cartContent.innerHTML = `
@@ -856,12 +856,12 @@
                                 <p class="item-price">₹${item.price}</p>
                             </div>
                             <div class="quantity-controls">
-                                <button class="qty-btn" onclick="updateQuantity(${JSON.stringify(item.id)}, -1)">-</button>
-                                <input type="number" class="quantity" value="${item.quantity}" min="1" onchange="setQuantity(${JSON.stringify(item.id)}, this.value)">
-                                <button class="qty-btn" onclick="updateQuantity(${JSON.stringify(item.id)}, 1)">+</button>
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <input type="number" class="quantity" value="${item.quantity}" min="1" onchange="setQuantity('${item.id}', this.value)">
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
                             </div>
                             <div class="item-total">₹${item.price * item.quantity}</div>
-                            <button class="remove-btn" onclick="removeItem(${JSON.stringify(item.id)})">Remove</button>
+                            <button class="remove-btn" onclick="removeItem('${item.id}')">Remove</button>
                         </div>
                     `).join('')}
                 </div>
@@ -885,7 +885,7 @@
         }
 
         function updateQuantity(productId, change) {
-            const item = cart.find(item => item.id === productId);
+            const item = cart.find(item => String(item.id) === String(productId));
             if (item) {
                 item.quantity += change;
                 if (item.quantity <= 0) {
@@ -899,7 +899,7 @@
         }
 
         function setQuantity(productId, quantity) {
-            const item = cart.find(item => item.id === productId);
+            const item = cart.find(item => String(item.id) === String(productId));
             if (item) {
                 item.quantity = parseInt(quantity) || 1;
                 localStorage.setItem('cart', JSON.stringify(cart));

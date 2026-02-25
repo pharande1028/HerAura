@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange & Returns - Coming Soon | HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #d4a574;
+            text-decoration: none;
+        }
+        
+        .back-btn {
+            background: #d4a574;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { background: #8B4513; }
+        
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .coming-soon-box {
+            background: white;
+            border-radius: 20px;
+            padding: 4rem 3rem;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(212,165,116,0.2);
+        }
+        
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #d4a574;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .notify-box {
+            background: #f8f6f0;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+        
+        .notify-box h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .email-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #d4a574;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .notify-btn {
+            background: #d4a574;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .notify-btn:hover { background: #8B4513; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="landing.html" class="brand-name">HerAura</a>
+            <a href="landing.html" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="coming-soon-box">
+            <div class="icon">🚀</div>
+            <h1>Coming Soon!</h1>
+            <p class="subtitle">Exchange & Returns Policy</p>
+            <p>We're working hard to bring you a seamless exchange and returns experience. Our customer-friendly policy will make it easy for you to shop with confidence.</p>
+            <p>Stay tuned for updates!</p>
+            
+            <div class="notify-box">
+                <h3>Get Notified When We Launch</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">Be the first to know when our Exchange & Returns service goes live.</p>
+                <form class="email-form" onsubmit="notifyMe(event)">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="notify-btn">Notify Me</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function notifyMe(e) {
+            e.preventDefault();
+            alert('Thank you! We\'ll notify you when Exchange & Returns service is available.');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

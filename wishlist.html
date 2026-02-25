@@ -338,25 +338,36 @@
         }
         
         .empty-bag-animation {
-            font-size: 8rem;
-            margin-bottom: 2rem;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
             position: relative;
-            display: inline-block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        .empty-bag-animation::before {
-            content: '🛍️';
-            position: relative;
-            z-index: 1;
+        .wishlist-empty-icon {
+            width: 120px;
+            height: 120px;
+            opacity: 0.3;
         }
         
-        .empty-bag-animation::after {
-            content: '💔';
+        .sparkle {
             position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 2rem;
-            animation: blowAway 3s ease-in-out infinite;
+            color: #d4a574;
+            font-size: 16px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 25%; left: 25%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { bottom: 30%; right: 20%; animation-delay: 1.5s; }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
         
         .shop-btn { 
@@ -693,7 +704,15 @@
             if (wishlist.length === 0) {
                 container.innerHTML = `
                     <div class="empty-wishlist">
-                        <div class="empty-bag-animation"></div>
+                        <div class="empty-bag-animation">
+                            <svg class="wishlist-empty-icon" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="1.5">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <div class="sparkle">✨</div>
+                            <div class="sparkle">✨</div>
+                            <div class="sparkle">✨</div>
+                            <div class="sparkle">✨</div>
+                        </div>
                         <h3>HEY! YOUR WISHLIST FEELS EMPTY</h3>
                         <p>ADD JEWELLS AND ACCESSORIES YOU LOVE TO THE WISHLIST</p>
                         <a href="shop.html" class="shop-btn">Start Shopping</a>

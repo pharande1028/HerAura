@@ -800,12 +800,13 @@
         }
 
         function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const product = products.find(p => String(p.id) === String(productId));
+            const existingItem = cart.find(item => String(item.id) === String(productId));
             
             if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else if (product) {
                 cart.push({ ...product, quantity: 1 });
             }
             
