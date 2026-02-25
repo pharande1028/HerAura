@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        
+        .auth-container { max-width: 900px; width: 100%; }
+        .auth-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 20px 60px rgba(212,165,116,0.2); }
+        
+        .brand-logo { text-align: center; margin-bottom: 2rem; }
+        .brand-name { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #8B4513; margin-bottom: 0.5rem; }
+        .brand-tagline { font-size: 0.9rem; color: #666; letter-spacing: 1px; }
+        
+        .auth-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
+        .auth-subtitle { color: #666; text-align: center; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+        .form-group { margin-bottom: 0; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333; font-size: 0.85rem; }
+        .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 10px; font-size: 0.95rem; transition: all 0.3s; }
+        .form-input:focus { outline: none; border-color: #d4a574; box-shadow: 0 0 0 3px rgba(212,165,116,0.1); }
+        
+        .password-wrapper { position: relative; }
+        .toggle-password { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; width: 20px; height: 20px; }
+        .toggle-password svg { width: 100%; height: 100%; }
+        
+        .password-strength { margin-top: 0.5rem; height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
+        .password-strength-bar { height: 100%; transition: all 0.3s; width: 0%; }
+        .password-strength-text { font-size: 0.85rem; margin-top: 0.3rem; }
+        
+        .btn-primary { width: 100%; padding: 1rem; background: #d4a574; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 1.5rem; }
+        .btn-primary:hover { background: #8B4513; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,165,116,0.3); }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        .terms { font-size: 0.85rem; color: #666; text-align: center; margin-top: 1rem; }
+        .terms a { color: #d4a574; text-decoration: none; }
+        .terms a:hover { text-decoration: underline; }
+        
+        .auth-footer { text-align: center; margin-top: 1.5rem; color: #666; font-size: 0.9rem; }
+        .auth-footer a { color: #007bff; text-decoration: none; font-weight: 600; }
+        .auth-footer a:hover { text-decoration: underline; }
+        
+        .error-message { background: #fee; color: #c33; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; display: none; }
+        .success-message { background: #efe; color: #3c3; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; display: none; }
+        
+        .validation-item { font-size: 0.8rem; color: #999; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.4rem; }
+        .validation-item.valid { color: #3c3; }
+        .validation-item.invalid { color: #c33; }
+        .validation-item svg { width: 14px; height: 14px; }
+        .validation-item.valid svg { stroke: #3c3; }
+        .validation-item.invalid svg { stroke: #c33; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="brand-logo">
+                <div class="brand-name">HerAura</div>
+                <div class="brand-tagline">Jewellery & Accessories</div>
+            </div>
+            
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join HerAura and discover elegant jewellery</p>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <form id="signupForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone (Optional)</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="password" placeholder="Create a strong password" required oninput="checkPasswordStrength()">
+                            <span class="toggle-password" onclick="togglePassword('password')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
+                            <span class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="strengthBar"></div>
+                        </div>
+                        <div class="password-strength-text" id="strengthText"></div>
+                        
+                        <div class="validation-item" id="val-length">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            At least 8 characters
+                        </div>
+                        <div class="validation-item" id="val-upper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            One uppercase letter
+                        </div>
+                        <div class="validation-item" id="val-number">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            One number
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary">Create Account</button>
+                
+                <div class="terms">
+                    By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </div>
+            </form>
+            
+            <div class="auth-footer">
+                Already have an account? <a href="auth-login.html">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pre-fill email if coming from login
+        window.addEventListener('DOMContentLoaded', function() {
+            const signupEmail = localStorage.getItem('signupEmail');
+            if (signupEmail) {
+                document.getElementById('email').value = signupEmail;
+                localStorage.removeItem('signupEmail');
+            }
+        });
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            const checks = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+            
+            // Update validation items
+            const valLength = document.getElementById('val-length');
+            const valUpper = document.getElementById('val-upper');
+            const valNumber = document.getElementById('val-number');
+            
+            if (checks.length) {
+                valLength.classList.remove('invalid');
+                valLength.classList.add('valid');
+                valLength.querySelector('svg').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            } else {
+                valLength.classList.remove('valid');
+                valLength.classList.add('invalid');
+                valLength.querySelector('svg').innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            }
+            
+            if (checks.upper) {
+                valUpper.classList.remove('invalid');
+                valUpper.classList.add('valid');
+                valUpper.querySelector('svg').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            } else {
+                valUpper.classList.remove('valid');
+                valUpper.classList.add('invalid');
+                valUpper.querySelector('svg').innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            }
+            
+            if (checks.number) {
+                valNumber.classList.remove('invalid');
+                valNumber.classList.add('valid');
+                valNumber.querySelector('svg').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            } else {
+                valNumber.classList.remove('valid');
+                valNumber.classList.add('invalid');
+                valNumber.querySelector('svg').innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            }
+            
+            // Calculate strength
+            Object.values(checks).forEach(check => { if (check) strength++; });
+            
+            const colors = ['#c33', '#f90', '#fc0', '#3c3', '#0c0'];
+            const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+            const widths = ['20%', '40%', '60%', '80%', '100%'];
+            
+            strengthBar.style.width = widths[strength - 1] || '0%';
+            strengthBar.style.background = colors[strength - 1] || '#eee';
+            strengthText.textContent = texts[strength - 1] || '';
+            strengthText.style.color = colors[strength - 1] || '#999';
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validation
+            if (!fullName || !email || !password) {
+                showError('Please fill all required fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showError('Password must be at least 8 characters');
+                return;
+            }
+            
+            if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+                showError('Password must contain uppercase letter and number');
+                return;
+            }
+            
+            // Check if email exists
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.email === email)) {
+                showError('Email already registered');
+                return;
+            }
+            
+            // Create user
+            const user = {
+                id: Date.now().toString(),
+                name: fullName,
+                fullName,
+                email,
+                phone,
+                password,
+                isVerified: false,
+                role: 'customer',
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Generate verification token
+            const verificationToken = Math.random().toString(36).substring(2);
+            localStorage.setItem('verificationToken_' + user.id, verificationToken);
+            
+            showSuccess('Account created! Redirecting to email verification...');
+            setTimeout(() => {
+                window.location.href = `auth-email-verify.html?token=${verificationToken}&email=${email}`;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

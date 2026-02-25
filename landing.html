@@ -1124,7 +1124,7 @@
                 </svg>
                 <span class="nav-label" id="profileLabel">Profile</span>
                 <div class="profile-dropdown">
-                    <div id="authButtons" style="border-bottom: 1px solid rgba(212, 165, 116, 0.3); padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="openAuthModal()" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">
+                    <div id="authButtons" onclick="window.location.href='auth-login.html'" style="border-bottom: 1px solid rgba(212, 165, 116, 0.3); padding: 0.8rem; color: #dc3545; text-align: center; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(212, 165, 116, 0.1)'; this.style.color='#8B4513';" onmouseout="this.style.background=''; this.style.color='#dc3545';">
                         Sign In
                     </div>
                     <div class="profile-logout" id="logoutButton" style="display: none;">
@@ -1653,9 +1653,9 @@
             
             if (isLoggedIn) {
                 profileIcon.classList.add('logged-in');
-                const firstName = customerData.name ? customerData.name.split(' ')[0] : 
-                                 customerData.email ? customerData.email.split('@')[0] : 'User';
-                profileLabel.textContent = firstName;
+                const displayName = customerData.name || customerData.fullName || 
+                                   (customerData.email ? customerData.email.split('@')[0] : 'User');
+                profileLabel.textContent = displayName;
                 if (authButtons) authButtons.style.display = 'none';
                 if (logoutButton) logoutButton.style.display = 'block';
             } else {

@@ -18,6 +18,7 @@ app.use('/api/products', require('./src/routes/products'));
 app.use('/api/orders', require('./src/routes/orders'));
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/dashboard', require('./src/routes/dashboard'));
+app.use('/api/email', require('./src/routes/email'));
 
 // Health check
 app.get('/', (req, res) => {

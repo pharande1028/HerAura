@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        
+        .auth-container { max-width: 500px; width: 100%; padding: 2rem; }
+        .auth-card { background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 20px 60px rgba(212,165,116,0.2); text-align: center; }
+        
+        .brand-logo { margin-bottom: 2rem; }
+        .brand-name { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #8B4513; margin-bottom: 0.5rem; }
+        .brand-tagline { font-size: 0.9rem; color: #666; letter-spacing: 1px; }
+        
+        .icon-wrapper { width: 100px; height: 100px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #efe, #dfd); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: scaleIn 0.5s ease; }
+        .icon-wrapper svg { width: 50px; height: 50px; stroke: #3c3; stroke-width: 3; }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        
+        .auth-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: #333; margin-bottom: 1rem; }
+        .auth-subtitle { color: #666; margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; }
+        
+        .btn-primary { padding: 1rem 2rem; background: #d4a574; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #8B4513; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,165,116,0.3); }
+        
+        .resend-link { margin-top: 1.5rem; font-size: 0.9rem; color: #666; }
+        .resend-link a { color: #d4a574; text-decoration: none; font-weight: 500; }
+        .resend-link a:hover { text-decoration: underline; }
+        
+        .error-state { display: none; }
+        .error-state .icon-wrapper { background: linear-gradient(135deg, #fee, #fdd); }
+        .error-state .icon-wrapper svg { stroke: #c33; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card" id="successState">
+            <div class="brand-logo">
+                <div class="brand-name">HerAura</div>
+                <div class="brand-tagline">Jewellery & Accessories</div>
+            </div>
+            
+            <div class="icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            
+            <h1 class="auth-title">Email Verified!</h1>
+            <p class="auth-subtitle">Your email has been successfully verified. You can now login and start shopping for beautiful jewellery.</p>
+            
+            <a href="auth-login.html" class="btn-primary">Continue to Login</a>
+            
+            <div class="resend-link">
+                Need help? <a href="landing.html#contact">Contact Support</a>
+            </div>
+        </div>
+        
+        <div class="auth-card error-state" id="errorState">
+            <div class="brand-logo">
+                <div class="brand-name">HerAura</div>
+                <div class="brand-tagline">Jewellery & Accessories</div>
+            </div>
+            
+            <div class="icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+            </div>
+            
+            <h1 class="auth-title">Verification Failed</h1>
+            <p class="auth-subtitle" id="errorMessage">Invalid or expired verification link.</p>
+            
+            <a href="auth-signup.html" class="btn-primary">Back to Sign Up</a>
+            
+            <div class="resend-link">
+                Need help? <a href="landing.html#contact">Contact Support</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const email = urlParams.get('email');
+
+        if (!token || !email) {
+            showError('Invalid verification link');
+        } else {
+            verifyEmail();
+        }
+
+        function verifyEmail() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                showError('User not found');
+                return;
+            }
+            
+            const storedToken = localStorage.getItem('verificationToken_' + user.id);
+            
+            if (storedToken !== token) {
+                showError('Invalid verification token');
+                return;
+            }
+            
+            // Mark user as verified
+            user.isVerified = true;
+            const userIndex = users.findIndex(u => u.id === user.id);
+            users[userIndex] = user;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Remove verification token
+            localStorage.removeItem('verificationToken_' + user.id);
+            
+            // Show success
+            document.getElementById('successState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>

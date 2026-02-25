@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        
+        .auth-container { max-width: 450px; width: 100%; padding: 2rem; }
+        .auth-card { background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 20px 60px rgba(212,165,116,0.2); }
+        
+        .brand-logo { text-align: center; margin-bottom: 2rem; }
+        .brand-name { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #8B4513; margin-bottom: 0.5rem; }
+        .brand-tagline { font-size: 0.9rem; color: #666; letter-spacing: 1px; }
+        
+        .auth-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
+        .auth-subtitle { color: #666; text-align: center; margin-bottom: 2rem; font-size: 0.95rem; }
+        
+        .tab-switch { display: flex; background: #f5f5f5; border-radius: 10px; padding: 0.3rem; margin-bottom: 2rem; }
+        .tab-btn { flex: 1; padding: 0.7rem; border: none; background: transparent; cursor: pointer; border-radius: 8px; font-weight: 500; transition: all 0.3s; }
+        .tab-btn.active { background: white; color: #d4a574; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333; font-size: 0.9rem; }
+        .form-input { width: 100%; padding: 0.9rem 1rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; transition: all 0.3s; }
+        .form-input:focus { outline: none; border-color: #d4a574; box-shadow: 0 0 0 3px rgba(212,165,116,0.1); }
+        
+        .password-wrapper { position: relative; }
+        .toggle-password { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; width: 20px; height: 20px; }
+        .toggle-password svg { width: 100%; height: 100%; }
+        
+        .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .remember-me { display: flex; align-items: center; gap: 0.5rem; }
+        .forgot-link { color: #d4a574; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+        
+        .btn-primary { width: 100%; padding: 1rem; background: #d4a574; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-primary:hover { background: #8B4513; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,165,116,0.3); }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        .divider { text-align: center; margin: 1.5rem 0; color: #999; position: relative; }
+        .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #ddd; }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        
+        .social-login { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .social-btn { flex: 1; padding: 0.8rem; border: 1px solid #ddd; background: white; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s; }
+        .social-btn:hover { border-color: #d4a574; background: #fafafa; }
+        
+        .auth-footer { text-align: center; margin-top: 1.5rem; color: #666; font-size: 0.9rem; }
+        .auth-footer a { color: #007bff; text-decoration: none; font-weight: 600; }
+        .auth-footer a:hover { text-decoration: underline; }
+        
+        .error-message { background: #fee; color: #c33; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; display: none; }
+        .success-message { background: #efe; color: #3c3; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; display: none; }
+        
+        .otp-inputs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
+        .otp-input { width: 50px; height: 50px; text-align: center; font-size: 1.5rem; border: 2px solid #ddd; border-radius: 10px; }
+        .otp-input:focus { border-color: #d4a574; outline: none; }
+        
+        .resend-otp { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666; }
+        .resend-link { color: #d4a574; cursor: pointer; text-decoration: none; }
+        .resend-link:hover { text-decoration: underline; }
+        .resend-link.disabled { color: #ccc; cursor: not-allowed; }
+        
+        #passwordForm, #otpForm { display: none; }
+        #passwordForm.active, #otpForm.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="brand-logo">
+                <div class="brand-name">HerAura</div>
+                <div class="brand-tagline">Jewellery & Accessories</div>
+            </div>
+            
+            <h1 class="auth-title" id="authTitle">Sign in to HerAura</h1>
+            <p class="auth-subtitle" id="authSubtitle">Enter your email or phone to continue</p>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <!-- Step 1: Email/Phone Input -->
+            <form id="emailStep" style="display: block;">
+                <div class="form-group">
+                    <label class="form-label">Enter your Email / Phone</label>
+                    <input type="text" class="form-input" id="emailPhone" placeholder="Enter your email or phone" required>
+                </div>
+                <button type="submit" class="btn-primary">Continue</button>
+            </form>
+            
+            <!-- Step 2: Password Login -->
+            <form id="passwordStep" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Enter your Email / Phone</label>
+                    <input type="text" class="form-input" id="displayEmail" disabled style="background: #f5f5f5;">
+                    <a href="#" onclick="backToEmail()" style="font-size: 0.85rem; color: #d4a574; text-decoration: none;">Change</a>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="password" placeholder="Enter your password" required>
+                        <span class="toggle-password" onclick="togglePassword('password')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="auth-forgot-password.html" class="forgot-link">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            
+            <div class="auth-footer">
+                New to HerAura? <a href="auth-signup.html">Create an account</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentEmail = '';
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => successDiv.style.display = 'none', 5000);
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function backToEmail() {
+            document.getElementById('emailStep').style.display = 'block';
+            document.getElementById('passwordStep').style.display = 'none';
+            document.getElementById('authTitle').textContent = 'Sign in to HerAura';
+            document.getElementById('authSubtitle').textContent = 'Enter your email or phone to continue';
+            hideMessages();
+        }
+
+        // Step 1: Check if user exists
+        document.getElementById('emailStep').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailPhone = document.getElementById('emailPhone').value.trim();
+            
+            if (!emailPhone) {
+                showError('Please enter email or phone');
+                return;
+            }
+            
+            currentEmail = emailPhone;
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === emailPhone || u.phone === emailPhone);
+            
+            if (user) {
+                // User exists - show password form
+                document.getElementById('emailStep').style.display = 'none';
+                document.getElementById('passwordStep').style.display = 'block';
+                document.getElementById('displayEmail').value = emailPhone;
+                document.getElementById('authTitle').textContent = 'Welcome back';
+                document.getElementById('authSubtitle').textContent = 'Enter your password to continue';
+                setTimeout(() => document.getElementById('password').focus(), 100);
+            } else {
+                // User doesn't exist - redirect to signup
+                localStorage.setItem('signupEmail', emailPhone);
+                window.location.href = 'auth-signup.html';
+            }
+        });
+
+        // Step 2: Password Login
+        document.getElementById('passwordStep').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (!password) {
+                showError('Please enter password');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => (u.email === currentEmail || u.phone === currentEmail) && u.password === password);
+            
+            if (user) {
+                if (!user.isVerified) {
+                    showError('Please verify your email first');
+                    return;
+                }
+                
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('customerData', JSON.stringify({
+                    id: user.id,
+                    name: user.name || user.fullName,
+                    fullName: user.fullName || user.name,
+                    email: user.email,
+                    phone: user.phone
+                }));
+                if (rememberMe) localStorage.setItem('rememberMe', 'true');
+                
+                showSuccess('Login successful! Redirecting...');
+                setTimeout(() => window.location.href = 'landing.html', 1500);
+            } else {
+                showError('Incorrect password');
+            }
+        });
+    </script>
+</body>
+</html>
