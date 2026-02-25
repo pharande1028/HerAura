@@ -72,76 +72,182 @@
             <div class="success-message" id="successMessage"></div>
             
             <form id="signupForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-input" id="fullName" placeholder="Enter your full name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" id="email" placeholder="Enter your email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Phone (Optional)</label>
-                        <input type="tel" class="form-input" id="phone" placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="password" placeholder="Create a strong password" required oninput="checkPasswordStrength()">
-                            <span class="toggle-password" onclick="togglePassword('password')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </span>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.1rem; color: #8B4513; margin-bottom: 1rem; font-weight: 600;">Personal Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Enter Your Name (First Name)</label>
+                            <input type="text" class="form-input" id="fullName" placeholder="Enter your first name" required>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Confirm Password</label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
-                            <span class="toggle-password" onclick="togglePassword('confirmPassword')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <div class="password-strength">
-                            <div class="password-strength-bar" id="strengthBar"></div>
-                        </div>
-                        <div class="password-strength-text" id="strengthText"></div>
                         
-                        <div class="validation-item" id="val-length">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                            At least 8 characters
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="email" placeholder="Enter your email" required>
                         </div>
-                        <div class="validation-item" id="val-upper">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                            One uppercase letter
-                        </div>
-                        <div class="validation-item" id="val-number">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                            One number
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">Phone</label>
+                            <div id="phoneContainer">
+                                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <select class="form-input" id="countryCode" style="width: 85px; padding: 0.75rem 0.5rem;">
+                                        <option value="+91">+91</option>
+                                        <option value="+1">+1</option>
+                                        <option value="+44">+44</option>
+                                        <option value="+61">+61</option>
+                                        <option value="+81">+81</option>
+                                        <option value="+86">+86</option>
+                                        <option value="+33">+33</option>
+                                        <option value="+49">+49</option>
+                                        <option value="+39">+39</option>
+                                        <option value="+7">+7</option>
+                                        <option value="+55">+55</option>
+                                        <option value="+27">+27</option>
+                                        <option value="+971">+971</option>
+                                        <option value="+65">+65</option>
+                                        <option value="+60">+60</option>
+                                    </select>
+                                    <input type="tel" class="form-input" id="phone" placeholder="Enter phone number" required style="flex: 1;">
+                                </div>
+                            </div>
+                            <button type="button" onclick="addPhoneField()" style="padding: 0.5rem 1rem; background: transparent; color: #d4a574; border: 1px solid #d4a574; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#d4a574'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#d4a574';">+ Add Another Number</button>
                         </div>
                     </div>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.1rem; color: #8B4513; margin-bottom: 1rem; font-weight: 600;">Password</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Create Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-input" id="password" placeholder="Create a strong password" required oninput="checkPasswordStrength()">
+                                <span class="toggle-password" onclick="togglePassword('password')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
+                                <span class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="strengthBar"></div>
+                            </div>
+                            <div class="password-strength-text" id="strengthText"></div>
+                            
+                            <div class="validation-item" id="val-length">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                At least 8 characters
+                            </div>
+                            <div class="validation-item" id="val-upper">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                One uppercase letter
+                            </div>
+                            <div class="validation-item" id="val-number">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                One number
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.1rem; color: #8B4513; margin-bottom: 1rem; font-weight: 600;">Your Address</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" id="addressName" placeholder="Enter full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <select class="form-input" id="addressCountryCode" style="width: 85px; padding: 0.75rem 0.5rem;">
+                                    <option value="+91">+91</option>
+                                    <option value="+1">+1</option>
+                                    <option value="+44">+44</option>
+                                    <option value="+61">+61</option>
+                                    <option value="+81">+81</option>
+                                    <option value="+86">+86</option>
+                                </select>
+                                <input type="tel" class="form-input" id="addressMobile" placeholder="Enter mobile number" required style="flex: 1;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Country/Region</label>
+                            <select class="form-input" id="country" required>
+                                <option value="">Select Country</option>
+                                <option value="India">India</option>
+                                <option value="USA">USA</option>
+                                <option value="UK">UK</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pincode</label>
+                            <input type="text" class="form-input" id="pincode" placeholder="Enter pincode" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">Flat, House no., Building, Company, Apartment</label>
+                            <input type="text" class="form-input" id="address1" placeholder="Enter address" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">Area, Street, Sector, Village</label>
+                            <input type="text" class="form-input" id="address2" placeholder="Enter area" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Landmark</label>
+                            <input type="text" class="form-input" id="landmark" placeholder="Enter landmark">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Town/City</label>
+                            <input type="text" class="form-input" id="city" placeholder="Enter city" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-input" id="state" placeholder="Enter state" required>
+                        </div>
+                        
+                        <div class="form-group full-width" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                            <input type="checkbox" id="defaultAddress" style="width: auto;">
+                            <label for="defaultAddress" style="margin: 0; cursor: pointer;">Set as default address</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <button type="button" class="btn-outline" onclick="alert('Add new address feature coming soon!')" style="padding: 0.7rem 1.5rem; background: transparent; color: #d4a574; border: 2px solid #d4a574; border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#d4a574'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#d4a574';">+ Add Another Address</button>
                 </div>
                 
                 <button type="submit" class="btn-primary">Create Account</button>
@@ -158,6 +264,37 @@
     </div>
 
     <script>
+        let phoneCount = 1;
+        
+        function addPhoneField() {
+            phoneCount++;
+            const container = document.getElementById('phoneContainer');
+            const newField = document.createElement('div');
+            newField.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
+            newField.innerHTML = `
+                <select class="form-input" style="width: 85px; padding: 0.75rem 0.5rem;">
+                    <option value="+91">+91</option>
+                    <option value="+1">+1</option>
+                    <option value="+44">+44</option>
+                    <option value="+61">+61</option>
+                    <option value="+81">+81</option>
+                    <option value="+86">+86</option>
+                    <option value="+33">+33</option>
+                    <option value="+49">+49</option>
+                    <option value="+39">+39</option>
+                    <option value="+7">+7</option>
+                    <option value="+55">+55</option>
+                    <option value="+27">+27</option>
+                    <option value="+971">+971</option>
+                    <option value="+65">+65</option>
+                    <option value="+60">+60</option>
+                </select>
+                <input type="tel" class="form-input" placeholder="Enter phone number" style="flex: 1;">
+                <button type="button" onclick="this.parentElement.remove()" style="padding: 0.75rem 1rem; background: #dc3545; color: white; border: none; border-radius: 8px; cursor: pointer;">×</button>
+            `;
+            container.appendChild(newField);
+        }
+        
         // Pre-fill email if coming from login
         window.addEventListener('DOMContentLoaded', function() {
             const signupEmail = localStorage.getItem('signupEmail');
@@ -252,12 +389,14 @@
             
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
+            const countryCode = document.getElementById('countryCode').value;
             const phone = document.getElementById('phone').value.trim();
+            const fullPhone = countryCode + phone;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             
             // Validation
-            if (!fullName || !email || !password) {
+            if (!fullName || !email || !phone || !password) {
                 showError('Please fill all required fields');
                 return;
             }
@@ -290,24 +429,42 @@
                 name: fullName,
                 fullName,
                 email,
-                phone,
+                phone: fullPhone,
                 password,
-                isVerified: false,
+                isVerified: true,
                 role: 'customer',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                addresses: [{
+                    addressName: document.getElementById('addressName').value.trim(),
+                    addressMobile: document.getElementById('addressCountryCode').value + document.getElementById('addressMobile').value.trim(),
+                    country: document.getElementById('country').value,
+                    pincode: document.getElementById('pincode').value.trim(),
+                    address1: document.getElementById('address1').value.trim(),
+                    address2: document.getElementById('address2').value.trim(),
+                    landmark: document.getElementById('landmark').value.trim(),
+                    city: document.getElementById('city').value.trim(),
+                    state: document.getElementById('state').value.trim()
+                }]
             };
             
             users.push(user);
             localStorage.setItem('users', JSON.stringify(users));
             
-            // Generate verification token
-            const verificationToken = Math.random().toString(36).substring(2);
-            localStorage.setItem('verificationToken_' + user.id, verificationToken);
+            // Auto-login after signup
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('customerData', JSON.stringify({
+                id: user.id,
+                name: user.name,
+                fullName: user.fullName,
+                email: user.email,
+                phone: user.phone,
+                addresses: user.addresses
+            }));
             
-            showSuccess('Account created! Redirecting to email verification...');
+            showSuccess('Account created successfully! Redirecting to login...');
             setTimeout(() => {
-                window.location.href = `auth-email-verify.html?token=${verificationToken}&email=${email}`;
-            }, 2000);
+                window.location.href = 'landing.html';
+            }, 1500);
         });
     </script>
 </body>

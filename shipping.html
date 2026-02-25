@@ -401,6 +401,98 @@
         .continue-btn:hover {
             background: #8B4513;
         }
+        
+        .address-card {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .address-card.selected {
+            border-color: #d4a574;
+            background: #fff8e7;
+        }
+        
+        .address-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .address-card:hover {
+            border-color: #d4a574;
+        }
+        
+        .address-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-edit, .btn-add {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: #d4a574;
+            border: 1px solid #d4a574;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit:hover, .btn-add:hover {
+            background: #d4a574;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -526,85 +618,197 @@
         <div class="shipping-form">
             <div class="form-section">
                 <h3>Shipping Address</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="address" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" id="city" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State</label>
-                        <select id="state" name="state" required>
-                            <option value="">Select State</option>
-                            <option value="maharashtra">Maharashtra</option>
-                            <option value="delhi">Delhi</option>
-                            <option value="karnataka">Karnataka</option>
-                            <option value="gujarat">Gujarat</option>
-                            <option value="rajasthan">Rajasthan</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="pincode">Pincode</label>
-                        <input type="text" id="pincode" name="pincode" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                </div>
+                <div id="addressList"></div>
+                <button class="btn-add" onclick="openAddressModal()">+ Add New Address</button>
             </div>
             
             <button class="continue-btn" onclick="proceedToPayment()">Continue to Payment</button>
         </div>
     </div>
+    
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddressModal()">&times;</span>
+            <h3 style="font-size: 1.5rem; color: #8B4513; margin-bottom: 1.5rem;">Add/Edit Address</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-input" id="modalAddressName">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" class="form-input" id="modalAddressMobile">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Country/Region</label>
+                    <input type="text" class="form-input" id="modalCountry">
+                </div>
+                <div class="form-group">
+                    <label>Pincode</label>
+                    <input type="text" class="form-input" id="modalPincode">
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label>Flat, House no., Building</label>
+                <input type="text" class="form-input" id="modalAddress1">
+            </div>
+            <div class="form-group full-width">
+                <label>Area, Street, Sector</label>
+                <input type="text" class="form-input" id="modalAddress2">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Landmark</label>
+                    <input type="text" class="form-input" id="modalLandmark">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" class="form-input" id="modalCity">
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label>State</label>
+                <input type="text" class="form-input" id="modalState">
+            </div>
+            <button class="continue-btn" onclick="saveAddress()">Save Address</button>
+        </div>
+    </div>
 
     <script>
-        function proceedToPayment() {
-            // Validate form
-            const form = document.querySelector('.shipping-form');
-            const inputs = form.querySelectorAll('input[required], select[required]');
-            let isValid = true;
+        let selectedAddress = null;
+        let editingIndex = -1;
+        
+        function loadAddresses() {
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            let addresses = customerData.addresses || [];
             
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.style.borderColor = '#dc3545';
-                } else {
-                    input.style.borderColor = '#ddd';
-                }
-            });
-            
-            if (isValid) {
-                // Save shipping data
-                const shippingData = {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    address: document.getElementById('address').value,
-                    city: document.getElementById('city').value,
-                    state: document.getElementById('state').value,
-                    pincode: document.getElementById('pincode').value,
-                    phone: document.getElementById('phone').value
-                };
-                localStorage.setItem('shippingData', JSON.stringify(shippingData));
-                window.location.href = 'payment.html';
-            } else {
-                alert('Please fill in all required fields');
+            // Migrate old address format to new array format
+            if (addresses.length === 0 && customerData.addressName) {
+                addresses = [{
+                    addressName: customerData.addressName,
+                    addressMobile: customerData.addressMobile,
+                    country: customerData.country,
+                    pincode: customerData.pincode,
+                    address1: customerData.address1,
+                    address2: customerData.address2,
+                    landmark: customerData.landmark,
+                    city: customerData.city,
+                    state: customerData.state
+                }];
+                customerData.addresses = addresses;
+                localStorage.setItem('customerData', JSON.stringify(customerData));
             }
+            
+            const addressList = document.getElementById('addressList');
+            
+            if (addresses.length === 0) {
+                addressList.innerHTML = '<p style="color: #999;">No address found. Please add an address.</p>';
+                return;
+            }
+            
+            addressList.innerHTML = addresses.map((addr, index) => `
+                <div class="address-card ${index === 0 ? 'selected' : ''}" onclick="selectAddress(${index})">
+                    <strong>${addr.addressName}</strong><br>
+                    ${addr.address1}, ${addr.address2}<br>
+                    ${addr.city}, ${addr.state} - ${addr.pincode}<br>
+                    ${addr.country}<br>
+                    Phone: ${addr.addressMobile}
+                    <div class="address-actions">
+                        <button class="btn-edit" onclick="event.stopPropagation(); editAddress(${index})">Edit</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            selectedAddress = addresses[0];
+        }
+        
+        function selectAddress(index) {
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            selectedAddress = customerData.addresses[index];
+            document.querySelectorAll('.address-card').forEach((card, i) => {
+                card.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function openAddressModal() {
+            editingIndex = -1;
+            document.getElementById('addressModal').style.display = 'block';
+            document.getElementById('modalAddressName').value = '';
+            document.getElementById('modalAddressMobile').value = '';
+            document.getElementById('modalCountry').value = '';
+            document.getElementById('modalPincode').value = '';
+            document.getElementById('modalAddress1').value = '';
+            document.getElementById('modalAddress2').value = '';
+            document.getElementById('modalLandmark').value = '';
+            document.getElementById('modalCity').value = '';
+            document.getElementById('modalState').value = '';
+        }
+        
+        function editAddress(index) {
+            editingIndex = index;
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            const addr = customerData.addresses[index];
+            document.getElementById('addressModal').style.display = 'block';
+            document.getElementById('modalAddressName').value = addr.addressName || '';
+            document.getElementById('modalAddressMobile').value = addr.addressMobile || '';
+            document.getElementById('modalCountry').value = addr.country || '';
+            document.getElementById('modalPincode').value = addr.pincode || '';
+            document.getElementById('modalAddress1').value = addr.address1 || '';
+            document.getElementById('modalAddress2').value = addr.address2 || '';
+            document.getElementById('modalLandmark').value = addr.landmark || '';
+            document.getElementById('modalCity').value = addr.city || '';
+            document.getElementById('modalState').value = addr.state || '';
+        }
+        
+        function closeAddressModal() {
+            document.getElementById('addressModal').style.display = 'none';
+        }
+        
+        function saveAddress() {
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            if (!customerData.addresses) customerData.addresses = [];
+            
+            const newAddress = {
+                addressName: document.getElementById('modalAddressName').value,
+                addressMobile: document.getElementById('modalAddressMobile').value,
+                country: document.getElementById('modalCountry').value,
+                pincode: document.getElementById('modalPincode').value,
+                address1: document.getElementById('modalAddress1').value,
+                address2: document.getElementById('modalAddress2').value,
+                landmark: document.getElementById('modalLandmark').value,
+                city: document.getElementById('modalCity').value,
+                state: document.getElementById('modalState').value
+            };
+            
+            if (editingIndex === -1) {
+                customerData.addresses.push(newAddress);
+            } else {
+                customerData.addresses[editingIndex] = newAddress;
+            }
+            
+            localStorage.setItem('customerData', JSON.stringify(customerData));
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === customerData.id);
+            if (userIndex > -1) {
+                users[userIndex].addresses = customerData.addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            closeAddressModal();
+            loadAddresses();
+            alert('Address saved successfully!');
+        }
+        
+        function proceedToPayment() {
+            if (!selectedAddress) {
+                alert('Please select a shipping address');
+                return;
+            }
+            localStorage.setItem('shippingData', JSON.stringify(selectedAddress));
+            window.location.href = 'payment.html';
         }
         
         // Update badge counts
@@ -634,6 +838,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateBadges();
+            loadAddresses();
         });
         
         // Update badges every 2 seconds to sync with other pages

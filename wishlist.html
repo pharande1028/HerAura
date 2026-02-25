@@ -484,21 +484,27 @@
             position: absolute; 
             top: 10px; 
             right: 10px; 
-            background: rgba(220, 53, 69, 0.9); 
-            color: white; 
-            border: none; 
+            background: white; 
+            color: #dc3545; 
+            border: 2px solid #dc3545; 
             border-radius: 50%; 
-            width: 30px; 
-            height: 30px; 
+            width: 32px; 
+            height: 32px; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
+            font-size: 20px; 
+            font-weight: bold; 
             transition: all 0.3s; 
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); 
+            z-index: 10; 
         }
         .remove-icon:hover { 
             background: #dc3545; 
-            transform: scale(1.1); 
+            color: white; 
+            transform: scale(1.15) rotate(90deg); 
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.5); 
         }
         
         /* Empty State */
@@ -684,6 +690,7 @@
         </div>
     </footer>
 
+    <script src="user-storage.js"></script>
     <script>
         function showWishlist() {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -698,7 +705,7 @@
         }
         
         function loadWishlist() {
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlist = getUserWishlist();
             const container = document.getElementById('contentArea');
             
             if (wishlist.length === 0) {
@@ -725,7 +732,7 @@
                 <div class="wishlist-grid">
                     ${wishlist.map(item => `
                         <div class="wishlist-item" data-id="${item.id}">
-                            <button class="remove-icon" onclick="removeFromWishlist(${JSON.stringify(item.id)})">×</button>
+                            <button class="remove-icon" onclick="removeFromWishlist('${item.id}')">×</button>
                             <img src="${item.image}" alt="${item.name}" class="product-image">
                             <div class="product-info">
                                 <h3 class="product-name">${item.name}</h3>
@@ -741,7 +748,7 @@
         }
         
         function loadRecentlyViewed() {
-            const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+            const recentlyViewed = getUserRecentlyViewed();
             const container = document.getElementById('contentArea');
             
             if (recentlyViewed.length === 0) {
@@ -774,22 +781,20 @@
         }
         
         function removeFromWishlist(productId) {
-            const pid = String(productId);
-            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            wishlist = wishlist.filter(item => String(item.id) !== pid);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            let wishlist = getUserWishlist();
+            wishlist = wishlist.filter(item => String(item.id) !== String(productId));
+            setUserWishlist(wishlist);
             loadWishlist();
             updateBadges();
-            alert('Removed from wishlist!');
         }
         
         function addToCart(productId) {
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+            const wishlist = getUserWishlist();
+            const recentlyViewed = getUserRecentlyViewed();
             const product = wishlist.find(item => item.id === productId) || recentlyViewed.find(item => item.id === productId);
             
             if (product) {
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let cart = getUserCart();
                 const existingItem = cart.find(item => item.id === productId);
                 
                 if (existingItem) {
@@ -798,15 +803,15 @@
                     cart.push({...product, quantity: 1});
                 }
                 
-                localStorage.setItem('cart', JSON.stringify(cart));
+                setUserCart(cart);
                 updateBadges();
                 alert('Product added to cart!');
             }
         }
         
         function updateBadges() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const cart = getUserCart();
+            const wishlist = getUserWishlist();
             const isLoggedIn = localStorage.getItem('userLoggedIn');
             const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
             
@@ -851,6 +856,7 @@
         }
         
         function logout() {
+            clearUserData();
             localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('customerData');
             updateBadges();

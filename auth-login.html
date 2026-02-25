@@ -217,12 +217,30 @@
                 }
                 
                 localStorage.setItem('userLoggedIn', 'true');
+                
+                // Migrate old address format to new array format
+                let addresses = user.addresses || [];
+                if (addresses.length === 0 && user.addressName) {
+                    addresses = [{
+                        addressName: user.addressName,
+                        addressMobile: user.addressMobile,
+                        country: user.country,
+                        pincode: user.pincode,
+                        address1: user.address1,
+                        address2: user.address2,
+                        landmark: user.landmark,
+                        city: user.city,
+                        state: user.state
+                    }];
+                }
+                
                 localStorage.setItem('customerData', JSON.stringify({
                     id: user.id,
                     name: user.name || user.fullName,
                     fullName: user.fullName || user.name,
                     email: user.email,
-                    phone: user.phone
+                    phone: user.phone,
+                    addresses: addresses
                 }));
                 if (rememberMe) localStorage.setItem('rememberMe', 'true');
                 

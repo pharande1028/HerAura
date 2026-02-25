@@ -1131,7 +1131,7 @@
                         <div class="profile-dropdown-item" onclick="logout()" style="color: #dc3545; font-weight: 600;">Logout</div>
                     </div>
                     <div class="dropdown-section">
-                        <div class="profile-dropdown-item" onclick="alert('Your Account - Coming Soon!')">Your Account</div>
+                        <div class="profile-dropdown-item" onclick="window.location.href='user-account.html'">Your Account</div>
                         <div class="profile-dropdown-item" onclick="alert('Your Orders - Coming Soon!')">Your Orders</div>
                         <div class="profile-dropdown-item" onclick="window.location.href='wishlist.html'">Wishlist</div>
                         <div class="profile-dropdown-item" onclick="window.location.href='cart.html'">Cart</div>
@@ -1372,7 +1372,7 @@
                     <a href="https://instagram.com/heraura_jewel" target="_blank">Instagram</a>
                     <a href="mailto:heraura26@gmail.com">Email</a>
                     <a href="tel:+919356948452">Phone</a>
-                    <a href="admin-login.html" target="_blank" style="color: #d4a574; font-size: 0.8rem;">Admin Login</a>
+                    <a href="#" onclick="openSupportModal(); return false;">Direct Support</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1434,6 +1434,7 @@
     </div>
 
 </body>
+<script src="user-storage.js"></script>
 <script>
     // Loading Animation - Disabled
     window.addEventListener('load', function() {
@@ -1622,8 +1623,8 @@
     }, 2000);
     // Update badge counts
     function updateBadges() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const cart = getUserCart();
+        const wishlist = getUserWishlist();
         const isLoggedIn = localStorage.getItem('userLoggedIn');
         const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
         
@@ -1681,6 +1682,7 @@
     }
     
     function logout() {
+        clearUserData();
         localStorage.removeItem('userLoggedIn');
         localStorage.removeItem('customerData');
         updateBadges();
@@ -1777,7 +1779,7 @@
     // Load category products
     function loadCategoryProducts() {
         const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const wishlist = getUserWishlist();
         console.log('Loading products:', products);
         const categories = ['Neckpieces', 'Pendants', 'Rings', 'Earrings', 'Bracelets'];
         
@@ -1820,7 +1822,7 @@
     }
     
     function toggleWishlist(productId) {
-        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        let wishlist = getUserWishlist();
         const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
         const product = products.find(p => String(p.id) === String(productId));
         const existingIndex = wishlist.findIndex(item => String(item.id) === String(productId));
@@ -1833,13 +1835,13 @@
             alert('Added to wishlist!');
         }
         
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        setUserWishlist(wishlist);
         updateBadges();
         loadCategoryProducts();
     }
     
     function addToCart(productId) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = getUserCart();
         const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
         const product = products.find(p => String(p.id) === String(productId));
         const existingItem = cart.find(item => String(item.id) === String(productId));
@@ -1850,7 +1852,7 @@
             cart.push({ ...product, quantity: 1 });
         }
         
-        localStorage.setItem('cart', JSON.stringify(cart));
+        setUserCart(cart);
         updateBadges();
         alert('Product added to cart!');
     }

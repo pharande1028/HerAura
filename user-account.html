@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Account - HerAura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8f6f0 0%, #fff8e7 100%); min-height: 100vh; padding: 0; }
+        
+        .page-content { padding: 140px 2rem 2rem; }
+        
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .brand-name { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #8B4513; margin-bottom: 0.5rem; }
+        .page-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: #333; margin-bottom: 0.5rem; }
+        
+        .account-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 20px 60px rgba(212,165,116,0.2); margin-bottom: 2rem; }
+        .section-title { font-size: 1.2rem; color: #8B4513; margin-bottom: 1rem; font-weight: 600; border-bottom: 2px solid #d4a574; padding-bottom: 0.5rem; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        .info-item { padding: 0.5rem 0; }
+        .info-label { font-size: 0.85rem; color: #666; margin-bottom: 0.3rem; }
+        .info-value { font-size: 1rem; color: #333; font-weight: 500; }
+        .info-item.full-width { grid-column: 1 / -1; }
+        
+        .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 10px; font-size: 0.95rem; }
+        .form-input:focus { outline: none; border-color: #d4a574; box-shadow: 0 0 0 3px rgba(212,165,116,0.1); }
+        
+        .btn-edit { padding: 0.7rem 1.5rem; background: #d4a574; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .btn-edit:hover { background: #8B4513; transform: translateY(-2px); }
+        
+        .btn-save { padding: 0.7rem 1.5rem; background: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; margin-right: 0.5rem; }
+        .btn-cancel { padding: 0.7rem 1.5rem; background: #6c757d; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        
+        .edit-mode { display: none; }
+        .view-mode { display: block; }
+        
+        .back-link { text-align: center; margin-top: 2rem; display: none; }
+        
+        /* Header from landing page */
+        header { background: white; padding: 0.1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(212,165,116,0.2); height: 120px; }
+        nav { display: flex; flex-direction: column; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 5px; }
+        .signature-logo { position: absolute; top: 0.5rem; left: 2rem; z-index: 1001; }
+        .brand-name { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #333; cursor: pointer; }
+        .brand-name:hover { color: #d4a574; }
+        .brand-tagline { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: #666; margin: -15px 0 0 0; letter-spacing: 1px; }
+        .nav-menu { position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); }
+        .nav-menu ul { display: flex; list-style: none; align-items: center; }
+        .nav-menu ul li { margin-left: 1.25rem; }
+        .nav-menu a { text-decoration: none; color: #333; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover { color: #d4a574; }
+        
+        .nav-icons { position: absolute; top: 2rem; right: 4rem; display: flex; gap: 2rem; }
+        .nav-icon-wrapper { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+        .nav-icon-wrapper:hover { color: #d4a574; }
+        .nav-label { font-size: 0.7rem; color: #666; font-weight: 500; }
+        .icon-badge { position: absolute; top: -8px; right: -8px; background: #999; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .icon-badge.has-items { background: #dc3545; }
+        
+        /* Footer from landing page */
+        footer { background: #2c2c2c; color: #ccc; padding: 3rem 0 2rem; margin-top: 3rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; margin-bottom: 2rem; max-width: 1200px; margin: 0 auto 2rem; padding: 0 2rem; }
+        .footer-section h3 { color: white; margin-bottom: 1rem; font-size: 1.1rem; }
+        .footer-section p { line-height: 1.6; }
+        .footer-section a { color: #ccc; text-decoration: none; display: block; margin-bottom: 0.8rem; font-size: 0.95rem; line-height: 1.5; }
+        .footer-section a:hover { color: #d4a574; }
+        .footer-bottom { border-top: 1px solid #444; padding-top: 2rem; text-align: center; }
+        .back-link a { color: #d4a574; text-decoration: none; font-weight: 600; }
+        .back-link a:hover { text-decoration: underline; }
+        
+        .success-message { background: #d4edda; color: #155724; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; display: none; }
+        
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal-content { background: white; margin: 5% auto; padding: 2rem; border-radius: 15px; width: 90%; max-width: 800px; }
+        .close { float: right; font-size: 28px; font-weight: bold; cursor: pointer; color: #999; }
+        .close:hover { color: #333; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333; }
+        .form-group.full-width { grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="signature-logo" onclick="window.location.href='landing.html'">
+            <div class="brand-name">HerAura</div>
+            <div class="brand-tagline">Jewellery & Accessories</div>
+        </div>
+        <div class="nav-menu">
+            <ul>
+                <li><a href="landing.html#home">HOME</a></li>
+                <li><a href="landing.html#products">OUR COLLECTION</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+                <li><a href="landing.html#contact">CONTACT</a></li>
+                <li><a href="landing.html#about">ABOUT US</a></li>
+            </ul>
+        </div>
+        <div class="nav-icons">
+            <div class="nav-icon-wrapper" onclick="window.location.href='wishlist.html'">
+                <div style="position: relative;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span class="icon-badge" id="wishlistBadge">0</span>
+                </div>
+                <span class="nav-label">Wishlist</span>
+            </div>
+            <div class="nav-icon-wrapper" onclick="window.location.href='cart.html'">
+                <div style="position: relative;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <span class="icon-badge" id="cartBadge">0</span>
+                </div>
+                <span class="nav-label">Cart</span>
+            </div>
+            <div class="nav-icon-wrapper" onclick="window.location.href='user-account.html'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label" id="profileLabel">Profile</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="page-content">
+    <div class="container">
+        <div class="header">
+            <div class="brand-name">HerAura</div>
+            <h1 class="page-title">Your Account</h1>
+        </div>
+        
+        <div class="success-message" id="successMessage">Profile updated successfully!</div>
+        
+        <!-- Personal Information -->
+        <div class="account-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 class="section-title" style="margin: 0; border: none; padding: 0;">Personal Information</h2>
+                <button class="btn-edit" onclick="toggleEdit('personal')">Edit</button>
+            </div>
+            
+            <div id="personal-view" class="view-mode">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value" id="view-name">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value" id="view-email">-</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value" id="view-phone">-</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="personal-edit" class="edit-mode">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <input type="text" class="form-input" id="edit-name">
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <input type="email" class="form-input" id="edit-email">
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-label">Phone</div>
+                        <input type="tel" class="form-input" id="edit-phone">
+                    </div>
+                </div>
+                <button class="btn-save" onclick="saveEdit('personal')">Save Changes</button>
+                <button class="btn-cancel" onclick="cancelEdit('personal')">Cancel</button>
+            </div>
+        </div>
+        
+        <!-- Address Information -->
+        <div class="account-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 class="section-title" style="margin: 0; border: none; padding: 0;">Addresses</h2>
+                <button class="btn-edit" onclick="addNewAddress()">+ Add New Address</button>
+            </div>
+            
+            <div id="addressesList"></div>
+        </div>
+        
+        <div class="back-link">
+            <a href="landing.html">← Back to Home</a>
+        </div>
+    </div>
+    </div>
+    
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddressModal()">&times;</span>
+            <h3 style="font-size: 1.5rem; color: #8B4513; margin-bottom: 1.5rem;">Edit Address</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-input" id="modalAddressName">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" class="form-input" id="modalAddressMobile">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Country/Region</label>
+                    <input type="text" class="form-input" id="modalCountry">
+                </div>
+                <div class="form-group">
+                    <label>Pincode</label>
+                    <input type="text" class="form-input" id="modalPincode">
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label>Flat, House no., Building</label>
+                <input type="text" class="form-input" id="modalAddress1">
+            </div>
+            <div class="form-group full-width">
+                <label>Area, Street, Sector</label>
+                <input type="text" class="form-input" id="modalAddress2">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Landmark</label>
+                    <input type="text" class="form-input" id="modalLandmark">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" class="form-input" id="modalCity">
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label>State</label>
+                <input type="text" class="form-input" id="modalState">
+            </div>
+            <button class="btn-edit" onclick="saveAddressModal()" style="width: 100%; padding: 1rem;">Save Address</button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>HerAura</h3>
+                    <p>Anti-tarnish jwellery for everyday elegance</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="landing.html#home">Home</a>
+                    <a href="shop.html">Shop</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Care</h3>
+                    <a href="size-guide.html">Size Guide</a>
+                    <a href="#">Care Instructions</a>
+                    <a href="#">Track Your Order</a>
+                    <a href="exchange-returns.html">Exchange & Returns</a>
+                    <a href="landing.html#contact">Contact Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Policies</h3>
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="shipping-policy.html">Shipping Policy</a>
+                    <a href="return-refund-policy.html">Exchange Return & Refund Policy</a>
+                    <a href="terms-conditions.html">Terms & Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="https://instagram.com/heraura_jewel" target="_blank">Instagram</a>
+                    <a href="mailto:heraura26@gmail.com">Email</a>
+                    <a href="tel:+919356948452">Phone</a>
+                    <a href="landing.html#contact">Direct Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HerAura. All rights reserved. | Made with ❤️ for everyday elegance</p>
+                <a href="admin.html" style="color: #2c2c2c; font-size: 8px; opacity: 0.1; text-decoration: none;">•</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="user-storage.js"></script>
+    <script>
+        function loadUserData() {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            
+            document.getElementById('view-name').textContent = userData.name || '-';
+            document.getElementById('view-email').textContent = userData.email || '-';
+            document.getElementById('view-phone').textContent = userData.phone || '-';
+            
+            loadAddresses();
+        }
+        
+        function loadAddresses() {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            let addresses = userData.addresses || [];
+            
+            // Migrate old address format to new array format
+            if (addresses.length === 0 && userData.addressName) {
+                addresses = [{
+                    addressName: userData.addressName,
+                    addressMobile: userData.addressMobile,
+                    country: userData.country,
+                    pincode: userData.pincode,
+                    address1: userData.address1,
+                    address2: userData.address2,
+                    landmark: userData.landmark,
+                    city: userData.city,
+                    state: userData.state,
+                    isDefault: true
+                }];
+                userData.addresses = addresses;
+                localStorage.setItem('customerData', JSON.stringify(userData));
+            }
+            
+            const addressesList = document.getElementById('addressesList');
+            
+            if (addresses.length === 0) {
+                addressesList.innerHTML = '<p style="color: #999;">No addresses found.</p>';
+                return;
+            }
+            
+            addressesList.innerHTML = addresses.map((addr, index) => `
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border: 2px solid ${addr.isDefault ? '#28a745' : '#ddd'}; position: relative;">
+                    ${addr.isDefault ? '<span style="position: absolute; top: 1rem; right: 1rem; background: #28a745; color: white; padding: 0.3rem 0.8rem; border-radius: 5px; font-size: 0.75rem; font-weight: 600;">Default</span>' : ''}
+                    <strong>${addr.addressName}</strong><br>
+                    ${addr.address1}, ${addr.address2}<br>
+                    ${addr.city}, ${addr.state} - ${addr.pincode}<br>
+                    ${addr.country}<br>
+                    Phone: ${addr.addressMobile}
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button onclick="editAddressAccount(${index})" onmouseover="this.style.background='#d4a574'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#d4a574';" style="padding: 0.5rem 1rem; background: transparent; color: #d4a574; border: 1px solid #d4a574; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s;">Edit</button>
+                        <button onclick="deleteAddress(${index})" onmouseover="this.style.background='#dc3545'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#dc3545';" style="padding: 0.5rem 1rem; background: transparent; color: #dc3545; border: 1px solid #dc3545; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s;">Delete</button>
+                        ${!addr.isDefault ? `<button onclick="setDefaultAddress(${index})" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Set as Default</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function setDefaultAddress(index) {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            userData.addresses.forEach((addr, i) => addr.isDefault = i === index);
+            localStorage.setItem('customerData', JSON.stringify(userData));
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userData.id);
+            if (userIndex > -1) {
+                users[userIndex].addresses = userData.addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            loadAddresses();
+        }
+        
+        function deleteAddress(index) {
+            if (!confirm('Are you sure you want to delete this address?')) return;
+            
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            const wasDefault = userData.addresses[index].isDefault;
+            userData.addresses.splice(index, 1);
+            
+            if (wasDefault && userData.addresses.length > 0) {
+                userData.addresses[0].isDefault = true;
+            }
+            
+            localStorage.setItem('customerData', JSON.stringify(userData));
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userData.id);
+            if (userIndex > -1) {
+                users[userIndex].addresses = userData.addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            loadAddresses();
+            alert('Address deleted successfully!');
+        }
+        
+        let editingAddressIndex = -1;
+        
+        function addNewAddress() {
+            editingAddressIndex = -1;
+            document.getElementById('addressModal').style.display = 'block';
+            document.getElementById('modalAddressName').value = '';
+            document.getElementById('modalAddressMobile').value = '';
+            document.getElementById('modalCountry').value = '';
+            document.getElementById('modalPincode').value = '';
+            document.getElementById('modalAddress1').value = '';
+            document.getElementById('modalAddress2').value = '';
+            document.getElementById('modalLandmark').value = '';
+            document.getElementById('modalCity').value = '';
+            document.getElementById('modalState').value = '';
+        }
+        
+        function editAddressAccount(index) {
+            editingAddressIndex = index;
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            const addr = userData.addresses[index];
+            
+            document.getElementById('addressModal').style.display = 'block';
+            document.getElementById('modalAddressName').value = addr.addressName || '';
+            document.getElementById('modalAddressMobile').value = addr.addressMobile || '';
+            document.getElementById('modalCountry').value = addr.country || '';
+            document.getElementById('modalPincode').value = addr.pincode || '';
+            document.getElementById('modalAddress1').value = addr.address1 || '';
+            document.getElementById('modalAddress2').value = addr.address2 || '';
+            document.getElementById('modalLandmark').value = addr.landmark || '';
+            document.getElementById('modalCity').value = addr.city || '';
+            document.getElementById('modalState').value = addr.state || '';
+        }
+        
+        function closeAddressModal() {
+            document.getElementById('addressModal').style.display = 'none';
+        }
+        
+        function saveAddressModal() {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            if (!userData.addresses) userData.addresses = [];
+            
+            const newAddress = {
+                addressName: document.getElementById('modalAddressName').value,
+                addressMobile: document.getElementById('modalAddressMobile').value,
+                country: document.getElementById('modalCountry').value,
+                pincode: document.getElementById('modalPincode').value,
+                address1: document.getElementById('modalAddress1').value,
+                address2: document.getElementById('modalAddress2').value,
+                landmark: document.getElementById('modalLandmark').value,
+                city: document.getElementById('modalCity').value,
+                state: document.getElementById('modalState').value,
+                isDefault: userData.addresses.length === 0
+            };
+            
+            if (editingAddressIndex === -1) {
+                userData.addresses.push(newAddress);
+            } else {
+                newAddress.isDefault = userData.addresses[editingAddressIndex].isDefault;
+                userData.addresses[editingAddressIndex] = newAddress;
+            }
+            
+            localStorage.setItem('customerData', JSON.stringify(userData));
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userData.id);
+            if (userIndex > -1) {
+                users[userIndex].addresses = userData.addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            closeAddressModal();
+            loadAddresses();
+            alert(editingAddressIndex === -1 ? 'Address added successfully!' : 'Address updated successfully!');
+        }
+
+        function toggleEdit(section) {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            
+            if (section === 'personal') {
+                document.getElementById('edit-name').value = userData.name || '';
+                document.getElementById('edit-email').value = userData.email || '';
+                document.getElementById('edit-phone').value = userData.phone || '';
+                document.getElementById('personal-view').style.display = 'none';
+                document.getElementById('personal-edit').style.display = 'block';
+            }
+        }
+
+        function saveEdit(section) {
+            const userData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            
+            if (section === 'personal') {
+                userData.name = document.getElementById('edit-name').value;
+                userData.fullName = document.getElementById('edit-name').value;
+                userData.email = document.getElementById('edit-email').value;
+                userData.phone = document.getElementById('edit-phone').value;
+            }
+            
+            localStorage.setItem('customerData', JSON.stringify(userData));
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userData.id);
+            if (userIndex > -1) {
+                users[userIndex] = { ...users[userIndex], ...userData };
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => document.getElementById('successMessage').style.display = 'none', 3000);
+            
+            cancelEdit(section);
+            loadUserData();
+        }
+
+        function cancelEdit(section) {
+            document.getElementById(section + '-view').style.display = 'block';
+            document.getElementById(section + '-edit').style.display = 'none';
+        }
+
+        window.addEventListener('DOMContentLoaded', loadUserData);
+        
+        // Update badges
+        function updateBadges() {
+            const cart = getUserCart();
+            const wishlist = getUserWishlist();
+            const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+            
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlist.length;
+            
+            const cartBadge = document.getElementById('cartBadge');
+            const wishlistBadge = document.getElementById('wishlistBadge');
+            
+            cartBadge.textContent = cartCount;
+            wishlistBadge.textContent = wishlistCount;
+            
+            if (cartCount > 0) cartBadge.classList.add('has-items');
+            else cartBadge.classList.remove('has-items');
+            
+            if (wishlistCount > 0) wishlistBadge.classList.add('has-items');
+            else wishlistBadge.classList.remove('has-items');
+            
+            document.getElementById('profileLabel').textContent = customerData.name || 'Profile';
+            
+            // Reload addresses to sync
+            if (typeof loadAddresses === 'function') loadAddresses();
+        }
+        
+        updateBadges();
+        setInterval(updateBadges, 2000);
+    </script>
+</body>
+</html>
