@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Debug Tool - HerAura</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; padding: 2rem; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; }
+        h1 { color: #d4a574; margin-bottom: 2rem; }
+        .coupon-card { background: #f9f9f9; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; border-left: 4px solid #d4a574; }
+        .coupon-card h3 { color: #333; margin-bottom: 0.5rem; }
+        .coupon-card p { margin: 0.3rem 0; font-size: 0.9rem; }
+        .status-active { color: #28a745; font-weight: bold; }
+        .status-inactive { color: #dc3545; font-weight: bold; }
+        .issue { background: #fff3cd; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; color: #856404; }
+        .success { background: #d4edda; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; color: #155724; }
+        button { background: #d4a574; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; margin-top: 1rem; }
+        button:hover { background: #8B4513; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Coupon Debug Tool</h1>
+        <button onclick="analyzeCoupons()">Analyze All Coupons</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function analyzeCoupons() {
+            const coupons = JSON.parse(localStorage.getItem('herauraCoupons') || '[]');
+            const resultsDiv = document.getElementById('results');
+            const now = new Date();
+            
+            if (coupons.length === 0) {
+                resultsDiv.innerHTML = '<p style="color: #dc3545; margin-top: 1rem;">❌ No coupons found in localStorage!</p>';
+                return;
+            }
+            
+            let html = `<h2 style="margin-top: 2rem;">Found ${coupons.length} coupon(s)</h2>`;
+            
+            coupons.forEach(coupon => {
+                const issues = [];
+                const validFrom = new Date(coupon.validFrom);
+                const validUntil = new Date(coupon.validUntil);
+                
+                // Check status
+                if (coupon.status !== 'active') {
+                    issues.push(`❌ Status is "${coupon.status}" (must be "active")`);
+                }
+                
+                // Check dates
+                if (validFrom > now) {
+                    issues.push(`❌ Not started yet (starts ${validFrom.toLocaleString()})`);
+                }
+                if (validUntil < now) {
+                    issues.push(`❌ Expired (ended ${validUntil.toLocaleString()})`);
+                }
+                
+                // Check type for product pages
+                const validTypes = ['firstPurchase', 'percentage', 'specialDay'];
+                if (!validTypes.includes(coupon.type)) {
+                    issues.push(`⚠️ Type "${coupon.type}" won't show on product pages (only ${validTypes.join(', ')})`);
+                }
+                
+                // Check applicability
+                if (coupon.applicableTo === 'categories') {
+                    if (!coupon.applicableCategories || coupon.applicableCategories.length === 0) {
+                        issues.push(`❌ No categories selected`);
+                    } else {
+                        issues.push(`✅ Applies to categories: ${coupon.applicableCategories.join(', ')}`);
+                    }
+                }
+                
+                html += `
+                    <div class="coupon-card">
+                        <h3>${coupon.code}</h3>
+                        <p><strong>Type:</strong> ${coupon.type}</p>
+                        <p><strong>Status:</strong> <span class="status-${coupon.status}">${coupon.status}</span></p>
+                        <p><strong>Discount:</strong> ${coupon.value}%</p>
+                        <p><strong>Min Order:</strong> ₹${coupon.minOrder}</p>
+                        <p><strong>Valid From:</strong> ${validFrom.toLocaleString()}</p>
+                        <p><strong>Valid Until:</strong> ${validUntil.toLocaleString()}</p>
+                        <p><strong>Applicable To:</strong> ${coupon.applicableTo}</p>
+                        ${coupon.applicableCategories ? `<p><strong>Categories:</strong> ${coupon.applicableCategories.join(', ')}</p>` : ''}
+                        ${issues.length > 0 ? `<div class="issue">${issues.join('<br>')}</div>` : '<div class="success">✅ This coupon should display on product pages!</div>'}
+                    </div>
+                `;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Auto-run on load
+        window.onload = analyzeCoupons;
+    </script>
+</body>
+</html>

@@ -287,10 +287,10 @@
             background: #5a6268;
         }
         .btn-delete {
-            background: #d4a574;
+            background: #dc3545;
         }
         .btn-delete:hover {
-            background: #8B4513;
+            background: #c82333;
         }
         
         .pagination, .pagination-top {
@@ -404,72 +404,62 @@
                         </div>
                         <div class="form-group">
                             <label>Coupon Type *</label>
-                            <select id="couponType" required>
+                            <select id="couponType" onchange="updateDiscountField()" required>
                                 <option value="">Select Type</option>
-                                <option value="percentage">Percentage Discount</option>
-                                <option value="fixed">Fixed Amount</option>
-                                <option value="freeShipping">Free Shipping</option>
-                                <option value="buyXgetY">Buy X Get Y</option>
+                                <option value="firstPurchase">First Purchase (One-time per user)</option>
+                                <option value="percentage">% Discount on Any Purchase</option>
+                                <option value="specialDay">Special Day Sale (% Discount)</option>
+                                <option value="buy799get199">Buy ₹799 Get ₹199 Product Free</option>
+                                <option value="buy999get299">Buy ₹999 Get ₹299 Product Free</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row" id="discountRow" style="display:none;">
                         <div class="form-group">
-                            <label>Discount Value *</label>
-                            <input type="number" id="discountValue" placeholder="e.g., 50 or 500" required>
+                            <label id="discountLabel">Discount % *</label>
+                            <input type="number" id="discountValue" placeholder="e.g., 10">
                         </div>
                         <div class="form-group">
-                            <label>Maximum Discount (₹)</label>
-                            <input type="number" id="maxDiscount" placeholder="e.g., 1000">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Minimum Order Value (₹)</label>
-                            <input type="number" id="minOrderValue" placeholder="e.g., 999">
-                        </div>
-                        <div class="form-group">
-                            <label>Usage Limit Per User</label>
-                            <input type="number" id="usageLimitPerUser" placeholder="e.g., 1">
+                            <label>Minimum Order Value (₹) *</label>
+                            <input type="number" id="minOrderValue" placeholder="e.g., 499" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Total Usage Limit</label>
-                            <input type="number" id="totalUsageLimit" placeholder="e.g., 100">
+                            <label>Total Number of Coupons *</label>
+                            <input type="number" id="totalCoupons" placeholder="e.g., 100" required>
                         </div>
+                        <div class="form-group">
+                            <label>Usage Limit Per Person *</label>
+                            <input type="number" id="usageLimitPerUser" placeholder="e.g., 1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Valid From *</label>
                             <input type="datetime-local" id="validFrom" required>
                         </div>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
                             <label>Valid Until *</label>
                             <input type="datetime-local" id="validUntil" required>
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
-                            <label>Status *</label>
-                            <select id="couponStatus" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="scheduled">Scheduled</option>
+                            <label>Applicable To *</label>
+                            <select id="applicableTo" onchange="toggleCategoryField()">
+                                <option value="all">All Products</option>
+                                <option value="categories">Specific Categories</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Applicable Categories</label>
-                        <div class="checkbox-group" id="categoryCheckboxes"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Applicable Products (Optional)</label>
-                        <input type="text" id="applicableProducts" placeholder="Enter product IDs separated by commas">
+                        <div class="form-group" id="categoriesFieldWrapper" style="display:none;">
+                            <label>Select Categories *</label>
+                            <div class="checkbox-group" id="categoryCheckboxes"></div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -489,6 +479,9 @@
                 </svg>
             </div>
             <div id="manageCoupons" class="section-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <button onclick="if(confirm('Clear all coupons from storage? This cannot be undone!')) { localStorage.removeItem('herauraCoupons'); location.reload(); }" style="padding: 0.6rem 1.2rem; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Clear All Coupons</button>
+                </div>
                 <div class="filters">
                     <input type="text" id="searchCoupon" placeholder="Search by code..." onkeyup="filterCoupons()">
                     <select id="filterStatus" onchange="filterCoupons()">
@@ -529,7 +522,36 @@
                 <div class="pagination" id="paginationBottom"></div>
             </div>
 
-            <!-- Section 3: Coupon Analytics -->
+            <!-- Section 3: Platform & Shipping Settings -->
+            <div class="section-header" onclick="toggleSection('platformSettings')">
+                <h2>Platform & Shipping Settings</h2>
+                <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div id="platformSettings" class="section-content">
+                <form id="settingsForm" class="coupon-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Platform Fee (₹) *</label>
+                            <input type="number" id="platformFee" placeholder="e.g., 12" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Shipping Charge (₹) *</label>
+                            <input type="number" id="shippingCharge" placeholder="e.g., 99" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Free Shipping Threshold (₹) *</label>
+                            <input type="number" id="freeShippingThreshold" placeholder="e.g., 799" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Settings</button>
+                </form>
+            </div>
+
+            <!-- Section 4: Coupon Analytics -->
             <div class="section-header" onclick="toggleSection('couponAnalytics')">
                 <h2>Coupon Analytics</h2>
                 <svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -566,6 +588,54 @@
             }
         }
 
+        function updateDiscountField() {
+            const type = document.getElementById('couponType').value;
+            const discountRow = document.getElementById('discountRow');
+            const discountLabel = document.getElementById('discountLabel');
+            const discountInput = document.getElementById('discountValue');
+            const minOrderInput = document.getElementById('minOrderValue');
+            
+            if(type === 'firstPurchase') {
+                discountRow.style.display = 'grid';
+                discountLabel.textContent = 'Discount % *';
+                discountInput.placeholder = 'e.g., 10';
+                discountInput.required = true;
+                minOrderInput.value = '0';
+                minOrderInput.required = false;
+                minOrderInput.parentElement.style.display = 'none';
+            } else if(type === 'percentage' || type === 'specialDay') {
+                discountRow.style.display = 'grid';
+                discountLabel.textContent = 'Discount % *';
+                discountInput.placeholder = 'e.g., 10';
+                discountInput.required = true;
+                minOrderInput.required = true;
+                minOrderInput.parentElement.style.display = 'block';
+            } else if(type === 'buy799get199') {
+                discountRow.style.display = 'none';
+                discountInput.required = false;
+                discountInput.value = '0';
+                minOrderInput.value = '799';
+                minOrderInput.required = false;
+                minOrderInput.parentElement.style.display = 'none';
+            } else if(type === 'buy999get299') {
+                discountRow.style.display = 'none';
+                discountInput.required = false;
+                discountInput.value = '0';
+                minOrderInput.value = '999';
+                minOrderInput.required = false;
+                minOrderInput.parentElement.style.display = 'none';
+            } else {
+                discountRow.style.display = 'none';
+                discountInput.required = false;
+                minOrderInput.parentElement.style.display = 'block';
+            }
+        }
+        
+        function toggleCategoryField() {
+            const value = document.getElementById('applicableTo').value;
+            document.getElementById('categoriesFieldWrapper').style.display = value === 'categories' ? 'block' : 'none';
+        }
+
         function toggleSection(sectionId) {
             const section = document.getElementById(sectionId);
             const header = section.previousElementSibling;
@@ -600,20 +670,6 @@
             const saved = localStorage.getItem('herauraCoupons');
             if(saved) {
                 coupons = JSON.parse(saved);
-            } else {
-                coupons = [
-                    {id: 1, code: 'WELCOME50', type: 'percentage', value: 50, maxDiscount: 1000, minOrder: 999, usageLimitPerUser: 1, totalLimit: 100, used: 45, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['All'], description: 'Welcome offer for new users'},
-                    {id: 2, code: 'FLAT500', type: 'fixed', value: 500, maxDiscount: null, minOrder: 2999, usageLimitPerUser: 3, totalLimit: 50, used: 28, validFrom: '2024-01-01', validUntil: '2024-06-30', status: 'active', categories: ['Necklaces', 'Rings'], description: 'Flat ₹500 off on premium jewelry'},
-                    {id: 3, code: 'FREESHIP', type: 'freeShipping', value: 0, maxDiscount: null, minOrder: 1499, usageLimitPerUser: 5, totalLimit: 200, used: 156, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['All'], description: 'Free shipping on all orders'},
-                    {id: 4, code: 'FESTIVE30', type: 'percentage', value: 30, maxDiscount: 2000, minOrder: 1999, usageLimitPerUser: 2, totalLimit: 150, used: 89, validFrom: '2024-10-01', validUntil: '2024-11-15', status: 'active', categories: ['All'], description: 'Festive season special'},
-                    {id: 5, code: 'RING20', type: 'percentage', value: 20, maxDiscount: 500, minOrder: 799, usageLimitPerUser: 1, totalLimit: 75, used: 42, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['Rings'], description: 'Special discount on rings'},
-                    {id: 6, code: 'SUMMER25', type: 'percentage', value: 25, maxDiscount: 1500, minOrder: 1499, usageLimitPerUser: 2, totalLimit: 100, used: 100, validFrom: '2024-04-01', validUntil: '2024-06-30', status: 'expired', categories: ['All'], description: 'Summer sale offer'},
-                    {id: 7, code: 'EARRING15', type: 'percentage', value: 15, maxDiscount: 300, minOrder: 599, usageLimitPerUser: 3, totalLimit: 80, used: 34, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['Earrings'], description: 'Earring collection discount'},
-                    {id: 8, code: 'NEWYEAR40', type: 'percentage', value: 40, maxDiscount: 3000, minOrder: 2999, usageLimitPerUser: 1, totalLimit: 50, used: 0, validFrom: '2024-12-25', validUntil: '2025-01-05', status: 'scheduled', categories: ['All'], description: 'New Year mega sale'},
-                    {id: 9, code: 'BRIDE10', type: 'percentage', value: 10, maxDiscount: 5000, minOrder: 9999, usageLimitPerUser: 1, totalLimit: 30, used: 12, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['Necklaces', 'Bangles'], description: 'Bridal collection offer'},
-                    {id: 10, code: 'FLASH200', type: 'fixed', value: 200, maxDiscount: null, minOrder: 1299, usageLimitPerUser: 1, totalLimit: 100, used: 67, validFrom: '2024-01-01', validUntil: '2024-12-31', status: 'active', categories: ['All'], description: 'Flash sale discount'}
-                ];
-                saveCoupons();
             }
             renderCoupons();
             updateAnalytics();
@@ -626,23 +682,24 @@
         document.getElementById('couponForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const selectedCategories = Array.from(document.querySelectorAll('#categoryCheckboxes input:checked')).map(cb => cb.value);
+            const type = document.getElementById('couponType').value;
+            const selectedCategories = document.getElementById('applicableTo').value === 'categories' ? 
+                Array.from(document.querySelectorAll('#categoryCheckboxes input:checked')).map(cb => cb.value) : ['All'];
             
             const newCoupon = {
                 id: coupons.length > 0 ? Math.max(...coupons.map(c => c.id)) + 1 : 1,
                 code: document.getElementById('couponCode').value.toUpperCase(),
-                type: document.getElementById('couponType').value,
-                value: parseFloat(document.getElementById('discountValue').value),
-                maxDiscount: document.getElementById('maxDiscount').value ? parseFloat(document.getElementById('maxDiscount').value) : null,
-                minOrder: document.getElementById('minOrderValue').value ? parseFloat(document.getElementById('minOrderValue').value) : 0,
-                usageLimitPerUser: document.getElementById('usageLimitPerUser').value ? parseInt(document.getElementById('usageLimitPerUser').value) : null,
-                totalLimit: document.getElementById('totalUsageLimit').value ? parseInt(document.getElementById('totalUsageLimit').value) : null,
+                type: type,
+                value: type === 'buy799get199' || type === 'buy999get299' ? 0 : parseFloat(document.getElementById('discountValue').value),
+                minOrder: parseFloat(document.getElementById('minOrderValue').value),
+                usageLimitPerUser: parseInt(document.getElementById('usageLimitPerUser').value),
+                totalLimit: parseInt(document.getElementById('totalCoupons').value),
                 used: 0,
                 validFrom: document.getElementById('validFrom').value,
                 validUntil: document.getElementById('validUntil').value,
-                status: document.getElementById('couponStatus').value,
-                categories: selectedCategories.length > 0 ? selectedCategories : ['All'],
-                products: document.getElementById('applicableProducts').value,
+                status: 'active',
+                applicableTo: document.getElementById('applicableTo').value,
+                applicableCategories: selectedCategories,
                 description: document.getElementById('couponDescription').value
             };
             
@@ -653,6 +710,7 @@
             
             this.reset();
             document.querySelectorAll('#categoryCheckboxes input').forEach(cb => cb.checked = false);
+            document.getElementById('discountRow').style.display = 'none';
             alert('Coupon created successfully!');
         });
 
@@ -669,6 +727,13 @@
                 return matchSearch && matchStatus && matchType;
             });
             
+            if(filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem; color: #666;">No coupons found. Create your first coupon above!</td></tr>';
+                document.getElementById('paginationTop').innerHTML = '';
+                document.getElementById('paginationBottom').innerHTML = '';
+                return;
+            }
+            
             const totalPages = Math.ceil(filtered.length / itemsPerPage);
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
@@ -679,9 +744,9 @@
                                    coupon.status === 'expired' ? 'status-cancelled' : 
                                    coupon.status === 'scheduled' ? 'status-pending' : 'status-inactive';
                 
-                const discountDisplay = coupon.type === 'percentage' ? `${coupon.value}%` :
-                                       coupon.type === 'fixed' ? `₹${coupon.value}` :
-                                       coupon.type === 'freeShipping' ? 'Free Ship' : 'Buy X Get Y';
+                const discountDisplay = coupon.type === 'percentage' || coupon.type === 'firstPurchase' || coupon.type === 'specialDay' ? `${coupon.value}%` :
+                                       coupon.type === 'buy799get199' ? 'Buy ₹799 Get ₹199' :
+                                       coupon.type === 'buy999get299' ? 'Buy ₹999 Get ₹299' : '-';
                 
                 const usageDisplay = coupon.totalLimit ? `${coupon.used}/${coupon.totalLimit}` : coupon.used;
                 
@@ -696,7 +761,6 @@
                         <td>${new Date(coupon.validUntil).toLocaleDateString()}</td>
                         <td><span class="status-badge ${statusClass}">${coupon.status}</span></td>
                         <td style="white-space: nowrap;">
-                            <button class="btn-action btn-view" onclick="viewCoupon(${coupon.id})">View</button>
                             <button class="btn-action btn-edit" onclick="editCoupon(${coupon.id})">Edit</button>
                             <button class="btn-action btn-toggle ${coupon.status === 'active' ? 'deactivate' : ''}" onclick="toggleCouponStatus(${coupon.id})">${coupon.status === 'active' ? 'Deactivate' : 'Activate'}</button>
                             <button class="btn-action btn-delete" onclick="deleteCoupon(${coupon.id})">Delete</button>
@@ -736,7 +800,80 @@
         }
 
         function editCoupon(id) {
-            alert('Edit functionality - Would open a modal with pre-filled form');
+            const coupon = coupons.find(c => c.id === id);
+            if(!coupon) return;
+            
+            // Populate form with coupon data
+            document.getElementById('couponCode').value = coupon.code;
+            document.getElementById('couponType').value = coupon.type;
+            document.getElementById('discountValue').value = coupon.value;
+            document.getElementById('minOrderValue').value = coupon.minOrder;
+            document.getElementById('totalCoupons').value = coupon.totalLimit;
+            document.getElementById('usageLimitPerUser').value = coupon.usageLimitPerUser;
+            document.getElementById('validFrom').value = coupon.validFrom;
+            document.getElementById('validUntil').value = coupon.validUntil;
+            document.getElementById('applicableTo').value = coupon.applicableTo;
+            document.getElementById('couponDescription').value = coupon.description || '';
+            
+            // Show discount field if needed
+            updateDiscountField();
+            
+            // Handle categories
+            if(coupon.applicableTo === 'categories') {
+                toggleCategoryField();
+                document.querySelectorAll('#categoryCheckboxes input').forEach(cb => {
+                    cb.checked = coupon.applicableCategories.includes(cb.value);
+                });
+            }
+            
+            // Change form to edit mode
+            const form = document.getElementById('couponForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Update Coupon';
+            submitBtn.onclick = function(e) {
+                e.preventDefault();
+                updateCoupon(id);
+            };
+            
+            // Scroll to form
+            document.getElementById('createCoupon').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function updateCoupon(id) {
+            const coupon = coupons.find(c => c.id === id);
+            if(!coupon) return;
+            
+            const type = document.getElementById('couponType').value;
+            const selectedCategories = document.getElementById('applicableTo').value === 'categories' ? 
+                Array.from(document.querySelectorAll('#categoryCheckboxes input:checked')).map(cb => cb.value) : ['All'];
+            
+            // Update coupon
+            coupon.code = document.getElementById('couponCode').value.toUpperCase();
+            coupon.type = type;
+            coupon.value = type === 'buy799get199' || type === 'buy999get299' ? 0 : parseFloat(document.getElementById('discountValue').value);
+            coupon.minOrder = parseFloat(document.getElementById('minOrderValue').value);
+            coupon.usageLimitPerUser = parseInt(document.getElementById('usageLimitPerUser').value);
+            coupon.totalLimit = parseInt(document.getElementById('totalCoupons').value);
+            coupon.validFrom = document.getElementById('validFrom').value;
+            coupon.validUntil = document.getElementById('validUntil').value;
+            coupon.applicableTo = document.getElementById('applicableTo').value;
+            coupon.applicableCategories = selectedCategories;
+            coupon.description = document.getElementById('couponDescription').value;
+            
+            saveCoupons();
+            renderCoupons();
+            updateAnalytics();
+            
+            // Reset form
+            const form = document.getElementById('couponForm');
+            form.reset();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Create Coupon';
+            submitBtn.onclick = null;
+            document.querySelectorAll('#categoryCheckboxes input').forEach(cb => cb.checked = false);
+            document.getElementById('discountRow').style.display = 'none';
+            
+            alert('Coupon updated successfully!');
         }
 
         function toggleCouponStatus(id) {
@@ -746,6 +883,7 @@
                 saveCoupons();
                 renderCoupons();
                 updateAnalytics();
+                alert(`Coupon ${coupon.status === 'active' ? 'activated' : 'deactivated'} successfully!`);
             }
         }
 
@@ -759,21 +897,52 @@
         }
 
         function updateAnalytics() {
-            document.getElementById('totalCoupons').textContent = coupons.length;
-            document.getElementById('activeCoupons').textContent = coupons.filter(c => c.status === 'active').length;
-            document.getElementById('totalUsage').textContent = coupons.reduce((sum, c) => sum + c.used, 0);
+            const totalCoupons = coupons.length;
+            const activeCoupons = coupons.filter(c => c.status === 'active').length;
+            const totalUsage = coupons.reduce((sum, c) => sum + (c.used || 0), 0);
             
             const totalDiscount = coupons.reduce((sum, c) => {
-                if(c.type === 'fixed') return sum + (c.value * c.used);
-                return sum + (c.used * 100);
+                if(c.type === 'fixed') return sum + (c.value * (c.used || 0));
+                return sum + ((c.used || 0) * 100);
             }, 0);
+            
+            document.getElementById('totalCoupons').textContent = totalCoupons;
+            document.getElementById('activeCoupons').textContent = activeCoupons;
+            document.getElementById('totalUsage').textContent = totalUsage;
             document.getElementById('totalDiscount').textContent = '₹' + totalDiscount.toLocaleString();
         }
 
         window.onload = function() {
             initializeCategoryCheckboxes();
             initializeCoupons();
+            loadSettings();
         };
+        
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('herauraSettings') || '{"platformFee": 12, "freeShippingThreshold": 799, "shippingCharge": 99}');
+            document.getElementById('platformFee').value = settings.platformFee || 12;
+            document.getElementById('shippingCharge').value = settings.shippingCharge || 99;
+            document.getElementById('freeShippingThreshold').value = settings.freeShippingThreshold || 799;
+        }
+        
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const settings = {
+                platformFee: parseFloat(document.getElementById('platformFee').value),
+                shippingCharge: parseFloat(document.getElementById('shippingCharge').value),
+                freeShippingThreshold: parseFloat(document.getElementById('freeShippingThreshold').value)
+            };
+            localStorage.setItem('herauraSettings', JSON.stringify(settings));
+            alert('Settings saved successfully!');
+        });
+        
+        function loadProducts() {
+            // Removed - no longer needed
+        }
+        
+        function toggleApplicableFields() {
+            // Removed - no longer needed
+        }
     </script>
 </body>
 </html>

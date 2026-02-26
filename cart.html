@@ -759,13 +759,14 @@
         </div>
     </div>
 
+    <script src="user-storage.js"></script>
     <script>
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = getUserCart();
 
         // Update badge counts
         function updateBadges() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const cart = getUserCart();
+            const wishlist = getUserWishlist();
             const isLoggedIn = localStorage.getItem('userLoggedIn');
             const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
             
@@ -842,42 +843,86 @@
                 return;
             }
 
-            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = subtotal >= 799 ? 0 : 99;
-            const total = subtotal + shipping;
+            const settings = JSON.parse(localStorage.getItem('herauraSettings') || '{"platformFee": 12, "freeShippingThreshold": 799, "shippingCharge": 99}');
+            
+            const subtotal = cart.reduce((total, item) => {
+                const price = parseFloat(item.discountPrice || item.price);
+                return total + (price * item.quantity);
+            }, 0);
+            const platformFee = settings.platformFee || 12;
+            const baseShipping = subtotal >= settings.freeShippingThreshold ? 0 : settings.shippingCharge;
+            
+            let discount = 0;
+            let freeShipping = false;
+            if (appliedCoupon) {
+                if (appliedCoupon.type === 'freeShipping' && subtotal >= appliedCoupon.minOrder) {
+                    freeShipping = true;
+                } else if (appliedCoupon.type === 'percentage' || appliedCoupon.type === 'firstPurchase' || appliedCoupon.type === 'specialDay') {
+                    discount = (subtotal * appliedCoupon.value) / 100;
+                }
+            }
+            
+            const finalShipping = freeShipping ? 0 : baseShipping;
+            const total = subtotal - discount + finalShipping + platformFee;
 
             cartContent.innerHTML = `
                 <div class="cart-items">
-                    ${cart.map(item => `
+                    ${cart.map(item => {
+                        const itemImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+                        const itemPrice = parseFloat(item.discountPrice || item.price);
+                        return `
                         <div class="cart-item">
-                            <img src="${item.image}" alt="${item.name}" class="item-image">
+                            <img src="${itemImage}" alt="${item.name}" class="item-image" onclick="window.location.href='product-detail.html?id=${item.id}'" style="cursor: pointer;">
                             <div class="item-info">
-                                <h3>${item.name}</h3>
-                                <p class="item-price">₹${item.price}</p>
+                                <h3 onclick="window.location.href='product-detail.html?id=${item.id}'" style="cursor: pointer;">${item.name}</h3>
+                                <p class="item-price">₹${itemPrice}</p>
                             </div>
                             <div class="quantity-controls">
                                 <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
                                 <input type="number" class="quantity" value="${item.quantity}" min="1" onchange="setQuantity('${item.id}', this.value)">
                                 <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
                             </div>
-                            <div class="item-total">₹${item.price * item.quantity}</div>
+                            <div class="item-total">₹${itemPrice * item.quantity}</div>
                             <button class="remove-btn" onclick="removeItem('${item.id}')">Remove</button>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
                 
                 <div class="cart-summary">
+                    <div class="coupon-section" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee;">
+                        <h3 style="font-family: 'Playfair Display', serif; color: #8B4513; margin-bottom: 1rem; font-size: 1.1rem;">Apply Coupon</h3>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <input type="text" id="couponInput" placeholder="Enter coupon code" value="${appliedCoupon ? appliedCoupon.code : ''}" onkeypress="if(event.key==='Enter'){applyCoupon();event.preventDefault();}" style="flex: 1; padding: 0.8rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                            <button onclick="applyCoupon()" style="padding: 0.8rem 1.5rem; background: #d4a574; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#8B4513'" onmouseout="this.style.background='#d4a574'">Apply</button>
+                        </div>
+                        <div id="cartCoupons"></div>
+                        <div id="couponMessage" style="margin-top: 0.5rem; font-size: 0.9rem; color: ${appliedCoupon ? '#28a745' : ''};">${appliedCoupon ? `Coupon "${appliedCoupon.code}" applied!` : ''}</div>
+                    </div>
                     <div class="summary-row">
                         <span>Subtotal:</span>
-                        <span>₹${subtotal}</span>
+                        <span>₹${subtotal.toFixed(2)}</span>
+                    </div>
+                    ${discount > 0 ? `
+                    <div class="summary-row" style="color: #28a745;">
+                        <span>Discount (${appliedCoupon.code}) <button onclick="removeCoupon()" style="background: #fff5f5; border: 1px solid #ffcdd2; color: #dc3545; cursor: pointer; font-size: 0.8rem; padding: 0.3rem 0.8rem; border-radius: 6px; margin-left: 0.5rem; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#dc3545'; this.style.color='white';" onmouseout="this.style.background='#fff5f5'; this.style.color='#dc3545';">✕ Remove</button></span>
+                        <span>-₹${discount.toFixed(2)}</span>
+                    </div>` : ''}
+                    <div class="summary-row">
+                        <span>Platform Fee:</span>
+                        <span>₹${platformFee.toFixed(2)}</span>
                     </div>
                     <div class="summary-row">
                         <span>Shipping:</span>
-                        <span>${shipping === 0 ? 'Free' : '₹' + shipping}</span>
+                        <span>${finalShipping === 0 ? `<span style="color: #28a745; font-weight: 600;">FREE</span>` : '₹' + finalShipping.toFixed(2)}</span>
                     </div>
+                    ${subtotal < settings.freeShippingThreshold && finalShipping > 0 ? `
+                    <div class="summary-row" style="color: #28a745; font-weight: 500; font-size: 0.9rem;">
+                        <span colspan="2">Add ₹${(settings.freeShippingThreshold - subtotal).toFixed(2)} more to get FREE shipping</span>
+                        <span></span>
+                    </div>` : ''}
                     <div class="summary-row summary-total">
                         <span>Total:</span>
-                        <span>₹${total}</span>
+                        <span>₹${total.toFixed(2)}</span>
                     </div>
                     <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
                 </div>
@@ -891,7 +936,7 @@
                 if (item.quantity <= 0) {
                     removeItem(productId);
                 } else {
-                    localStorage.setItem('cart', JSON.stringify(cart));
+                    setUserCart(cart);
                     loadCart();
                     updateBadges();
                 }
@@ -902,7 +947,7 @@
             const item = cart.find(item => String(item.id) === String(productId));
             if (item) {
                 item.quantity = parseInt(quantity) || 1;
-                localStorage.setItem('cart', JSON.stringify(cart));
+                setUserCart(cart);
                 loadCart();
                 updateBadges();
             }
@@ -910,7 +955,7 @@
 
         function removeItem(productId) {
             cart = cart.filter(item => item.id !== productId);
-            localStorage.setItem('cart', JSON.stringify(cart));
+            setUserCart(cart);
             loadCart();
             updateBadges();
         }
@@ -919,9 +964,164 @@
             window.location.href = 'shipping.html';
         }
 
+        let appliedCoupon = null;
+
+        function removeCoupon() {
+            appliedCoupon = null;
+            document.getElementById('couponInput').value = '';
+            document.getElementById('couponMessage').textContent = '';
+            loadCart();
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('couponInput').value.trim().toUpperCase();
+            const messageEl = document.getElementById('couponMessage');
+            
+            if (!couponCode) {
+                messageEl.style.color = '#dc3545';
+                messageEl.textContent = 'Please enter a coupon code';
+                return;
+            }
+            
+            const coupons = JSON.parse(localStorage.getItem('herauraCoupons') || '[]');
+            const coupon = coupons.find(c => c.code.toUpperCase() === couponCode && c.status === 'active');
+            
+            if (!coupon) {
+                messageEl.style.color = '#dc3545';
+                messageEl.textContent = 'Invalid or expired coupon code';
+                return;
+            }
+            
+            const now = new Date();
+            const validFrom = new Date(coupon.validFrom);
+            const validUntil = new Date(coupon.validUntil);
+            
+            if (now < validFrom || now > validUntil) {
+                messageEl.style.color = '#dc3545';
+                messageEl.textContent = 'Coupon has expired or not yet valid';
+                return;
+            }
+            
+            const subtotal = cart.reduce((total, item) => {
+                const price = parseFloat(item.discountPrice || item.price);
+                return total + (price * item.quantity);
+            }, 0);
+            
+            if (subtotal < coupon.minOrder) {
+                messageEl.style.color = '#dc3545';
+                messageEl.textContent = `Minimum order value of ₹${coupon.minOrder} required`;
+                return;
+            }
+            
+            appliedCoupon = coupon;
+            messageEl.style.color = '#28a745';
+            messageEl.textContent = `Coupon "${coupon.code}" applied successfully!`;
+            
+            loadCart();
+        }
+
+        function loadCartCoupons() {
+            const coupons = JSON.parse(localStorage.getItem('herauraCoupons') || '[]');
+            const now = new Date();
+            
+            const applicable = coupons.filter(c => {
+                if (c.status !== 'active') return false;
+                if (new Date(c.validUntil) < now) return false;
+                return true;
+            });
+            
+            const container = document.getElementById('cartCoupons');
+            if (!container || applicable.length === 0) return;
+            
+            window.cartCoupons = applicable;
+            
+            container.innerHTML = `
+                <button onclick="openCartCouponsModal()" style="display:flex; align-items:center; justify-content:center; gap:0.8rem; padding:0.8rem 1.2rem; background:white; color:#8B4513; border:2px solid #d4a574; border-radius:10px; cursor:pointer; font-weight:600; font-size:0.95rem; transition: all 0.3s ease; width: 100%; box-shadow: 0 2px 8px rgba(212,165,116,0.15);" onmouseover="this.style.background='#fafafa'; this.style.borderColor='#8B4513'; this.style.boxShadow='0 4px 12px rgba(139,69,19,0.2)';" onmouseout="this.style.background='white'; this.style.borderColor='#d4a574'; this.style.boxShadow='0 2px 8px rgba(212,165,116,0.15)';">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2">
+                        <rect x="3" y="8" width="18" height="4" rx="1"/>
+                        <path d="M12 8v13"/>
+                        <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
+                        <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
+                    </svg>
+                    <span>View ${applicable.length} Available Offer${applicable.length > 1 ? 's' : ''}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2" style="margin-left: auto;">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            `;
+        }
+        
+        function openCartCouponsModal() {
+            const modal = document.createElement('div');
+            modal.id = 'cartCouponsModal';
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 10000; display: flex; align-items: center; justify-content: center;';
+            
+            const content = document.createElement('div');
+            content.style.cssText = 'background: white; border-radius: 15px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;';
+            
+            const coupons = window.cartCoupons || [];
+            
+            content.innerHTML = `
+                <button onclick="closeCartCouponsModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: #666; line-height: 1; transition: all 0.3s ease;" onmouseover="this.style.color='#dc3545'; this.style.transform='rotate(90deg)';" onmouseout="this.style.color='#666'; this.style.transform='rotate(0deg)';">&times;</button>
+                <h2 style="font-family: 'Playfair Display', serif; color: #8B4513; margin-bottom: 0.5rem; font-size: 1.8rem;">Available Offers</h2>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Choose from ${coupons.length} exclusive offer${coupons.length > 1 ? 's' : ''} for your order</p>
+                ${coupons.map(c => {
+                    let description = '';
+                    if (c.type === 'firstPurchase') {
+                        description = `Get ${c.value}% OFF on your first purchase`;
+                    } else if (c.type === 'buy799get199') {
+                        description = `Buy products worth ₹799 and get ₹199 product FREE`;
+                    } else if (c.type === 'buy999get299') {
+                        description = `Buy products worth ₹999 and get ₹299 product FREE`;
+                    } else {
+                        description = `Get ${c.value}% OFF on orders above ₹${c.minOrder}`;
+                    }
+                    
+                    return `
+                        <div style="border: 2px solid #d4a574; border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem; background: white; box-shadow: 0 4px 12px rgba(212,165,116,0.15); transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 6px 20px rgba(139,69,19,0.25)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(212,165,116,0.15)'; this.style.transform='translateY(0)';">
+                            <div style="display: flex; gap: 1rem; align-items: start; margin-bottom: 1rem;">
+                                <div style="background: #f8f4ef; padding: 0.8rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #8B4513; font-size: 1.3rem; margin-bottom: 0.5rem; letter-spacing: 0.5px;">${c.code}</div>
+                                    <div style="color: #666; font-size: 0.95rem; line-height: 1.5;">${description}</div>
+                                    ${c.description ? `<div style="color: #888; font-size: 0.85rem; font-style: italic; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed #d4a574;">${c.description}</div>` : ''}
+                                </div>
+                            </div>
+                            <button onclick="applyCartCoupon('${c.code}')" style="width: 100%; padding: 0.8rem; background: #d4a574; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(212,165,116,0.3);" onmouseover="this.style.background='#8B4513'; this.style.transform='scale(1.02)'; this.style.boxShadow='0 4px 12px rgba(139,69,19,0.4)';" onmouseout="this.style.background='#d4a574'; this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(212,165,116,0.3)';">APPLY THIS COUPON</button>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeCartCouponsModal();
+            });
+        }
+        
+        function closeCartCouponsModal() {
+            const modal = document.getElementById('cartCouponsModal');
+            if (modal) {
+                document.body.removeChild(modal);
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        function applyCartCoupon(code) {
+            document.getElementById('couponInput').value = code;
+            closeCartCouponsModal();
+            applyCoupon();
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadCart();
+            loadCartCoupons();
             updateBadges();
         });
         

@@ -210,7 +210,13 @@
         <div class="login-left">
             <div class="brand-logo">HerAura</div>
             <div class="brand-tagline">Admin Portal</div>
-            <div class="login-illustration">💎</div>
+            <div class="login-illustration">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#d4a574" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="#d4a574" opacity="0.3"/>
+                    <path d="M2 17L12 22L22 17" stroke="#d4a574" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="#d4a574" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
             <p style="opacity: 0.9;">Manage your jewelry empire with elegance</p>
         </div>
         
@@ -231,22 +237,22 @@
             <form id="email-form" class="login-form active" onsubmit="handleLogin(event, 'email')">
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">First Name</label>
+                        <label class="form-label" for="email-firstname">First Name</label>
                         <input type="text" class="form-input" id="email-firstname" placeholder="John" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Last Name</label>
+                        <label class="form-label" for="email-lastname">Last Name</label>
                         <input type="text" class="form-input" id="email-lastname" placeholder="Doe" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Email Address</label>
+                    <label class="form-label" for="email-address">Email Address</label>
                     <input type="email" class="form-input" id="email-address" placeholder="admin@heraura.com" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
+                    <label class="form-label" for="email-password">Password</label>
                     <input type="password" class="form-input" id="email-password" placeholder="Enter your password" required>
                 </div>
                 
@@ -261,22 +267,22 @@
             <form id="mobile-form" class="login-form" onsubmit="handleLogin(event, 'mobile')">
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">First Name</label>
+                        <label class="form-label" for="mobile-firstname">First Name</label>
                         <input type="text" class="form-input" id="mobile-firstname" placeholder="John" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Last Name</label>
+                        <label class="form-label" for="mobile-lastname">Last Name</label>
                         <input type="text" class="form-input" id="mobile-lastname" placeholder="Doe" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Mobile Number</label>
+                    <label class="form-label" for="mobile-number">Mobile Number</label>
                     <input type="tel" class="form-input" id="mobile-number" placeholder="+91 9876543210" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
+                    <label class="form-label" for="mobile-password">Password</label>
                     <input type="password" class="form-input" id="mobile-password" placeholder="Enter your password" required>
                 </div>
                 

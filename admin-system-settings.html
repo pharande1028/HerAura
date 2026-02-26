@@ -656,8 +656,8 @@
                         <td><strong>${partner.name}</strong></td>
                         <td><span class="aging-badge ${statusClass}">${partner.status.toUpperCase()}</span></td>
                         <td>${partner.apiKey}</td>
-                        <td>${partner.tracking ? '✅ Yes' : '❌ No'}</td>
-                        <td>${partner.cod ? '✅ Yes' : '❌ No'}</td>
+                        <td>${partner.tracking ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Yes' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> No'}</td>
+                        <td>${partner.cod ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Yes' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> No'}</td>
                         <td style="white-space: nowrap;">
                             <button class="btn-action btn-view" onclick="editShipping(${partner.id})">Edit</button>
                             <button class="btn-action ${partner.status === 'active' ? 'btn-reject' : 'btn-approve'}" onclick="toggleShipping(${partner.id})">${partner.status === 'active' ? 'Disable' : 'Enable'}</button>

@@ -1435,6 +1435,7 @@
 
 </body>
 <script src="user-storage.js"></script>
+<script src="cart-utils.js"></script>
 <script>
     // Loading Animation - Disabled
     window.addEventListener('load', function() {
@@ -1788,7 +1789,12 @@
             const grid = document.getElementById(gridId);
             if (!grid) return;
             
-            const categoryProducts = products.filter(p => p.category === category);
+            const categoryProducts = products.filter(p => {
+                if (p.categories && Array.isArray(p.categories)) {
+                    return p.categories.some(cat => cat.toLowerCase() === category.toLowerCase());
+                }
+                return p.category && p.category.toLowerCase() === category.toLowerCase();
+            });
             console.log(`${category} products:`, categoryProducts);
             
             if (categoryProducts.length === 0) {
@@ -1801,7 +1807,7 @@
                 const productImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
                 return `
                     <div class="category-product-card" data-product-id="${product.id}">
-                        <button class="category-wishlist-heart ${isInWishlist ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
+                        <button class="category-wishlist-heart ${isInWishlist ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${product.id}'); loadCategoryProducts();">
                             <svg width="20" height="20" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                             </svg>
@@ -1821,41 +1827,9 @@
         });
     }
     
-    function toggleWishlist(productId) {
-        let wishlist = getUserWishlist();
-        const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-        const product = products.find(p => String(p.id) === String(productId));
-        const existingIndex = wishlist.findIndex(item => String(item.id) === String(productId));
-        
-        if (existingIndex > -1) {
-            wishlist.splice(existingIndex, 1);
-            alert('Removed from wishlist!');
-        } else {
-            if (product) wishlist.push(product);
-            alert('Added to wishlist!');
-        }
-        
-        setUserWishlist(wishlist);
-        updateBadges();
-        loadCategoryProducts();
-    }
+
     
-    function addToCart(productId) {
-        let cart = getUserCart();
-        const products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-        const product = products.find(p => String(p.id) === String(productId));
-        const existingItem = cart.find(item => String(item.id) === String(productId));
-        
-        if (existingItem) {
-            existingItem.quantity = (existingItem.quantity || 1) + 1;
-        } else if (product) {
-            cart.push({ ...product, quantity: 1 });
-        }
-        
-        setUserCart(cart);
-        updateBadges();
-        alert('Product added to cart!');
-    }
+
     
     function buyNow(productId) {
         addToCart(productId);

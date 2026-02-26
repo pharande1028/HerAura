@@ -1669,7 +1669,16 @@
                         <span class="discount" id="discountPercent" style="display: none;"></span>
                         <span class="stock-status" id="stockStatus" style="color: #28a745; font-size: 1rem; font-weight: 600; margin-left: 1rem;">Ready to Ship - In Stock</span>
                     </div>
-                    <div class="size-selection">
+                    <div class="available-coupons" style="margin: 1.5rem 0; padding: 1rem; background: #f8f4ef; border-radius: 10px;">
+                        <h4 style="margin-bottom: 1rem; color: #8B4513; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
+                            </svg>
+                            Available Offers
+                        </h4>
+                        <div id="productCoupons"></div>
+                    </div><div class="size-selection">
                         <h3 id="sizeSelectionTitle">Select Size</h3>
                         <div class="size-options" id="sizeOptions">
                             <button class="size-option active" onclick="selectSize(this)" style="background: #ff6b6b; color: white; border-color: #ff6b6b;">One Size</button>
@@ -1708,7 +1717,7 @@
                     <div class="product-buttons">
                         <div class="button-row">
                             <button class="btn btn-wishlist" id="wishlistBtn" onclick="toggleWishlist()">Add to Wishlist</button>
-                            <button class="btn btn-secondary" onclick="addToCart()">Add to Cart</button>
+                            <button class="btn btn-secondary" onclick="addToCartFromDetail()">Add to Cart</button>
                         </div>
                         <button class="btn btn-primary" onclick="buyNow()">Buy Now</button>
                     </div>
@@ -2080,6 +2089,9 @@
     </div>
 
     <script src="api-config.js"></script>
+    <script src="user-storage.js"></script>
+    <script src="cart-utils.js"></script>
+    <script src="coupon-display.js"></script>
     <script>
         let currentProduct = {};
         let mediaItems = [
@@ -2339,6 +2351,7 @@
         }
 
         function displayProductDetails(product) {
+            loadProductCoupons(product.id, product.category);
             if (!product) return;
             
             // Show the product info container
@@ -2348,13 +2361,13 @@
             document.getElementById('productShortDescription').textContent = product.shortDescription || product.description || 'Premium anti-tarnish jewelry for everyday elegance';
             document.getElementById('breadcrumbProductName').textContent = product.name;
             document.getElementById('productCategory').textContent = product.category || 'Jewelry';
-            document.getElementById('currentPrice').textContent = `₹${product.price.toLocaleString()}`;
-            document.getElementById('originalPrice').textContent = product.originalPrice ? `₹${product.originalPrice.toLocaleString()}` : '';
+            document.getElementById('currentPrice').textContent = `₹${(product.discountPrice || product.price).toLocaleString()}`;
+            document.getElementById('originalPrice').textContent = product.price && product.discountPrice && product.price > product.discountPrice ? `₹${product.price.toLocaleString()}` : '';
             
             // Show/hide discount badge
             const discountElement = document.getElementById('discountPercent');
-            if (product.originalPrice && product.originalPrice > product.price) {
-                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+            if (product.price && product.discountPrice && product.price > product.discountPrice) {
+                const discount = Math.round(((product.price - product.discountPrice) / product.price) * 100);
                 discountElement.textContent = `${discount}% OFF`;
                 discountElement.style.display = 'inline-block';
             } else {
@@ -2526,23 +2539,17 @@
             }
         }
 
-        function addToCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const existingItem = cart.find(item => item.id === currentProduct.id);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({...currentProduct, quantity: 1});
+        function addToCartFromDetail() {
+            if (!currentProduct || !currentProduct.id) {
+                alert('Product not loaded');
+                return;
             }
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateBadges();
-            alert('Added to cart!');
+            const result = addToCart(currentProduct.id);
+            if (result) updateBadges();
         }
 
         function buyNow() {
-            addToCart();
+            addToCartFromDetail();
             window.location.href = 'cart.html';
         }
 
@@ -2614,8 +2621,8 @@
 
         // Update badge counts
         function updateBadges() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const cart = getUserCart();
+            const wishlist = getUserWishlist();
             const isLoggedIn = localStorage.getItem('userLoggedIn');
             const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
             
@@ -2917,3 +2924,5 @@
     </script>
 </body>
 </html>
+
+
